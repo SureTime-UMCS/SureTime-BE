@@ -8,12 +8,12 @@ View the raw content of this file to understand the format.
 - [ ] Translate to english readme.md
 - [ ] Create list of tables
 - [ ] Create request examples
-- [ ] Create UML diagram of apllication
-- [ ] Create Datebase diagram.
+- [ ] Create UML diagram of application
+- [ ] Create Database diagram.
 
 ### In Progress
 
-- [ ] Translating to english readme.md [Żywko]
+- [ ] Translating to english readme.md [Dorota]
 
 ### Done ✓
 

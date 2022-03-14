@@ -4,6 +4,7 @@ import com.assigment.suretime.common.Gender;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Document
 public class Competitor {
+    //In mongodb in id is by default String.
     @Id
     private String id;
 
@@ -23,6 +25,8 @@ public class Competitor {
     private String email;
 
     private Address address;
+
+    @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDateTime created;
 
     public Competitor(String firstName, String secondName, Gender gender, String email, Address address, LocalDateTime created) {
