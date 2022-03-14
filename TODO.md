@@ -1,10 +1,10 @@
-# Example of TODO.md
+# TODO.md
 
 This is our todo list.
 View the raw content of this file to understand the format.
 
 ### Todo
-
+- [ ] Add posibility to add person to club and vice versa.
 - [ ] Translate to english readme.md
 - [ ] Create list of tables
 - [ ] Create request examples
@@ -14,7 +14,7 @@ View the raw content of this file to understand the format.
 ### In Progress
 
 - [ ] Translating to english readme.md [Dorota]
-
+- [ ] Club. 
 ### Done ✓
 
 - [x] Create my first TODO.md  
@@ -23,4 +23,5 @@ View the raw content of this file to understand the format.
 - [x] Mongo Database integration
 - [x] Created first table
     - [x] Competitor
+  
   

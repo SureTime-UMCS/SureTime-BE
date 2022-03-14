@@ -1,7 +1,9 @@
 package com.assigment.suretime.commandLineRunners;
 
-import com.assigment.suretime.common.Gender;
-import com.assigment.suretime.competitor.Address;
+import com.assigment.suretime.club.Club;
+import com.assigment.suretime.club.ClubRepository;
+import com.assigment.suretime.person.Gender;
+import com.assigment.suretime.address.Address;
 import com.assigment.suretime.competitor.Competitor;
 import com.assigment.suretime.competitor.CompetitorRepository;
 import org.slf4j.Logger;
@@ -14,9 +16,25 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Configuration
-public class LoadDatabase {
+public class dbSeeder {
 
-    private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
+    private static final Logger log = LoggerFactory.getLogger(dbSeeder.class);
+
+    @Bean
+    CommandLineRunner addClubs(ClubRepository clubRepository){
+        return args -> {
+          Address address = new Address("Lublin",
+                  "Gleboka",
+                  new BigDecimal(31),
+                  new BigDecimal(0));
+          Club club = new Club(address, "AZS22");
+          clubRepository.findByName(club.getName()).ifPresentOrElse(
+                  c -> {log.info("Do not insert, club exist."+ club);},
+                  () -> {log.info("Insered:"+ clubRepository.insert(club));}
+          );
+        };
+    }
+
     @Bean
     CommandLineRunner initDatabase(CompetitorRepository competitorRepository){
         return args -> {

@@ -16,7 +16,6 @@ public class CompetitorService {
         return competitorRepository.findCompetitorByEmail(email).orElseThrow(
                 () -> new CompetitorNotFoundException(email));
     }
-
     public List<Competitor> getAllCompetitors() {
         return competitorRepository.findAll();
     }

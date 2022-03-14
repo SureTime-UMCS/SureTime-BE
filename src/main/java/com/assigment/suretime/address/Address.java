@@ -1,4 +1,4 @@
-package com.assigment.suretime.competitor;
+package com.assigment.suretime.address;
 
 
 import lombok.AllArgsConstructor;
@@ -13,5 +13,4 @@ public class Address {
     private String street;
     private BigDecimal buildingNumber;
     private BigDecimal apartmentNumber;
-
 }
