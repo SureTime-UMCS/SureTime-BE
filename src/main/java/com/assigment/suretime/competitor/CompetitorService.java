@@ -12,9 +12,11 @@ public class CompetitorService {
 
     private final CompetitorRepository competitorRepository;
 
-    public Optional<Competitor> getCompetitorByEmail(String email){
-        return competitorRepository.findCompetitorByEmail(email);
+    public Competitor getCompetitorByEmail(String email){
+        return competitorRepository.findCompetitorByEmail(email).orElseThrow(
+                () -> new CompetitorNotFoundException(email));
     }
+
     public List<Competitor> getAllCompetitors() {
         return competitorRepository.findAll();
     }

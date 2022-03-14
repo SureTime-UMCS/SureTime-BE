@@ -2,6 +2,7 @@ package com.assigment.suretime.competitor;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,10 +20,10 @@ public class CompetitorController {
         return competitorService.getAllCompetitors();
     }
 
-    //@GetMapping("/{email}")
-    //public Competitor fetchByEmail(@PathVariable String email){
-    //
-    //}
+    @GetMapping("/{email}")
+    public Competitor fetchByEmail(@PathVariable String email){
+        return competitorService.getCompetitorByEmail(email);
+    }
 
 
 }
