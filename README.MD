@@ -47,3 +47,37 @@ Use a [IntelliJ IDEA Ultimate](https://www.jetbrains.com/lp/intellij-frameworks/
     ```
 
 
+### Project requirements for 4
+- [x] Wykorzystanie narzędzia Spring Framework (najlepiej z wykorzystaniem SpringBoot) +
+  Maven + git (repozytorium w ogólnie dostępnym darmowym hostingu)
+
+- [x] Kod ma być dostępny w zewnętrznym repozytorium razem z dokumentacją
+
+- [ ] min 10 poprawnych (zgodnych z REST) endpoint-ów (min. 4 metody GET / POST / PUT /
+  DELETE) Należy znać sens wykorzystywanych metod. 
+
+- [ ] Do wszystkich endpointów należy przygotować kolekcję requestów za pomocą programu
+  Postman (wyeksportowana kolekcja ma znaleźć się w repozytorium razem z kodem oraz
+  dokumentacją w oddzielnych katalogach)
+
+- [ ] min 5 tabel w bazie wykorzystywanej przez aplikację
+
+- [x] Logika biznesowa wykorzystująca DI oraz IoC
+
+- [ ] Dokumentacja opisująca przeznaczenie oraz przypadki użycia aplikacji w postaci
+  diagramów UML
+
+### Project requirements for grade > 4
+- [ ]  Osiągnięcie "glory of rest" (hateoas)
+- [x] Wykorzystanie do projektowania i dokumentacji API narzędzia typu [swagger.io](https://swagger.io/) lub
+  alternatywnych (Postman może importować ze swaggera)
+- [ ] Bardziej złożona logika wykorzystująca wzorce projektowe ale nie wymuszane przez
+  framework Spring
+- [ ] Poprawnie wykorzystać jeden ze starterów aplikacji SpringBoot’a
+
+### Dla chętnych
+
+- [ ] Prosty front-end do konsumpcji endpointów Rest-owych
+- [ ] Wykorzystać JWT jwt.io
+
+
