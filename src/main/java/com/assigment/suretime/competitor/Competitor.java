@@ -1,6 +1,6 @@
 package com.assigment.suretime.competitor;
 
-import com.assigment.suretime.Gender;
+import com.assigment.suretime.common.Gender;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

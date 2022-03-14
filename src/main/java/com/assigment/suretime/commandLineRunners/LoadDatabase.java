@@ -1,5 +1,6 @@
-package com.assigment.suretime;
+package com.assigment.suretime.commandLineRunners;
 
+import com.assigment.suretime.common.Gender;
 import com.assigment.suretime.competitor.Address;
 import com.assigment.suretime.competitor.Competitor;
 import com.assigment.suretime.competitor.CompetitorRepository;
