@@ -48,8 +48,10 @@ Use a [IntelliJ IDEA Ultimate](https://www.jetbrains.com/lp/intellij-frameworks/
 
 
 ### Project requirements
-- :heavy_check_mark: Wykorzystanie narzędzia Spring Framework (najlepiej z wykorzystaniem SpringBoot) +
+ :heavy_check_mark: Wykorzystanie narzędzia Spring Framework (najlepiej z wykorzystaniem SpringBoot) +
   Maven + git (repozytorium w ogólnie dostępnym darmowym hostingu)
-- [x] Kod ma być dostępny w zewnętrznym repozytorium razem z dokumentacją
-- [ ] min 10 poprawnych (zgodnych z REST) endpoint-ów (min. 4 metody GET / POST / PUT /
+
+:white_check_mark: Kod ma być dostępny w zewnętrznym repozytorium razem z dokumentacją
+
+:white_check_mark: min 10 poprawnych (zgodnych z REST) endpoint-ów (min. 4 metody GET / POST / PUT /
   DELETE) Należy znać sens wykorzystywanych metod. 
