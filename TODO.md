@@ -23,5 +23,6 @@ View the raw content of this file to understand the format.
 - [x] Mongo Database integration
 - [x] Created first table
     - [x] Competitor
+- [x] Auto creation of request in PostMan
   
   

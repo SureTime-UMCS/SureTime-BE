@@ -10,14 +10,14 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/")
 public class HomePageController {
 
-    @GetMapping({"" ,"swagger-ui", "v1/api", "api/", "api"})
+    @GetMapping("")
     public RedirectView homePage() {
         return new RedirectView("swagger-ui/");
     }
 
 
-    @GetMapping({"api-docs/", "api-docs", "docs", "docs/"})
-    public RedirectView apiDocs(){
-        return new RedirectView("/v2/api-docs");
-    }
+//    @GetMapping({"api-docs/", "api-docs", "docs", "docs/"})
+//    public RedirectView apiDocs(){
+//        return new RedirectView("/v2/api-docs");
+//    }
 }
