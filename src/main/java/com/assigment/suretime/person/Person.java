@@ -24,21 +24,41 @@ public class Person {
     @Indexed(unique = true)
     private String email;
     private Gender gender;
-    private Address address;
 
-    @DocumentReference(lazy = true)
+    @DBRef
     private Club club;
-    @DocumentReference(lazy = true)
+
+    @DBRef
     private Person coach;
+
     @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDateTime created;
 
-    public Person(String firstName, String secondName, Gender gender, String email, Address address) {
+
+    public Person(String email){
+        this.email = email;
+        this.created = LocalDateTime.now();
+    }
+
+    @org.springframework.data.annotation.PersistenceConstructor
+    public Person(String id, String firstName, String secondName, String email, Gender gender, Club club, Person coach, LocalDateTime created) {
+        this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.gender = gender;
         this.email = email;
-        this.address = address;
+        this.gender = gender;
+        this.club = club;
+        this.coach = coach;
+        this.created = created;
+    }
+
+    public Person(Person p) {
+        this.firstName = p.getFirstName();
+        this.secondName = p.getSecondName();
+        this.email = p.getEmail();
+        this.gender = p.getGender();
+        this.club = p.getClub();
+        this.coach = p.getCoach();
         this.created = LocalDateTime.now();
     }
 

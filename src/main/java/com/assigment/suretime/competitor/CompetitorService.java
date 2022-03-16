@@ -1,5 +1,6 @@
 package com.assigment.suretime.competitor;
 
+import com.assigment.suretime.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class CompetitorService {
 
     public Competitor getCompetitorByEmail(String email){
         return competitorRepository.findCompetitorByEmail(email).orElseThrow(
-                () -> new CompetitorNotFoundException(email));
+                () -> new NotFoundException("Competitor",email));
     }
     public List<Competitor> getAllCompetitors() {
         return competitorRepository.findAll();

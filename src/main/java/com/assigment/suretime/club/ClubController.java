@@ -1,5 +1,6 @@
 package com.assigment.suretime.club;
 
+import com.assigment.suretime.person.Person;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -13,34 +14,41 @@ import java.util.List;
 @RequestMapping("api/v1/clubs")
 public class ClubController {
 
-    private final ClubService clubService;
+    private final ClubService service;
 
 
     @GetMapping("/")
-    public CollectionModel<EntityModel<Club>> getAllClubs(){
-        List<EntityModel<Club>> clubs = clubService.getAllClubs();
+    public CollectionModel<EntityModel<Club>> all(){
+        List<EntityModel<Club>> clubs = service.getAll();
         return CollectionModel.of(clubs,
-                linkTo(methodOn(ClubController.class).getAllClubs()).withSelfRel());
+                linkTo(methodOn(ClubController.class).all()).withSelfRel());
     }
 
     @GetMapping("/{name}")
-    public EntityModel<Club> getClubByName(@PathVariable String name){
-        return clubService.getClubByName(name);
+    public EntityModel<Club> getOne(@PathVariable String name){
+        return service.getByName(name);
     }
 
     @PostMapping()
-    EntityModel<Club> addClub(@RequestBody Club club){
-        return clubService.addClub(club);
+    EntityModel<Club> addOne(@RequestBody Club club){
+        return service.addOne(club);
     }
 
     @PutMapping("/{name}")
-    EntityModel<Club> replaceClub(@RequestBody Club newClub, @PathVariable String name){
-        return clubService.replaceClub(newClub, name);
+    EntityModel<Club> updateOne(@RequestBody Club newClub, @PathVariable String name){
+        EntityModel<Club> entityModel = service.updateOne(newClub, name);
+        return entityModel;
+
     }
 
     @DeleteMapping("/{name}")
     void deleteClub(@PathVariable String name){
-        clubService.deleteByName(name);
+        service.deleteByName(name);
+    }
+
+    @PostMapping("addToClub/")
+    EntityModel<Club> addPersonToClub(@RequestBody String clubName,  @RequestBody String personEmail){
+        return service.addPersonToClub(clubName, personEmail);
     }
 
 }

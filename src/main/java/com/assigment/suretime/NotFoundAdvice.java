@@ -1,4 +1,5 @@
-package com.assigment.suretime.competitor;
+package com.assigment.suretime;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -7,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class CompetitorNotFoundAdvice {
-
+public class NotFoundAdvice {
     @ResponseBody
-    @ExceptionHandler(CompetitorNotFoundException.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String competitorNotFoundHandler(CompetitorNotFoundException ex){
+    String notFoundHandler(NotFoundException ex){
         return ex.getMessage();
     }
 }
+

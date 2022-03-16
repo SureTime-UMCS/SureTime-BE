@@ -9,8 +9,8 @@ public class ClubModelAssembler implements RepresentationModelAssembler<Club, En
     @Override
     public EntityModel<Club> toModel(Club club) {
         return EntityModel.of(club,
-                linkTo(methodOn(ClubController.class).getClubByName(club.getName())).withSelfRel(),
-                linkTo(methodOn(ClubController.class).getAllClubs()).withRel("clubs"));
+                linkTo(methodOn(ClubController.class).getOne(club.getName())).withSelfRel(),
+                linkTo(methodOn(ClubController.class).all()).withRel("clubs"));
     }
 }
 
