@@ -4,8 +4,6 @@ import com.assigment.suretime.club.Club;
 import com.assigment.suretime.club.ClubRepository;
 import com.assigment.suretime.person.Gender;
 import com.assigment.suretime.address.Address;
-import com.assigment.suretime.competitor.Competitor;
-import com.assigment.suretime.competitor.CompetitorRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -35,30 +33,30 @@ public class dbSeeder {
         };
     }
 
-    @Bean
-    CommandLineRunner initDatabase(CompetitorRepository competitorRepository){
-        return args -> {
-            Address address = new Address(" Kurzyna Mala",
-                    "Nie powiem :)",
-                    new BigDecimal(22),
-                    new BigDecimal(33));
-            String email = "zywko@gmail.com";
-            Competitor competitor = new Competitor(
-                    "Szymon",
-                    "Zywko",
-                    Gender.MALE,
-                    email,
-                    address,
-                    LocalDateTime.now());
-
-            competitorRepository.findCompetitorByEmail(email).
-                    ifPresentOrElse(c -> log.info("Do not inserted " + competitor),
-                            () -> {
-                                competitorRepository.insert(competitor);
-                                log.info("Inserted: " + competitor);
-                            });
-        };
-
-    }
+//    @Bean
+//    CommandLineRunner initDatabase(CompetitorRepository competitorRepository){
+//        return args -> {
+//            Address address = new Address(" Kurzyna Mala",
+//                    "Nie powiem :)",
+//                    new BigDecimal(22),
+//                    new BigDecimal(33));
+//            String email = "zywko@gmail.com";
+//            Competitor competitor = new Competitor(
+//                    "Szymon",
+//                    "Zywko",
+//                    Gender.MALE,
+//                    email,
+//                    address,
+//                    LocalDateTime.now());
+//
+//            competitorRepository.findCompetitorByEmail(email).
+//                    ifPresentOrElse(c -> log.info("Do not inserted " + competitor),
+//                            () -> {
+//                                competitorRepository.insert(competitor);
+//                                log.info("Inserted: " + competitor);
+//                            });
+//        };
+//
+//    }
 
 }

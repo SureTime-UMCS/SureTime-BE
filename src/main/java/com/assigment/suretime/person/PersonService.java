@@ -3,11 +3,11 @@ package com.assigment.suretime.person;
 
 import com.assigment.suretime.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -16,8 +16,9 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PersonModelAssembler personAssembler;
 
-    public List<Person> all(){
-        return personRepository.findAll();
+
+    public CollectionModel<EntityModel<Person>> all(){
+        return personAssembler.toCollectionModel(personRepository.findAll());
     }
 
     public ResponseEntity<EntityModel<Person>> getByEmail(String email){
@@ -28,6 +29,8 @@ public class PersonService {
     }
 
     public ResponseEntity<EntityModel<Person>> addOne(Person person) {
+        //if person is found then return response with 203 status (See other)
+        //else create new person.
         return personRepository.findByEmail(person.getEmail()).
                 map(p -> new ResponseEntity<>(personAssembler.toModel(p), HttpStatus.SEE_OTHER))
                 .orElseGet(()->
@@ -41,12 +44,12 @@ public class PersonService {
 
 
     ResponseEntity<EntityModel<Person>> updateCoach(String personEmail, String coachEmail){
-        Person coach = personRepository.findByEmail(coachEmail).
+        var coach = personRepository.findByEmail(coachEmail).
                 orElseThrow(()-> new NotFoundException("Person", coachEmail));
-        Person person = personRepository.findByEmail(personEmail).
+        var person = personRepository.findByEmail(personEmail).
                 orElseThrow(()-> new NotFoundException("Person", personEmail));
         person.setCoach(coach);
-        Person updatedPerson = personRepository.save(person);
+        var updatedPerson = personRepository.save(person);
 
         return ResponseEntity.ok(personAssembler.toModel(updatedPerson));
 
