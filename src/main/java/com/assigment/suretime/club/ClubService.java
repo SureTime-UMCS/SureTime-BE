@@ -1,7 +1,7 @@
 package com.assigment.suretime.club;
 
 
-import com.assigment.suretime.NotFoundException;
+import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.Person;
 import com.assigment.suretime.person.PersonRepository;
 import lombok.AllArgsConstructor;
@@ -24,12 +24,12 @@ public class ClubService
     private static final Logger log = LoggerFactory.getLogger(ClubService.class);
 
     public EntityModel<Club> getClubById(String id){
-        Club club = clubRepository.findById(id).orElseThrow(()-> new ClubNotFoundException(id));
+        Club club = clubRepository.findById(id).orElseThrow(()-> new NotFoundException("Club",id));
         return clubModelAssembler.toModel(club);
     }
 
     public EntityModel<Club> getByName(String name){
-        Club club = clubRepository.findByName(name).orElseThrow(()-> new ClubNotFoundException(name));
+        Club club = clubRepository.findByName(name).orElseThrow(()-> new NotFoundException("Club", name));
         return clubModelAssembler.toModel(club);
     }
 

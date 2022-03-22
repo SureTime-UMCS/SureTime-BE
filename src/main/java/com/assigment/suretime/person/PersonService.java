@@ -1,15 +1,13 @@
 package com.assigment.suretime.person;
 
 
-import com.assigment.suretime.NotFoundException;
+import com.assigment.suretime.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor

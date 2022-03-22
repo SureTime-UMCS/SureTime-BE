@@ -1,4 +1,4 @@
-package com.assigment.suretime;
+package com.assigment.suretime.exceptions;
 
 
 import org.springframework.http.HttpStatus;
