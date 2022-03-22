@@ -1,7 +1,6 @@
 package com.assigment.suretime.person;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;

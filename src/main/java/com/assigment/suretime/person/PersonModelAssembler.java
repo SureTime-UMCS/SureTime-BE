@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * This class is used for generating links each Person object.
+ */
 @Component
 public class PersonModelAssembler implements RepresentationModelAssembler<Person, EntityModel<Person>> {
 

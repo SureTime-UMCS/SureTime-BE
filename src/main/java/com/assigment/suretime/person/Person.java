@@ -21,6 +21,7 @@ public class Person {
     private String id;
     private String firstName;
     private String secondName;
+
     @Indexed(unique = true)
     private String email;
     private Gender gender;
@@ -31,6 +32,7 @@ public class Person {
     @DBRef
     private Person coach;
 
+
     @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDateTime created;
 
@@ -40,6 +42,9 @@ public class Person {
         this.created = LocalDateTime.now();
     }
 
+    /**
+     * Annotation PersistenceConstructor is needed to mapping object when retrieved from db.
+     */
     @org.springframework.data.annotation.PersistenceConstructor
     public Person(String id, String firstName, String secondName, String email, Gender gender, Club club, Person coach, LocalDateTime created) {
         this.id = id;
