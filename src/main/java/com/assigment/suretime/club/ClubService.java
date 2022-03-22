@@ -7,6 +7,7 @@ import com.assigment.suretime.person.PersonRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +34,8 @@ public class ClubService
         return clubModelAssembler.toModel(club);
     }
 
-    public List<EntityModel<Club>> getAll(){
-        List<EntityModel<Club>> clubs = clubRepository.findAll().stream().map(clubModelAssembler::toModel).toList();
-        return clubs;
+    public CollectionModel<EntityModel<Club>> getAll(){
+        return clubModelAssembler.toCollectionModel(clubRepository.findAll());
     }
 
     public EntityModel<Club> addOne(Club newClub) {

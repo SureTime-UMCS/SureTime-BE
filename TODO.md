@@ -10,7 +10,7 @@ View the raw content of this file to understand the format.
 - [ ] Create request examples
 - [ ] Create UML diagram of application
 - [ ] Create Database diagram.
-
+- [ ] Log every thing. 
 ### In Progress
 
 - [ ] Translating to english readme.md [Dorota]

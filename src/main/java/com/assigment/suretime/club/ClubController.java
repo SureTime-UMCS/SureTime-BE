@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -16,12 +13,9 @@ public class ClubController {
 
     private final ClubService service;
 
-
     @GetMapping("/")
     public CollectionModel<EntityModel<Club>> all(){
-        List<EntityModel<Club>> clubs = service.getAll();
-        return CollectionModel.of(clubs,
-                linkTo(methodOn(ClubController.class).all()).withSelfRel());
+        return service.getAll();
     }
 
     @GetMapping("/{name}")

@@ -31,6 +31,6 @@ public class Heat {
     }
 
     public void removeCompetitor(Person person){
-        competitors.remove(person)
+        competitors.remove(person);
     }
 }
