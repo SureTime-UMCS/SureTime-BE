@@ -4,19 +4,19 @@ This is our todo list.
 View the raw content of this file to understand the format.
 
 ### Todo
-- [ ] Add posibility to add person to club and vice versa.
-- [ ] Translate to english readme.md
-- [ ] Create list of tables
-- [ ] Create request examples
-- [ ] Create UML diagram of application
-- [ ] Create Database diagram.
-- [ ] Log every thing. 
-- [ ] Spring Security.
+- [ ] Translate to english readme.md [Priority 1:5]
+- [ ] Create UML diagram of application [Priority: 2:10]
+- [ ] Create Database diagram. [Priority: 3:5] 
+- [ ] Log every thing [Priority: 3:5]
+- [ ] Spring Security [Priority: 4:5]
 
 ### In Progress
 
 - [ ] Translating to english readme.md [Dorota]
-- [ ] Club [Zywko]. 
+- [ ] Club [Zywko].
+- [ ] Create list of tables [Zywko]
+- [ ] Create request examples [Zywko]
+
 ### Done ✓
 
 - [x] Create my first TODO.md  
