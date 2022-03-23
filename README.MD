@@ -8,6 +8,10 @@ For further reference, please consider the following sections:
 * [Spring Boot Tutorial - Build a Rest Api with MongoDB](https://www.youtube.com/watch?v=ssj0CGxv60k&t=457s&ab_channel=Amigoscode)
 * [Project Lombok](https://projectlombok.org/)
 
+* [Spring Security](https://octoperf.com/blog/2018/03/08/securing-rest-api-spring-security/#user-auth-uuid)
+* [Spring Security - 2](https://www.bezkoder.com/spring-boot-jwt-auth-mongodb/)
+* [Hexagonal Architecture](https://www.baeldung.com/hexagonal-architecture-ddd-spring)
+
 ### Guides
 
 The following guides illustrate how to use some features concretely:
