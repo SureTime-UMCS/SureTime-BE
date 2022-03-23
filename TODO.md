@@ -11,10 +11,12 @@ View the raw content of this file to understand the format.
 - [ ] Create UML diagram of application
 - [ ] Create Database diagram.
 - [ ] Log every thing. 
+- [ ] Spring Security.
+
 ### In Progress
 
 - [ ] Translating to english readme.md [Dorota]
-- [ ] Club. 
+- [ ] Club [Zywko]. 
 ### Done ✓
 
 - [x] Create my first TODO.md  
@@ -23,6 +25,7 @@ View the raw content of this file to understand the format.
 - [x] Mongo Database integration
 - [x] Created first table
     - [x] Competitor
+    - [x] Club
 - [x] Auto creation of request in PostMan
   
   
