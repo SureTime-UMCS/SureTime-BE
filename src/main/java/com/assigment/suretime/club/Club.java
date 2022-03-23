@@ -16,8 +16,10 @@ public class Club {
     @Id
     private String id;
     private Address address;
+
     @Indexed(unique = true)
     private String name;
+
     @DocumentReference
     private List<Person> members;
 

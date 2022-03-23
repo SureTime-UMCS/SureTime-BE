@@ -1,4 +1,4 @@
-package heat;
+package com.assigment.suretime.heat;
 
 import com.assigment.suretime.person.Person;
 import lombok.Data;
@@ -29,7 +29,6 @@ public class Heat {
     public void addCompetitor(Person person){
         competitors.add(person);
     }
-
     public void removeCompetitor(Person person){
         competitors.remove(person);
     }

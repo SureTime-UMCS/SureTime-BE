@@ -1,6 +1,5 @@
 package com.assigment.suretime.club;
 
-import com.assigment.suretime.person.Person;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

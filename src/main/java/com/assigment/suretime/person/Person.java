@@ -1,7 +1,5 @@
 package com.assigment.suretime.person;
 
-import com.assigment.suretime.address.Address;
-
 import com.assigment.suretime.club.Club;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -9,7 +7,6 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
 
@@ -46,7 +43,8 @@ public class Person {
      * Annotation PersistenceConstructor is needed to mapping object when retrieved from db.
      */
     @org.springframework.data.annotation.PersistenceConstructor
-    public Person(String id, String firstName, String secondName, String email, Gender gender, Club club, Person coach, LocalDateTime created) {
+    public Person(String id, String firstName, String secondName, String email,
+                  Gender gender, Club club, Person coach, LocalDateTime created) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
