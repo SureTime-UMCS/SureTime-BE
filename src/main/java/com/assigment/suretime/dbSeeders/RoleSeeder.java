@@ -16,16 +16,16 @@ public class RoleSeeder {
 
     private static final Logger log = LoggerFactory.getLogger(RoleSeeder.class);
 
-    @Bean
-    CommandLineRunner addRoles(RoleRepository repository) {
-        return args -> {
-            Arrays.stream(ERole.values()).forEach(eRole ->
-                    repository.findByName(eRole)
-                            .ifPresentOrElse(role -> log.info("Role: " + eRole.toString() + " already exist."),
-                                    () -> {
-                                        repository.save(new Role(eRole));
-                                        log.info("Inserted role: " + eRole.toString());
-                                    }));
-        };
-    }
+//    @Bean
+//    CommandLineRunner addRoles(RoleRepository repository) {
+//        return args -> {
+//            Arrays.stream(ERole.values()).forEach(eRole ->
+//                    repository.findByName(eRole)
+//                            .ifPresentOrElse(role -> log.info("Role: " + eRole.toString() + " already exist."),
+//                                    () -> {
+//                                        repository.save(new Role(eRole));
+//                                        log.info("Inserted role: " + eRole.toString());
+//                                    }));
+//        };
+//    }
 }

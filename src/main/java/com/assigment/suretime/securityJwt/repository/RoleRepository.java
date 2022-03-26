@@ -9,4 +9,6 @@ import com.assigment.suretime.securityJwt.models.Role;
 
 public interface RoleRepository extends MongoRepository<Role, String> {
   Optional<Role> findByName(ERole name);
+
+
 }
