@@ -94,7 +94,10 @@ public class AuthController {
 
 		Set<Role> roles = new HashSet<>();
 		//By default user get only user role.
-		roles.add(new Role(ERole.ROLE_USER));
+		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+				.orElse(roleRepository.insert(new Role(ERole.ROLE_USER)));
+
+		roles.add(userRole);
 
 //		if (strRoles == null) {
 //			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
