@@ -12,7 +12,7 @@ public class ClubController {
 
     private final ClubService service;
 
-    @GetMapping("/")
+    @GetMapping("")
     public CollectionModel<EntityModel<Club>> all(){
         return service.getAll();
     }
@@ -39,7 +39,7 @@ public class ClubController {
         service.deleteByName(name);
     }
 
-    @PostMapping("addToClub/")
+    @PostMapping("addPersonToClub/")
     EntityModel<Club> addPersonToClub(@RequestBody String clubName,  @RequestBody String personEmail){
         return service.addPersonToClub(clubName, personEmail);
     }

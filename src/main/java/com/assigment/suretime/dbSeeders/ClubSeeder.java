@@ -1,22 +1,20 @@
-package com.assigment.suretime.commandLineRunners;
+package com.assigment.suretime.dbSeeders;
 
 import com.assigment.suretime.club.Club;
 import com.assigment.suretime.club.ClubRepository;
-import com.assigment.suretime.person.Gender;
 import com.assigment.suretime.address.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-@Configuration
-public class dbSeeder {
+@Component
+public class ClubSeeder {
 
-    private static final Logger log = LoggerFactory.getLogger(dbSeeder.class);
+    private static final Logger log = LoggerFactory.getLogger(ClubSeeder.class);
 
     @Bean
     CommandLineRunner addClubs(ClubRepository clubRepository){

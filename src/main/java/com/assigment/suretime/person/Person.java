@@ -1,7 +1,10 @@
 package com.assigment.suretime.person;
 
 import com.assigment.suretime.club.Club;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -31,12 +34,11 @@ public class Person {
 
 
     @Indexed(direction = IndexDirection.DESCENDING)
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
 
 
     public Person(String email){
         this.email = email;
-        this.created = LocalDateTime.now();
     }
 
     /**
@@ -53,6 +55,17 @@ public class Person {
         this.club = club;
         this.coach = coach;
         this.created = created;
+
+    }
+    @Builder
+    public Person(String firstName, String secondName, String email,
+                  Gender gender, Club club, Person coach) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.email = email;
+        this.gender = gender;
+        this.club = club;
+        this.coach = coach;
     }
 
     public Person(Person p) {
@@ -62,7 +75,6 @@ public class Person {
         this.gender = p.getGender();
         this.club = p.getClub();
         this.coach = p.getCoach();
-        this.created = LocalDateTime.now();
     }
 
 }
