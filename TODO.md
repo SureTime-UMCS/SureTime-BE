@@ -3,6 +3,9 @@
 This is our todo list.
 View the raw content of this file to understand the format.
 
+BE - Backend
+FE - Frontend
+
 ### Todo
 - [ ] Add posibility to add person to club and vice versa.
 - [ ] Translate to english readme.md
@@ -12,6 +15,12 @@ View the raw content of this file to understand the format.
 - [ ] Create Database diagram.
 - [ ] Log every thing. 
 - [ ] Spring Security.
+- [ ] Create FE project
+- [ ] Create gateway service
+- [ ] JWT Autentication
+- [ ] Create data mock to database
+- [ ] Cachowanie
+- [ ] Tests
 
 ### In Progress
 
