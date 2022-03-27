@@ -24,16 +24,16 @@ public class PersonSeeder {
     ));
 
 
-    @Bean
-    CommandLineRunner addPersons(PersonRepository repository){
-        return args -> {
-            persons.forEach(person ->
-                    repository.findByEmail(person.getEmail())
-                            .ifPresentOrElse(role -> log.info("Person: " + person.getEmail() + " already exist."),
-                                    () -> {
-                                        repository.save(person);
-                                        log.info("Inserted person: " + person.getEmail());
-                                    }));
-        };
-    }
+//    @Bean
+//    CommandLineRunner addPersons(PersonRepository repository){
+//        return args -> {
+//            persons.forEach(person ->
+//                    repository.findByEmail(person.getEmail())
+//                            .ifPresentOrElse(role -> log.info("Person: " + person.getEmail() + " already exist."),
+//                                    () -> {
+//                                        repository.save(person);
+//                                        log.info("Inserted person: " + person.getEmail());
+//                                    }));
+//        };
+//    }
 }

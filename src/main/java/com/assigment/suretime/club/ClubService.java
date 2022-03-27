@@ -1,6 +1,7 @@
 package com.assigment.suretime.club;
 
 
+import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.Person;
 import com.assigment.suretime.person.PersonRepository;
@@ -49,17 +50,18 @@ public class ClubService
     }
 
     public EntityModel<Club> updateOne(Club newClub, String name) {
-        return clubRepository.findByName(name).map(c->{
-            c.setName(newClub.getName());
-            c.setAddress(newClub.getAddress());
-            return clubModelAssembler.toModel(clubRepository.save(c));
-        }).orElseGet(()->{
-            Club club = new Club(newClub.getAddress(), newClub.getName());
-            return clubModelAssembler.toModel(clubRepository.insert(club));
-        });
-
+        clubRepository.findByName(newClub.getName())
+                .ifPresent(c->{
+                    throw new AlreadyExistsException(newClub.getName());
+                });
+        return clubRepository.findByName(name)
+                .map(club -> {
+                    club.update(newClub);
+                    clubRepository.save(club);
+                    return clubModelAssembler.toModel(club);
+                })
+                .orElseThrow(()->new NotFoundException("Club", name));
     }
-
     public void deleteByName(String name) {
         clubRepository.deleteClubByName(name);
     }

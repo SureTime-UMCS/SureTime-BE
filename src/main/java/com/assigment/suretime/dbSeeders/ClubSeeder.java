@@ -16,45 +16,31 @@ public class ClubSeeder {
 
     private static final Logger log = LoggerFactory.getLogger(ClubSeeder.class);
 
-    @Bean
-    CommandLineRunner addClubs(ClubRepository clubRepository){
-        return args -> {
-          Address address = new Address("Lublin",
-                  "Gleboka",
-                  new BigDecimal(31),
-                  new BigDecimal(0));
-          Club club = new Club(address, "AZS22");
-          clubRepository.findByName(club.getName()).ifPresentOrElse(
-                  c -> {log.info("Do not insert, club exist."+ club);},
-                  () -> {log.info("Insered:"+ clubRepository.insert(club));}
-          );
-        };
-    }
+   @Bean
+   CommandLineRunner addClubs(ClubRepository clubRepository){
+       return args -> {
+         Address address = new Address("Lublin",
+                 "Gleboka",
+                 new BigDecimal(31),
+                 new BigDecimal(0));
+         Club club = new Club(address, "AZS UMCS Lublin");
+         clubRepository.findByName(club.getName()).ifPresentOrElse(
+                 c -> {log.info("Do not insert, club exist."+ club);},
+                 () -> {log.info("Insered:"+ clubRepository.save(club));}
+         );
 
-//    @Bean
-//    CommandLineRunner initDatabase(CompetitorRepository competitorRepository){
-//        return args -> {
-//            Address address = new Address(" Kurzyna Mala",
-//                    "Nie powiem :)",
-//                    new BigDecimal(22),
-//                    new BigDecimal(33));
-//            String email = "zywko@gmail.com";
-//            Competitor competitor = new Competitor(
-//                    "Szymon",
-//                    "Zywko",
-//                    Gender.MALE,
-//                    email,
-//                    address,
-//                    LocalDateTime.now());
-//
-//            competitorRepository.findCompetitorByEmail(email).
-//                    ifPresentOrElse(c -> log.info("Do not inserted " + competitor),
-//                            () -> {
-//                                competitorRepository.insert(competitor);
-//                                log.info("Inserted: " + competitor);
-//                            });
-//        };
-//
-//    }
+           Address address2 = new Address("Stalowa Wola ",
+                   "Plytka",
+                   new BigDecimal(22),
+                   new BigDecimal(1));
+           Club club2 = new Club(address, "KKS Stalowa Wola");
+           clubRepository.findByName(club.getName()).ifPresentOrElse(
+                   c -> {log.info("Do not insert, club exist."+ club2);},
+                   () -> {log.info("Insered:"+ clubRepository.save(club2));}
+           );
+       };
+   }
+
+
 
 }

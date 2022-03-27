@@ -4,6 +4,7 @@ import com.assigment.suretime.securityJwt.security.jwt.AuthEntryPointJwt;
 import com.assigment.suretime.securityJwt.security.jwt.AuthTokenFilter;
 import com.assigment.suretime.securityJwt.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -31,6 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+    @Value("${suretime.app.isSecureMode}")
+    private boolean isSecureOn;
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
@@ -54,16 +58,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/api/v1/**").permitAll()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
+        if(isSecureOn){
+            http.cors().and().csrf().disable()
+                    .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                    .authorizeRequests()
+                    .antMatchers(HttpMethod.GET,"/api/v1/**").permitAll()
+                    .antMatchers("/api/auth/**").permitAll()
+                    .antMatchers("/api/test/**").permitAll()
 
-                .anyRequest().authenticated();
+                    .anyRequest().authenticated();
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+            http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        }else{
+            http.cors().and().csrf().disable()
+                    .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                    .authorizeRequests()
+                    .antMatchers("/api/v1/**").permitAll()
+                    .antMatchers("/api/auth/**").permitAll()
+                    .antMatchers("/api/test/**").permitAll()
+
+                    .anyRequest().authenticated();
+
+            http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        }
+
     }
 }

@@ -54,7 +54,7 @@ public class Person {
         this.gender = gender;
         this.club = club;
         this.coach = coach;
-        this.created = created;
+        this.created = LocalDateTime.now();
 
     }
     @Builder
