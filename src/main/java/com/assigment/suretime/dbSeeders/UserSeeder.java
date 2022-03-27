@@ -25,20 +25,27 @@ import java.util.List;
 public class UserSeeder {
     private static final Logger log = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
-//    @Bean
-//    CommandLineRunner addUsers(UserRepository repository, PasswordEncoder encoder, RoleRepository roleRepository) {
-//        return args -> {
-//            List<User> users = new ArrayList<>(Arrays.asList(
-//                    new User("user", "user@gmail.com", encoder.encode("password"), new HashSet<>(List.of(roleRepository.findByName(ERole.ROLE_USER).get()))),
-//                    new User("mod", "mod@gmail.com", encoder.encode("password"),  new HashSet<>(List.of(roleRepository.findByName(ERole.ROLE_USER).get())))
-//            ));
-//            users.forEach(user -> repository.findByUsername(user.getUsername())
-//                    .ifPresentOrElse(u -> log.info("User: " + user.getUsername() + " already exist."),
-//                            () -> {
-//                                log.info("Inserted:" + user.getUsername());
-//                                repository.save(user);
-//                            }));
-//        };
-//
-//    }
+    @Bean
+    CommandLineRunner addUsers(UserRepository repository, PasswordEncoder encoder, RoleRepository roleRepository) {
+        return args -> {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER).get();
+            Role mod = roleRepository.findByName(ERole.ROLE_MODERATOR).get();
+            Role admin = roleRepository.findByName(ERole.ROLE_ADMIN).get();
+
+            List<User> users = new ArrayList<>(Arrays.asList(
+                    new User("user", "user@gmail.com", encoder.encode("password"), new HashSet<>(List.of(userRole))),
+                    new User("mod", "mod@gmail.com", encoder.encode("password"),  new HashSet<>(List.of(userRole, mod))),
+                    new User("admin", "admin@gmail.com", encoder.encode("password"),
+                            new HashSet<>(List.of(userRole, mod, admin)))
+
+            ));
+            users.forEach(user -> repository.findByUsername(user.getUsername())
+                    .ifPresentOrElse(u -> log.info("User: " + user.getUsername() + " already exist."),
+                            () -> {
+                                log.info("Inserted:" + user.getUsername());
+                                repository.save(user);
+                            }));
+        };
+
+    }
 }
