@@ -2,6 +2,7 @@ package com.assigment.suretime.securityJwt.controllers;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,8 @@ import com.assigment.suretime.securityJwt.payload.response.JwtResponse;
 import com.assigment.suretime.securityJwt.payload.response.MessageResponse;
 import com.assigment.suretime.securityJwt.security.jwt.JwtUtils;
 import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,6 +54,8 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
+
+	private static Logger log = LoggerFactory.getLogger(AuthController.class);
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -94,10 +99,13 @@ public class AuthController {
 
 		Set<Role> roles = new HashSet<>();
 		//By default user get only user role.
-		Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-				.orElse(roleRepository.insert(new Role(ERole.ROLE_USER)));
-
-		roles.add(userRole);
+		Optional<Role> userRole = roleRepository.findByName(ERole.ROLE_USER);
+		Role role = userRole.get();
+		if(userRole.isEmpty()){
+			log.info("Role not exist. Creating new one.");
+			role = roleRepository.insert(new Role(ERole.ROLE_USER));
+		}
+		roles.add(role);
 
 //		if (strRoles == null) {
 //			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
