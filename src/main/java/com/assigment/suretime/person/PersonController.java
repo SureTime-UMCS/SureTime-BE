@@ -24,7 +24,7 @@ public class PersonController {
         return personService.getByEmail(email);
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<EntityModel<Person>> addOne(@RequestBody Person person){
         return personService.addOne(person);
     }

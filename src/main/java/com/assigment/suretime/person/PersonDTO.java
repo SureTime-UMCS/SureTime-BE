@@ -1,12 +1,9 @@
 package com.assigment.suretime.person;
 
 import com.assigment.suretime.club.Club;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -15,9 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
-@Document
-public class Person {
-    //In mongodb in id is by default String.
+public class PersonDTO {
     @Id
     private String id;
     private String firstName;
@@ -31,17 +26,9 @@ public class Person {
     private Club club;
 
     @DBRef
-    private Person coach;
+    private PersonDTO coach;
 
-
-    @Indexed(direction = IndexDirection.DESCENDING)
-    private LocalDateTime created = LocalDateTime.now();
-
-    //For deserialisation purposes Person must have a zero-arg constructor.
-    public Person(){}
-
-    @PersistenceConstructor
-    public Person(String email){
+    public PersonDTO(String email){
         this.email = email;
     }
 
@@ -49,8 +36,8 @@ public class Person {
      * Annotation PersistenceConstructor is needed to mapping object when retrieved from db.
      */
     @org.springframework.data.annotation.PersistenceConstructor
-    public Person(String id, String firstName, String secondName, String email,
-                  Gender gender, Club club, Person coach, LocalDateTime created) {
+    public PersonDTO(String id, String firstName, String secondName, String email,
+                     Gender gender, Club club, PersonDTO coach) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -58,12 +45,11 @@ public class Person {
         this.gender = gender;
         this.club = club;
         this.coach = coach;
-        this.created = LocalDateTime.now();
 
     }
     @Builder
-    public Person(String firstName, String secondName, String email,
-                  Gender gender, Club club, Person coach) {
+    public PersonDTO(String firstName, String secondName, String email,
+                     Gender gender, Club club, PersonDTO coach) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
@@ -72,7 +58,7 @@ public class Person {
         this.coach = coach;
     }
 
-    public Person(Person p) {
+    public PersonDTO(PersonDTO p) {
         this.firstName = p.getFirstName();
         this.secondName = p.getSecondName();
         this.email = p.getEmail();

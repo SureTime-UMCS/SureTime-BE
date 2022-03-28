@@ -2,16 +2,24 @@ package com.assigment.suretime.club;
 
 import com.assigment.suretime.address.Address;
 import com.assigment.suretime.person.Person;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.codecs.jsr310.LocalDateTimeCodec;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Document
+@NoArgsConstructor
 public class Club {
     @Id
     private String id;
@@ -23,9 +31,28 @@ public class Club {
     @DocumentReference
     private List<Person> members;
 
+    @Indexed(direction = IndexDirection.DESCENDING)
+    private LocalDateTime created = LocalDateTime.now();
+
+    @PersistenceConstructor
+    public Club(String id, Address address, String name, List<Person> members, LocalDateTime created) {
+        this.id = id;
+        this.address = address;
+        this.name = name;
+        this.members = members;
+        this.created = LocalDateTime.now();
+    }
+
+    @PersistenceConstructor
     public Club(Address address, String name) {
         this.address = address;
         this.name = name;
     }
 
+    public Club update(Club other) {
+        this.address = other.getAddress();
+        this.name = other.getName();
+        this.members = other.getMembers();
+        return this;
+    }
 }
