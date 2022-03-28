@@ -22,15 +22,14 @@ FE - Frontend
 
 ### In Progress
 
-- [ ] Translating to english readme.md [Dorota]
-- [ ] Club [Zywko].
-- [ ] Create list of tables [Zywko]
-- [ ] Create request examples [Zywko]
-- [ ] Add posibility to add person to club and vice versa.
-- [ ] Tests
-- [ ] Log every thing.
-- [ ] Create request examples
-
+- [ ] Stories [Zywko]
+- [ ] Migrate repository to project [Sala]
+- [ ] FE repository [Przemek]
+- [ ] Microservices analysis (statistic service) [Alek]
+- [ ] Mock of data [Dorota]
+- [ ] User roles [Dorota]
+- [ ] Login/Register FE [Sala]
+- [ ] Jira [Sala]
 
 ### Done ✓
 
