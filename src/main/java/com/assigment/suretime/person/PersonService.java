@@ -32,6 +32,15 @@ public class PersonService {
 
     }
 
+    public ResponseEntity<?> removeOne(String email){
+        personRepository.findByEmail(email)
+                .ifPresentOrElse(p-> {
+                    log.info("Deleted: "+ email);
+                    personRepository.delete(p)
+                    ;}, ()->{log.info("Not deleted: "+email+" because do not exist already.");});
+        return ResponseEntity.ok("");
+    }
+
     public ResponseEntity<EntityModel<Person>> addOne(Person person) {
         //if person is found then return response with 203 status (See other)
         //else create new person.
