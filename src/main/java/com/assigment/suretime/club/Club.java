@@ -15,7 +15,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Document
@@ -29,17 +31,25 @@ public class Club {
     private String name;
 
     @DocumentReference
-    private List<Person> members;
+    private Set<Person> members;
 
     @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDateTime created = LocalDateTime.now();
 
     @PersistenceConstructor
-    public Club(String id, Address address, String name, List<Person> members, LocalDateTime created) {
+    public Club(String id, Address address, String name, Set<Person> members, LocalDateTime created) {
         this.id = id;
         this.address = address;
         this.name = name;
         this.members = members;
+        this.created = LocalDateTime.now();
+    }
+    @PersistenceConstructor
+    public Club(String id, Address address, String name, List<Person> members, LocalDateTime created) {
+        this.id = id;
+        this.address = address;
+        this.name = name;
+        this.members = new HashSet<>(members);
         this.created = LocalDateTime.now();
     }
 

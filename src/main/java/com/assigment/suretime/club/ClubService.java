@@ -8,13 +8,15 @@ import com.assigment.suretime.person.PersonRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.target.EmptyTargetSource;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -25,53 +27,64 @@ public class ClubService
     private final ClubModelAssembler clubModelAssembler;
     private static final Logger log = LoggerFactory.getLogger(ClubService.class);
 
-    public EntityModel<Club> getClubById(String id){
+    public ResponseEntity<EntityModel<Club>> getClubById(String id){
         Club club = clubRepository.findById(id).orElseThrow(()-> new NotFoundException("Club",id));
-        return clubModelAssembler.toModel(club);
+        return ResponseEntity.ok(clubModelAssembler.toModel(club));
     }
 
-    public EntityModel<Club> getByName(String name){
+    public ResponseEntity<EntityModel<Club>> getByName(String name){
         Club club = clubRepository.findByName(name).orElseThrow(()-> new NotFoundException("Club", name));
-        return clubModelAssembler.toModel(club);
+        return ResponseEntity.ok(clubModelAssembler.toModel(club));
     }
 
-    public CollectionModel<EntityModel<Club>> getAll(){
-        return clubModelAssembler.toCollectionModel(clubRepository.findAll());
+    public ResponseEntity<CollectionModel<EntityModel<Club>>> getAll(){
+        return ResponseEntity.ok(clubModelAssembler.toCollectionModel(clubRepository.findAll()));
     }
 
-    public EntityModel<Club> addOne(Club newClub) {
+    public ResponseEntity<EntityModel<Club>> addOne(Club newClub) {
         Optional<Club> club = clubRepository.findByName(newClub.getName());
         if(club.isEmpty()){
-            return clubModelAssembler.toModel(clubRepository.insert(newClub));
+            EntityModel<Club> responseEntity = clubModelAssembler.toModel(clubRepository.insert(newClub));
+            return new ResponseEntity<>(responseEntity, HttpStatus.CREATED);
         }else{
-            return clubModelAssembler.toModel(club.get());
+            return new ResponseEntity<>(HttpStatus.SEE_OTHER);
         }
 
     }
-
-    public EntityModel<Club> updateOne(Club newClub, String name) {
+    public ResponseEntity<EntityModel<Club>> updateOne(Club newClub, String name) {
         clubRepository.findByName(newClub.getName())
                 .ifPresent(c->{
                     throw new AlreadyExistsException(newClub.getName());
                 });
-        return clubRepository.findByName(name)
+        return ResponseEntity.ok(clubRepository.findByName(name)
                 .map(club -> {
                     club.update(newClub);
                     clubRepository.save(club);
                     return clubModelAssembler.toModel(club);
                 })
-                .orElseThrow(()->new NotFoundException("Club", name));
+                .orElseThrow(()->new NotFoundException("Club", name)));
     }
-    public void deleteByName(String name) {
+    public ResponseEntity<?> deleteByName(String name) {
         clubRepository.deleteClubByName(name);
+        return ResponseEntity.ok("");
     }
 
-
-    public EntityModel<Club> addPersonToClub(String clubName, String email) {
+    public ResponseEntity<EntityModel<Club>>addPersonToClub(String clubName, String email) {
         Club club = clubRepository.findByName(clubName).orElseThrow(()-> new NotFoundException("Club",clubName));
         Person person = personRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("Person",email));
-        club.setMembers(Collections.singletonList(person));
-        return clubModelAssembler.toModel(club);
+        Set<Person> clubMembers = club.getMembers();
+        clubMembers.add(person);
+        club.setMembers(clubMembers);
+        return ResponseEntity.ok(clubModelAssembler.toModel(club));
 
+    }
+
+    public ResponseEntity<?> removeOne(String name){
+        clubRepository.findByName(name)
+                .ifPresentOrElse(c-> {
+                    log.info("Deleted club: "+ name);
+                    clubRepository.delete(c);
+                    }, ()->{log.info("Not deleted: "+name+" because do not exist already.");});
+        return ResponseEntity.ok("");
     }
 }

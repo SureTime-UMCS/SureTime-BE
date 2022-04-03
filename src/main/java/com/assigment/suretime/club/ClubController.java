@@ -3,7 +3,11 @@ package com.assigment.suretime.club;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
@@ -13,35 +17,37 @@ public class ClubController {
     private final ClubService service;
 
     @GetMapping("")
-    public CollectionModel<EntityModel<Club>> all(){
+    public ResponseEntity<CollectionModel<EntityModel<Club>>> all(){
         return service.getAll();
     }
 
     @GetMapping("/{name}")
-    public EntityModel<Club> getOne(@PathVariable String name){
+    public ResponseEntity<EntityModel<Club>> getOne(@PathVariable String name){
         return service.getByName(name);
     }
 
     @PostMapping()
-    EntityModel<Club> addOne(@RequestBody Club club){
+    ResponseEntity<EntityModel<Club>> addOne(@RequestBody Club club){
         return service.addOne(club);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{name}")
-    EntityModel<Club> updateOne(@RequestBody Club newClub, @PathVariable String name){
-        EntityModel<Club> entityModel = service.updateOne(newClub, name);
+    ResponseEntity<EntityModel<Club>> updateOne(@PathVariable String name, @RequestBody Club newClub){
+        ResponseEntity<EntityModel<Club>> entityModel = service.updateOne(newClub, name);
         return entityModel;
 
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{name}")
-    void deleteClub(@PathVariable String name){
-        service.deleteByName(name);
+    ResponseEntity<?> deleteClub(@PathVariable String name){
+        return service.deleteByName(name);
     }
 
-    @PostMapping("addPersonToClub/")
-    EntityModel<Club> addPersonToClub(@RequestBody String clubName,  @RequestBody String personEmail){
-        return service.addPersonToClub(clubName, personEmail);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{name}/add_person_to_club")
+    ResponseEntity<EntityModel<Club>> addPersonToClub(@PathVariable String name, @RequestBody String personEmail){
+        return service.addPersonToClub(name, personEmail);
     }
 
 }
