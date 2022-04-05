@@ -36,8 +36,8 @@ public class ClubController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{name}")
-    ResponseEntity<?> updateClubName(@PathVariable String name, @RequestBody Club newClub){
-        ResponseEntity<?> entityModel = service.updateClubName(newClub, name);
+    ResponseEntity<?> updateClub(@PathVariable String name, @RequestBody Club newClub){
+        ResponseEntity<?> entityModel = service.updateClub(newClub, name);
         return entityModel;
 
     }

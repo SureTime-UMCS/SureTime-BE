@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -67,5 +66,16 @@ public class Club {
         this.name = other.getName();
         this.members = other.getMembers();
         return this;
+    }
+
+    public void updateNotNullFields(Club newClub){
+        if(newClub.getName() !=null)
+            this.setName(newClub.getName());
+        if(newClub.getAddress() !=null)
+            this.setAddress(newClub.getAddress());
+        if(newClub.getClubModerators() !=null)
+            this.clubModerators.addAll(newClub.getClubModerators());
+        if(newClub.getMembers() !=null)
+            this.members.addAll(newClub.getMembers());
     }
 }

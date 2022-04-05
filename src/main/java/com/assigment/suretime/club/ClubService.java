@@ -52,7 +52,7 @@ public class ClubService
         }
 
     }
-    public ResponseEntity<?> updateClubName(Club newClub, String name) {
+    public ResponseEntity<?> updateClub(Club newClub, String name) {
         //if other club has newClub.getName() will not allowed to make two clubs have same unique name.
         clubRepository.findByName(newClub.getName())
                 .ifPresent(c->{
@@ -62,7 +62,8 @@ public class ClubService
 
         return ResponseEntity.ok(clubRepository.findByName(name)
                 .map(club -> {
-                    club.setName(newClub.getName());
+                    club.updateNotNullFields(newClub);
+
                     clubRepository.save(club);
                     return clubModelAssembler.toModel(club);
                 })
