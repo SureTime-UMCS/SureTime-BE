@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -28,10 +29,11 @@ public class Club {
     private String name;
 
     @DocumentReference
-    private Set<Person> members;
+    private Set<Person> members, clubModerators;
 
     @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDateTime created = LocalDateTime.now();
+
 
     @PersistenceConstructor
     public Club(String id, Address address, String name, Set<Person> members, LocalDateTime created) {

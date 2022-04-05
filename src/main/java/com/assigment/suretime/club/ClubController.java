@@ -1,5 +1,6 @@
 package com.assigment.suretime.club;
 
+import com.assigment.suretime.club.requestsModels.AddPersonsToClubModeratorModel;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -26,6 +27,8 @@ public class ClubController {
         return service.getByName(name);
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     ResponseEntity<EntityModel<Club>> addOne(@RequestBody Club club){
         return service.addOne(club);
@@ -49,5 +52,14 @@ public class ClubController {
     ResponseEntity<EntityModel<Club>> addPersonToClub(@PathVariable String name, @RequestBody String personEmail){
         return service.addPersonToClub(name, personEmail);
     }
+
+    @PutMapping("{clubName}/add_moderators")
+    ResponseEntity<?> addModeratorsToClub(
+            @PathVariable String clubName,
+            @RequestBody @Valid AddPersonsToClubModeratorModel persons){
+        return service.addModeratorsToClub(clubName, persons);
+    }
+
+
 
 }

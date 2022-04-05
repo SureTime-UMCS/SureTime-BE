@@ -1,6 +1,7 @@
 package com.assigment.suretime.club;
 
 import com.assigment.suretime.address.Address;
+import com.assigment.suretime.club.requestsModels.AddPersonsToClubModeratorModel;
 import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.PersonService;
@@ -12,7 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -21,6 +24,8 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Set;
 
 import static com.assigment.suretime.util.asJsonString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -103,6 +108,7 @@ class ClubControllerTest {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
         Club club = new Club(address, "newClub");
+        clubService.removeOne(club.getName());
 
         //WHEN
         mockMvc.perform(post(url.toString() + "/clubs")
@@ -122,6 +128,7 @@ class ClubControllerTest {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
         Club club = new Club(address, "newClub");
+        clubService.removeOne(club.getName());
         //WHEN
         mockMvc.perform(post(url.toString() + "/clubs")
                         .content(asJsonString(club))
@@ -136,7 +143,8 @@ class ClubControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "ADMIN", roles = {"ADMIN"})
+    //@WithMockUser(value = "ADMIN", roles = {"ADMIN"})
+    @WithUserDetails("admin")
     void addUserToClub() throws Exception {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
@@ -155,6 +163,79 @@ class ClubControllerTest {
                 .andDo(print()).andExpect(status().is(HttpStatus.OK.value()));
         //AFTER
         clubService.removeOne(club.getName());
+        personService.removeOne(person.getEmail());
+    }
+
+    @Test
+    //@WithMockUser(value = "ADMIN", roles = {"ADMIN"})
+    @WithUserDetails("admin")
+    void addModeratorsToClubAsAdmin() throws Exception {
+        //GIVEN
+        String clubName = "NotExistingClub";
+        Club newClub = new Club(new Address(), clubName);
+        clubService.removeOne(clubName);
+        clubService.addOne(newClub);
+
+        String newMod = "somebodywhosisgonabemoderator";
+        Person person = new Person(newMod);
+        personService.updateOrCreate(person);
+        AddPersonsToClubModeratorModel moderatorModel =
+                new AddPersonsToClubModeratorModel(List.of(newMod));
+        String payload = asJsonString(moderatorModel);
+        //When
+        mockMvc.perform(put(url + "/clubs/" + clubName + "/add_moderators")
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                .content(payload)).andDo(print())
+                //Then
+                .andExpect(status().isOk());
+        assert clubService.clubRepository
+                .findByName(newClub.getName())
+                .get()
+                .getClubModerators().stream()
+                .anyMatch(p -> p.getEmail().equals(newMod));
+
+        //After
+        clubService.removeOne(clubName);
+        personService.removeOne(person.getEmail());
+    }
+
+    @Test
+    //@WithMockUser(value = "ADMIN", roles = {"ADMIN"})
+    @WithUserDetails("user")
+    void addModeratorsToClubAsClubModerator() throws Exception {
+        //GIVEN
+        String newMod = "somebodywhosisgonabemoderator@gmail.com";
+        Person person = new Person(newMod);
+        personService.updateOrCreate(person);
+        //prepare club.
+        String clubName = "NotExistingClub";
+        Club club = new Club(new Address(), clubName);
+        Person oldModerator = personRepository.findByEmail("user@gmail.com").get();
+        club.setClubModerators(Set.of(oldModerator));
+
+        //assert club do not exist already
+        clubService.removeOne(clubName);
+        //add clean club with moderator.
+        clubService.addOne(club);
+
+
+        AddPersonsToClubModeratorModel moderatorModel =
+                new AddPersonsToClubModeratorModel(List.of(newMod));
+        String payload = asJsonString(moderatorModel);
+        //When
+        mockMvc.perform(put(url + "/clubs/" + clubName + "/add_moderators")
+                        .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                        .content(payload)).andDo(print())
+                //Then
+                .andExpect(status().isOk());
+        assert clubService.clubRepository
+                .findByName(club.getName())
+                .get()
+                .getClubModerators().stream()
+                .anyMatch(p -> p.getEmail().equals(newMod));
+
+        //After
+        clubService.removeOne(clubName);
         personService.removeOne(person.getEmail());
     }
 

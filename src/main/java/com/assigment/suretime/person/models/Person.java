@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Setter
 @Document
 public class Person {
-    //In mongodb in id is by default String.
     @Id
     private String id;
     private String firstName;

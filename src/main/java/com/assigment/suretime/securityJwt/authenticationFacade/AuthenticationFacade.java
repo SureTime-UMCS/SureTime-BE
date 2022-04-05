@@ -16,6 +16,12 @@ public class AuthenticationFacade implements IAuthenticationFacade {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
+
+    public static Authentication getAuthenticationStatic() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+
     @Override
     public UserDetailsImpl getUserDetailsImpl() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -40,6 +46,10 @@ public class AuthenticationFacade implements IAuthenticationFacade {
         }catch (ClassCastException classCastException){
             return false;
         }
+    }
+    public static boolean isAdmin(){
+        Authentication authentication = AuthenticationFacade.getAuthenticationStatic();
+        return AuthenticationFacade.isAdmin(authentication);
     }
 
     public static boolean isAdmin(Authentication auth) {
