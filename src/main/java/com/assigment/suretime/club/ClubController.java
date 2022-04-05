@@ -36,8 +36,8 @@ public class ClubController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{name}")
-    ResponseEntity<EntityModel<Club>> updateOne(@PathVariable String name, @RequestBody Club newClub){
-        ResponseEntity<EntityModel<Club>> entityModel = service.updateOne(newClub, name);
+    ResponseEntity<?> updateClubName(@PathVariable String name, @RequestBody Club newClub){
+        ResponseEntity<?> entityModel = service.updateClubName(newClub, name);
         return entityModel;
 
     }
@@ -47,9 +47,8 @@ public class ClubController {
         return service.deleteByName(name);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{name}/add_person_to_club")
-    ResponseEntity<EntityModel<Club>> addPersonToClub(@PathVariable String name, @RequestBody String personEmail){
+    ResponseEntity<?> addPersonToClub(@PathVariable String name, @RequestBody String personEmail){
         return service.addPersonToClub(name, personEmail);
     }
 

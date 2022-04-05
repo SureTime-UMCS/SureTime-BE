@@ -57,6 +57,10 @@ public class Club {
         this.address = address;
         this.name = name;
     }
+    @PersistenceConstructor
+    public Club(String name) {
+        this.name = name;
+    }
 
     public Club update(Club other) {
         this.address = other.getAddress();

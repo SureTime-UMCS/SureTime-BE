@@ -10,8 +10,6 @@ import com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFac
 import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -54,14 +52,17 @@ public class ClubService
         }
 
     }
-    public ResponseEntity<EntityModel<Club>> updateOne(Club newClub, String name) {
+    public ResponseEntity<?> updateClubName(Club newClub, String name) {
+        //if other club has newClub.getName() will not allowed to make two clubs have same unique name.
         clubRepository.findByName(newClub.getName())
                 .ifPresent(c->{
                     throw new AlreadyExistsException(newClub.getName());
                 });
+
+
         return ResponseEntity.ok(clubRepository.findByName(name)
                 .map(club -> {
-                    club.update(newClub);
+                    club.setName(newClub.getName());
                     clubRepository.save(club);
                     return clubModelAssembler.toModel(club);
                 })
@@ -72,8 +73,14 @@ public class ClubService
         return ResponseEntity.ok("");
     }
 
-    public ResponseEntity<EntityModel<Club>>addPersonToClub(String clubName, String email) {
+    public ResponseEntity<?>addPersonToClub(String clubName, String email) {
         Club club = clubRepository.findByName(clubName).orElseThrow(()-> new NotFoundException("Club",clubName));
+        UserDetailsImpl userDetails = authenticationFacade.getUserDetailsImpl();
+        boolean isClubModerator = userDetails != null && club.getClubModerators().stream().anyMatch(person -> person.getEmail().equals(userDetails.getEmail()));
+        if(!AuthenticationFacade.isAdmin() && !isClubModerator){
+            return new ResponseEntity<>("Your have to be admin or club moderator to edit this resource", HttpStatus.FORBIDDEN);
+        }
+
         Person person = personRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("Person",email));
         Set<Person> clubMembers = club.getMembers();
         clubMembers.add(person);
