@@ -3,17 +3,15 @@ package com.assigment.suretime.club;
 
 import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
-import com.assigment.suretime.person.Person;
+import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.PersonRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.target.EmptyTargetSource;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -75,6 +73,7 @@ public class ClubService
         Set<Person> clubMembers = club.getMembers();
         clubMembers.add(person);
         club.setMembers(clubMembers);
+        clubRepository.save(club);
         return ResponseEntity.ok(clubModelAssembler.toModel(club));
 
     }

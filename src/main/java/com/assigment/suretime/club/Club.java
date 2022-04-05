@@ -1,12 +1,9 @@
 package com.assigment.suretime.club;
 
 import com.assigment.suretime.address.Address;
-import com.assigment.suretime.person.Person;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.assigment.suretime.person.models.Person;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.codecs.jsr310.LocalDateTimeCodec;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.IndexDirection;

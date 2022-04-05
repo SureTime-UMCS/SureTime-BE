@@ -1,6 +1,6 @@
 package com.assigment.suretime.heat;
 
-import com.assigment.suretime.person.Person;
+import com.assigment.suretime.person.models.Person;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;

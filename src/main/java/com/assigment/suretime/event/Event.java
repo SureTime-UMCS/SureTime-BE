@@ -1,6 +1,6 @@
 package com.assigment.suretime.event;
 
-import com.assigment.suretime.person.Person;
+import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.heat.Heat;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.DBRef;

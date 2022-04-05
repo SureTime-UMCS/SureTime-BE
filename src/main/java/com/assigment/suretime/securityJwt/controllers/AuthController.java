@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.assigment.suretime.person.models.Person;
+import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.securityJwt.payload.request.LoginRequest;
 import com.assigment.suretime.securityJwt.payload.request.SignupRequest;
 import com.assigment.suretime.securityJwt.payload.response.JwtResponse;
@@ -45,6 +47,9 @@ public class AuthController {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	PersonRepository personRepository;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -99,12 +104,8 @@ public class AuthController {
 
 		Set<Role> roles = new HashSet<>();
 		//By default user get only user role.
-		Optional<Role> userRole = roleRepository.findByName(ERole.ROLE_USER);
-		Role role = userRole.get();
-		if(userRole.isEmpty()){
-			log.info("Role not exist. Creating new one.");
-			role = roleRepository.insert(new Role(ERole.ROLE_USER));
-		}
+		Role role = roleRepository.findByName(ERole.ROLE_USER)
+				.orElseGet(()-> roleRepository.insert(new Role(ERole.ROLE_USER)));
 		roles.add(role);
 
 //		if (strRoles == null) {
@@ -136,6 +137,19 @@ public class AuthController {
 
 		user.setRoles(roles);
 		userRepository.save(user);
+
+		Person person = new Person(user.getEmail());
+		person.setUser(user);
+		personRepository.findByEmail(user.getEmail())
+				.ifPresentOrElse(p->{
+					log.warn("Person: "+ p +" already exist but should not.");
+					p.setUser(user);
+					personRepository.save(person);
+				}, ()->{
+					log.info("Created Person Object");
+					personRepository.save(person);
+				});
+
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}

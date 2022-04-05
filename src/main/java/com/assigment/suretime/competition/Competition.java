@@ -1,7 +1,7 @@
 package com.assigment.suretime.competition;
 
 import com.assigment.suretime.event.Event;
-import com.assigment.suretime.person.Person;
+import com.assigment.suretime.person.models.Person;
 import lombok.Data;
 import org.apache.tomcat.jni.Address;
 import org.springframework.data.annotation.Id;

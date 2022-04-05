@@ -8,12 +8,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.assigment.suretime.person.models.Person;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Data
 @Document(collection = "users")
@@ -27,6 +26,9 @@ public class User {
 
   private LocalDateTime created = LocalDateTime.now();
 
+  @DocumentReference
+  private Person person;
+
   @NotBlank
   @Size(max = 50)
   @Email
@@ -36,7 +38,7 @@ public class User {
   @Size(max = 120)
   private String password;
 
-  @DBRef
+  @DocumentReference
   private Set<Role> roles = new HashSet<>();
 
   public User(String username, String email, String password) {

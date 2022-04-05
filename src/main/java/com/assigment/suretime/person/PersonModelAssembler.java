@@ -1,14 +1,12 @@
 package com.assigment.suretime.person;
 
 
-import com.assigment.suretime.club.Club;
-import com.assigment.suretime.club.ClubController;
+import com.assigment.suretime.person.models.Person;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;

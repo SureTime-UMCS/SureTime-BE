@@ -1,7 +1,7 @@
 package com.assigment.suretime.club;
 
 import com.assigment.suretime.address.Address;
-import com.assigment.suretime.person.Person;
+import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.PersonService;
 import org.junit.Before;
@@ -10,10 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -146,7 +144,7 @@ class ClubControllerTest {
         clubService.addOne(club);
         String email = "testuasdlem@gmail.com";
         Person person = new Person(email);
-        personService.addOne(person);
+        personService.updateOrCreate(person);
 
         //WHEN
 
