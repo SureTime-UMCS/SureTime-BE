@@ -27,6 +27,10 @@ public class ClubController {
         return service.getByName(name);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Club>> getOneById(@PathVariable String id){
+        return service.getClubById(id);
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
@@ -34,7 +38,6 @@ public class ClubController {
         return service.addOne(club);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{name}")
     ResponseEntity<?> updateClub(@PathVariable String name, @RequestBody Club newClub){
         ResponseEntity<?> entityModel = service.updateClub(newClub, name);
