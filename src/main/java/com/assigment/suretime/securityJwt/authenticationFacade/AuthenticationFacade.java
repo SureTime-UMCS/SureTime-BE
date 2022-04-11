@@ -2,11 +2,20 @@ package com.assigment.suretime.securityJwt.authenticationFacade;
 
 import com.assigment.suretime.exceptions.NotFoundAuthenticationExecution;
 import com.assigment.suretime.person.models.Person;
+import com.assigment.suretime.securityJwt.models.ERole;
+import com.assigment.suretime.securityJwt.models.Role;
 import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class AuthenticationFacade implements IAuthenticationFacade {
@@ -49,10 +58,28 @@ public class AuthenticationFacade implements IAuthenticationFacade {
     }
     public static boolean isAdmin(){
         Authentication authentication = AuthenticationFacade.getAuthenticationStatic();
-        return AuthenticationFacade.isAdmin(authentication);
+        return AuthenticationFacade.hasRole(ERole.ROLE_ADMIN);
     }
 
-    public static boolean isAdmin(Authentication auth) {
-        return auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    public static boolean hasRole(Role role){
+        return hasRole(role.getName());
     }
+
+    //TODO TEST IT.
+    public static boolean hasRole(ERole eRole){
+        Authentication auth = getAuthenticationStatic();
+        return auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(eRole.toString()));
+    }
+
+    //TODO: TEST IT.
+    public static boolean hasAnyRole(Collection<ERole> eRoles){
+        Authentication auth = getAuthenticationStatic();
+        if (auth != null) {
+            return false;
+        }
+        Set<String> authorities = Set.copyOf(auth.getAuthorities()).stream()
+                .map(GrantedAuthority::toString).collect(Collectors.toSet());
+        boolean hasAnyCommon = Collections.disjoint(authorities, eRoles);
+    }
+
 }

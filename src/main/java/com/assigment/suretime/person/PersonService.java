@@ -36,6 +36,7 @@ public class PersonService {
     protected final ClubRepository clubRepository;
     protected final RoleRepository roleRepository;
     protected final UserRepository userRepository;
+
     private Person createPersonFromDTO(PersonDTO personDTO){
         var coachOptional = personRepository.findByEmail(personDTO.getCoachEmail());
         var clubOptional = clubRepository.findByName(personDTO.getClubName());
