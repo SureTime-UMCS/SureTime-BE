@@ -3,18 +3,44 @@ package com.assigment.suretime.dbSeeders;
 import com.assigment.suretime.securityJwt.models.ERole;
 import com.assigment.suretime.securityJwt.models.Role;
 import com.assigment.suretime.securityJwt.repository.RoleRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-public class SeederUtils {
+
+@Slf4j
+@Component
+@AllArgsConstructor
+public class SeederUtils implements ISeeder{
+
+    RoleRepository roleRepository;
 
     static void AssureRolesExistsInDb(RoleRepository roleRepository) {
-        if (roleRepository.findByName(ERole.ROLE_USER).isEmpty()) {
-            roleRepository.insert(new Role(ERole.ROLE_USER));
-        }
-        if (roleRepository.findByName(ERole.ROLE_ADMIN).isEmpty()) {
-            roleRepository.insert(new Role(ERole.ROLE_ADMIN));
-        }
-        if (roleRepository.findByName(ERole.ROLE_MODERATOR).isEmpty()) {
-            roleRepository.insert(new Role(ERole.ROLE_MODERATOR));
+        log.info("Assuring roles are in db.");
+        for (var eRole : ERole.values()){
+            if (roleRepository.findByName(eRole).isEmpty()) {
+                roleRepository.insert(new Role(eRole));
+            }
         }
     }
+
+    @Override
+    public void seed() {
+        log.info("Seeding roles.");
+        for (var eRole : ERole.values()){
+            if (roleRepository.findByName(eRole).isEmpty()) {
+                log.info("Inserting role:"+eRole.toString());
+                roleRepository.insert(new Role(eRole));
+            }
+        }
+    }
+
+    @Override
+    public void resetDb() {
+
+        log.info("Removing all roles.");
+        roleRepository.deleteAll();
+    }
+
+
 }
