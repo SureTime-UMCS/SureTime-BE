@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class NotFoundAdvice {
+public class NotFoundAuthenticationAdvice {
+
     @ResponseBody
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(NotFoundAuthenticationExecution.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String notFoundHandler(NotFoundException ex){
-        return "Content not found.\n"+ex.getMessage();
+    String notFoundHandler(NotFoundAuthenticationExecution ex) {
+        return ex.getMessage();
     }
 }
-
