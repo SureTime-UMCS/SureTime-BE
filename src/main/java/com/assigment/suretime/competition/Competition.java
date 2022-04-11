@@ -22,17 +22,18 @@ public class Competition {
 
     @DBRef
     private Map<String,Person> competitors;
+
     private LocalDateTime startTime, endTime;
 
 
-    boolean addCompetitor(Person person){
-        //put returns previous value associated with key if there was in map already.
-        //returns null when key does not exist in map.
-         Person previousValue = competitors.put(person.getEmail(), person);
-         return previousValue == null;
-    }
-
-    void addEvent(Event event){
-        events.add(event);
-    }
+//    boolean addCompetitor(Person person){
+//        //put returns previous value associated with key if there was in map already.
+//        //returns null when key does not exist in map.
+//         Person previousValue = competitors.put(person.getEmail(), person);
+//         return previousValue == null;
+//    }
+//
+//    void addEvent(Event event){
+//        events.add(event);
+//    }
 }

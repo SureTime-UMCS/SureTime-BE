@@ -75,7 +75,7 @@ public class ClubService
         return ResponseEntity.ok("");
     }
 
-    public ResponseEntity<?>addPersonToClub(String clubName, String email) {
+    public ResponseEntity<?> addPersonToClub(String clubName, String email) {
         Club club = getOrElseThrow(clubRepository.findByName(clubName), new NotFoundException("Club", clubName));
         boolean isClubModerator = isClubModerator(club);
         if(!AuthenticationFacade.isAdmin() && !isClubModerator){
