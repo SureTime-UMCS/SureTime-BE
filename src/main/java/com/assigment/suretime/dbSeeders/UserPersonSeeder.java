@@ -66,6 +66,13 @@ public class UserPersonSeeder implements ISeeder {
             adminUser.setRoles(Set.of(admin, mod, userRole));
             userRepository.save(adminUser);
         }
+        if (userRepository.findByUsername("pzla").isEmpty()) {
+            authController.registerUser(new SignupRequest("pzla", "pzla@gmail.com", "password"));
+            User adminUser = userRepository.findByEmail("pzla@gmail.com").orElseThrow(() -> new NotFoundException("pzla", "pzla@gmail.com"));
+            adminUser.setRoles(Set.of(admin, mod, userRole));
+            userRepository.save(adminUser);
+        }
+
         if (userRepository.findByUsername("mod").isEmpty()) {
             authController.registerUser(new SignupRequest("mod", "mod@gmail.com", "password"));
             User modUser = userRepository.findByEmail("mod@gmail.com").orElseThrow(() -> new NotFoundException("User", "mod@gmail.com"));
