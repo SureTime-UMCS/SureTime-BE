@@ -146,11 +146,11 @@ public class AuthController {
 					p.setUser(user);
 					personRepository.save(person);
 				}, ()->{
-					log.info("Created Person Object");
+					log.info("Created Person " + person.getEmail());
 					personRepository.save(person);
 				});
 
-
+		log.info("Registered user:"+ person.getEmail());
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }
