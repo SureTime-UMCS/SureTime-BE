@@ -49,6 +49,18 @@ public class AuthenticationFacade implements IAuthenticationFacade {
             return false;
         }
     }
+
+    public static boolean isModifingOwnData(Person person) {
+        return isModifingOwnData(person.getEmail());
+    }
+    public static boolean isModifingOwnData(String personEmail) {
+        Authentication auth = getAuthenticationStatic();
+        try{
+            return auth != null && ((UserDetailsImpl) auth.getPrincipal()).getEmail().equals(personEmail);
+        }catch (ClassCastException classCastException){
+            return false;
+        }
+    }
     public static boolean isModifingOwnData(String personString, Authentication auth) {
         try{
             return auth != null && ((UserDetailsImpl) auth.getPrincipal()).getEmail().equals(personString);
@@ -56,6 +68,7 @@ public class AuthenticationFacade implements IAuthenticationFacade {
             return false;
         }
     }
+
     public static boolean isAdmin(){
         Authentication authentication = AuthenticationFacade.getAuthenticationStatic();
         return AuthenticationFacade.hasRole(ERole.ROLE_ADMIN);
@@ -80,6 +93,7 @@ public class AuthenticationFacade implements IAuthenticationFacade {
         Set<String> authorities = Set.copyOf(auth.getAuthorities()).stream()
                 .map(GrantedAuthority::toString).collect(Collectors.toSet());
         boolean hasAnyCommon = Collections.disjoint(authorities, eRoles);
+        return hasAnyCommon;
     }
 
 }

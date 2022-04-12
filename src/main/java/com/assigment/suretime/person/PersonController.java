@@ -4,6 +4,7 @@ import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.models.PersonDTO;
 import com.assigment.suretime.person.models.RolesCollection;
+import com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade;
 import com.assigment.suretime.securityJwt.authenticationFacade.IAuthenticationFacade;
 import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
@@ -31,39 +32,30 @@ public class PersonController {
     }
 
     @GetMapping("{email}")
-    public ResponseEntity<EntityModel<Person>> one(@PathVariable String email){
+    public ResponseEntity<?> one(@PathVariable String email){
         return personService.getByEmail(email);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<EntityModel<Person>> me(){
-        try{
-            Authentication auth = authenticationFacade.getAuthentication();
-            UserDetailsImpl userDetails = ((UserDetailsImpl) auth.getPrincipal());
-            return personService.getByEmail(userDetails.getEmail());
-        }catch (Exception e){
-            throw new NotFoundException("Exception", e.getMessage());
-        }
+    public ResponseEntity<?> me(){
+        return personService.getByEmail(authenticationFacade.getUserDetailsImpl().getEmail());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("")
     public ResponseEntity<?> addOne(@RequestBody PersonDTO personDTO) {
-            return personService.updateOrCreate(personDTO, authenticationFacade.getAuthentication());
+            return personService.updateOrCreatePerson(personDTO);
     }
 
     @PutMapping("")
     public ResponseEntity<?> update(@RequestBody PersonDTO person){
-            return personService.updateOrCreate(person, authenticationFacade.getAuthentication());
+            return personService.updateOrCreatePerson(person);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{email}")
     public ResponseEntity<?> removeOne(@PathVariable String email){
         return personService.removeOne(email);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("update_roles/{email}")
     public ResponseEntity<?> updateRolesForPerson(@PathVariable String email, @Valid @RequestBody RolesCollection roles){
         return personService.updateRoles(email, roles);

@@ -56,8 +56,8 @@ public class UserPersonSeeder implements ISeeder {
     }
 
     private void assertAdminAndModAndUserCreation(AuthController authController, UserRepository userRepository) {
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER).get();
-        Role mod = roleRepository.findByName(ERole.ROLE_MODERATOR).get();
+        Role userRole = roleRepository.findByName(ERole.ROLE_BASIC_USER).get();
+        Role mod = roleRepository.findByName(ERole.ROLE_CLUB_ADMIN).get();
         Role admin = roleRepository.findByName(ERole.ROLE_ADMIN).get();
 
         if (userRepository.findByUsername("admin").isEmpty()) {
