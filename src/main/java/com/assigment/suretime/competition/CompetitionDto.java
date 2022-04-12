@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,11 +25,11 @@ import java.util.Map;
 public class CompetitionDto {
 
     private String id;
+    private String name;
     private Address address;
     private List<Event> events;
 
-    @DocumentReference(lazy = true)
-    private Map<String, Person> competitors;
+    private Set<String> competitors;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -38,6 +39,6 @@ public class CompetitionDto {
     public Competition fromDto(CompetitionDto dto){
         Competition competition = new Competition();
         return competition;
-
     }
+
 }

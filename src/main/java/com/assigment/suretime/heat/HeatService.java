@@ -4,6 +4,7 @@ import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.ModelAssembler;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
