@@ -7,6 +7,7 @@ import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade;
+import com.assigment.suretime.securityJwt.models.ERole;
 import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -42,6 +45,7 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toCollectionModel(clubRepository.findAll()));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EntityModel<Club>> addOne(Club newClub) {
         Optional<Club> club = clubRepository.findByName(newClub.getName());
         if(club.isEmpty()){
@@ -52,6 +56,7 @@ public class ClubService
         }
 
     }
+
     public ResponseEntity<?> updateClub(Club newClub, String name) {
         //if other club has newClub.getName() will not allowed to make two clubs have same unique name.
         clubRepository.findByName(newClub.getName())
@@ -61,7 +66,7 @@ public class ClubService
 
         Club modifiedClub = getOrElseThrow(clubRepository.findByName(name), new NotFoundException("Club", name));
 
-        boolean isClubModerator = isClubModerator(modifiedClub);
+        boolean isClubModerator = authenticationFacade.isClubModerator(modifiedClub);
         if(!AuthenticationFacade.isAdmin() && !isClubModerator){
             return new ResponseEntity<>("Your have to be admin or club moderator to edit this resource", HttpStatus.FORBIDDEN);
         }
@@ -70,14 +75,16 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toModel(modifiedClub));
 
     }
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteByName(String name) {
         clubRepository.deleteClubByName(name);
         return ResponseEntity.ok("");
     }
 
+
     public ResponseEntity<?> addPersonToClub(String clubName, String email) {
         Club club = getOrElseThrow(clubRepository.findByName(clubName), new NotFoundException("Club", clubName));
-        boolean isClubModerator = isClubModerator(club);
+        boolean isClubModerator = authenticationFacade.isClubModerator(club);
         if(!AuthenticationFacade.isAdmin() && !isClubModerator){
             return new ResponseEntity<>("Your have to be admin or club moderator to edit this resource", HttpStatus.FORBIDDEN);
         }
@@ -90,7 +97,7 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toModel(club));
 
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> removeOne(String name){
         clubRepository.findByName(name)
                 .ifPresentOrElse(c-> {
@@ -103,8 +110,7 @@ public class ClubService
     public ResponseEntity<?> addModeratorsToClub(String clubName,
                                                                  AddPersonsToClubModeratorModel moderatorsEmail) {
         Club club = getOrElseThrow(clubRepository.findByName(clubName), new NotFoundException("Club", clubName));
-
-        boolean isClubModerator = isClubModerator(club);
+        boolean isClubModerator = authenticationFacade.isClubModerator(club);
 
         if(!AuthenticationFacade.isAdmin() && !isClubModerator){
             return new ResponseEntity<>("Your have to be admin or club moderator to edit this resource", HttpStatus.FORBIDDEN);
@@ -120,12 +126,6 @@ public class ClubService
         clubRepository.save(club);
         return ResponseEntity.ok(clubModelAssembler.toModel(club));
 
-    }
-
-    private boolean isClubModerator(Club club) {
-        UserDetailsImpl userDetails = authenticationFacade.getUserDetailsImpl();
-        boolean isClubModerator = userDetails != null && club.getClubModerators().stream().anyMatch(person -> person.getEmail().equals(userDetails.getEmail()));
-        return isClubModerator;
     }
 
     private Club getOrElseThrow(Optional<Club> clubRepository, NotFoundException clubName) {

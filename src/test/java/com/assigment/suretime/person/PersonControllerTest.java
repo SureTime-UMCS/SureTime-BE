@@ -26,10 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.assigment.suretime.util.asJsonString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -97,14 +94,21 @@ class PersonControllerTest {
     void removeOneAsUserIsForbidden() throws Exception {
         //GIVEN
         Person person = new Person("szymonzywko@gmail.com");
-        personService.updateOrCreate(person);
+        personService.personRepository.findByEmail(person.getEmail())
+                .ifPresentOrElse(person1 -> {}, ()->{
+                    personService.personRepository.insert(person);
+                });
+
+
         //WHEN
         mockMvc.perform(delete(url.toString() + "/persons/" + person.getEmail()))
                 .andDo(print())
                 //THEN
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
 
-        assert personService.personRepository.findByEmail(person.getEmail()).isPresent();
+
+        Optional<Person> byEmail = personService.personRepository.findByEmail(person.getEmail());
+        assert byEmail.isPresent();
         personService.removeOne(person.getEmail());
     }
 
@@ -123,6 +127,7 @@ class PersonControllerTest {
                 .andDo(print())
                 //THEN
                 .andExpect(status().is(HttpStatus.CREATED.value()));
+        Person p = personService.personRepository.findByEmail(personDTO.getEmail()).get();
         assert personService.personRepository.findByEmail(personDTO.getEmail()).isPresent();
         personService.removeOne(personDTO.getEmail());
     }
@@ -131,7 +136,7 @@ class PersonControllerTest {
     @WithUserDetails(value = "mod")
     void getMyData() throws Exception {
         Person person = new Person("mod@gmail.com");
-        ResponseEntity<EntityModel<Person>> entityModelResponseEntity = personService.updateOrCreate(person);
+        ResponseEntity<?> entityModelResponseEntity = personService.updateOrCreate(person);
 
         //WHEN
         mockMvc.perform(get(url.toString() + "/persons/me"))

@@ -1,5 +1,6 @@
 package com.assigment.suretime.securityJwt.authenticationFacade;
 
+import com.assigment.suretime.club.Club;
 import com.assigment.suretime.exceptions.NotFoundAuthenticationExecution;
 import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.securityJwt.models.ERole;
@@ -68,9 +69,13 @@ public class AuthenticationFacade implements IAuthenticationFacade {
             return false;
         }
     }
+    public boolean isClubModerator(Club club) {
+        UserDetailsImpl userDetails = getUserDetailsImpl();
+        boolean isClubModerator = userDetails != null && club.getClubModerators().stream().anyMatch(person -> person.getEmail().equals(userDetails.getEmail()));
+        return isClubModerator;
+    }
 
     public static boolean isAdmin(){
-        Authentication authentication = AuthenticationFacade.getAuthenticationStatic();
         return AuthenticationFacade.hasRole(ERole.ROLE_ADMIN);
     }
 

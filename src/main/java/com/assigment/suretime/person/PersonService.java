@@ -18,13 +18,10 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade.isAdmin;
 import static com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade.isModifingOwnData;
 
 @Slf4j
@@ -90,7 +87,10 @@ public class PersonService {
         return ResponseEntity.ok("");
     }
 
-    ResponseEntity<?> updateOrCreatePerson(PersonDTO personDTO) {
+    public ResponseEntity<?> updateOrCreate(Person person){
+        return updateOrCreate(new PersonDTO(person));
+    }
+    public ResponseEntity<?> updateOrCreate(PersonDTO personDTO) {
         if(!AuthenticationFacade.isAdmin() && !AuthenticationFacade.isModifingOwnData(personDTO.getEmail())) {
             return new ResponseEntity<>("You are not allowed to modify thihs content", HttpStatus.FORBIDDEN);
         }
