@@ -1,23 +1,30 @@
 package com.assigment.suretime.heat;
 
 import com.assigment.suretime.exceptions.NotFoundException;
+import com.assigment.suretime.generics.ModelAssembler;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class HeatService {
 
     HeatRepository heatRepository;
-    HeatModelAssembler heatModelAssembler;
+    ModelAssembler<Heat> heatModelAssembler;
+
+    public HeatService(HeatRepository heatRepository) {
+        this.heatRepository = heatRepository;
+        this.heatModelAssembler = new ModelAssembler<>(Heat.class, HeatController.class);
+    }
+
     public ResponseEntity<?> getOne(String id){
         Heat heat = heatRepository.findById(id).orElseThrow(()-> new NotFoundException("Heat", id));
         return ResponseEntity.ok(heatModelAssembler.toModel(heat));
     }
 
-    public ResponseEntity<?> getAll(){
-        return ResponseEntity.ok(heatModelAssembler.toCollectionModel(heatRepository.findAll()));
+    public CollectionModel<?> getAll(){
+        return heatModelAssembler.toCollectionModel(heatRepository.findAll());
     }
 
     public ResponseEntity<?> addOne(Heat heat) {

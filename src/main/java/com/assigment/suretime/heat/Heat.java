@@ -1,5 +1,6 @@
 package com.assigment.suretime.heat;
 
+import com.assigment.suretime.generics.MongoModel;
 import com.assigment.suretime.person.models.Person;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -8,12 +9,11 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +21,7 @@ import java.util.Map;
 @Setter
 @Document
 @NoArgsConstructor
-public class Heat {
+public class Heat implements MongoModel {
     @Id
     private String id;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -29,7 +29,7 @@ public class Heat {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime;
 
-    @DBRef(lazy = true)
+    @DocumentReference(lazy = true)
     List<Person> competitors;
     Map<Person, Float> results;
 
