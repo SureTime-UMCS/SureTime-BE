@@ -1,5 +1,6 @@
 package com.assigment.suretime.competition;
 
+import com.assigment.suretime.address.Address;
 import com.assigment.suretime.event.Event;
 import com.assigment.suretime.generics.MongoModel;
 import com.assigment.suretime.person.models.Person;
@@ -11,7 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.tomcat.jni.Address;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -21,6 +21,8 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,11 +60,12 @@ public class Competition implements MongoModel<Competition> {
 
     @PersistenceConstructor
     public Competition(String name, Address address, LocalDateTime startTime, LocalDateTime endTime) {
-        this.id = id;
         this.name = name;
         this.address = address;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.events = new ArrayList<>();
+        this.competitors = new HashMap<>();
     }
 
     public static CompetitionDto toDto(Competition competition){
@@ -75,5 +78,9 @@ public class Competition implements MongoModel<Competition> {
     @Override
     public void update(Competition model) {
         throw new NotImplementedException("implement me");
+    }
+
+    public void addEvent(Event event) {
+        this.events.add(event);
     }
 }

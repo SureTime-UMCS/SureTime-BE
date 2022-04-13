@@ -14,6 +14,8 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +40,8 @@ public class Heat implements MongoModel<Heat> {
     public Heat(String name, LocalDateTime startTime) {
         this.name = name;
         this.startTime = startTime;
+        this.competitors = new ArrayList<>();
+        this.results = new HashMap<>();
     }
 
     public Heat(String id,String name, LocalDateTime startTime, List<Person> competitors, Map<Person, Float> results) {

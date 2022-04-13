@@ -20,6 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -53,14 +54,16 @@ public class Event implements MongoModel<Event> {
     public Event(String name, LocalDateTime startTime) {
         this.name = name;
         this.startTime = startTime;
+        this.heats = new ArrayList<>();
+        this.competitors = new ArrayList<>();
     }
 
     @PersistenceConstructor
     public Event(String name, List<Person> competitors, List<Heat> heats, LocalDateTime startTime) {
         this.name = name;
         this.competitors = competitors;
-        this.heats = heats;
         this.startTime = startTime;
+        this.heats = heats;
     }
     @Override
     public void update(Event event) {
@@ -68,5 +71,12 @@ public class Event implements MongoModel<Event> {
         this.heats = event.getHeats();
         this.startTime = event.getStartTime();
         this.name = event.getName();
+    }
+
+    public void addHeat(Heat heat) {
+        if(this.heats == null){
+            this.heats = new ArrayList<>();
+        }
+        this.heats.add(heat);
     }
 }

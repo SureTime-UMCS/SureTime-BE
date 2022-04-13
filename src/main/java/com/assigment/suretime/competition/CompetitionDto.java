@@ -1,6 +1,7 @@
 package com.assigment.suretime.competition;
 
 
+import com.assigment.suretime.address.Address;
 import com.assigment.suretime.event.Event;
 import com.assigment.suretime.person.models.Person;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -8,7 +9,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
-import org.apache.tomcat.jni.Address;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.format.annotation.DateTimeFormat;

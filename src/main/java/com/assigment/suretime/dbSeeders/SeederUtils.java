@@ -1,11 +1,15 @@
 package com.assigment.suretime.dbSeeders;
 
+import com.assigment.suretime.address.Address;
 import com.assigment.suretime.securityJwt.models.ERole;
 import com.assigment.suretime.securityJwt.models.Role;
 import com.assigment.suretime.securityJwt.repository.RoleRepository;
+import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
 
 
 @Slf4j
@@ -22,6 +26,14 @@ public class SeederUtils implements ISeeder{
                 roleRepository.insert(new Role(eRole));
             }
         }
+    }
+    protected static Address getFakeAddress(Faker fake){
+        com.github.javafaker.Address fakeAddress = fake.address();
+        return new Address(
+                fakeAddress.city(),
+                fakeAddress.streetName(),
+                new BigDecimal(fakeAddress.streetAddressNumber()),
+                new BigDecimal(fakeAddress.buildingNumber()));
     }
 
     @Override

@@ -37,8 +37,8 @@ public class UserPersonSeeder implements ISeeder {
 
         assertAdminAndModAndUserCreation(authController, userRepository);
         Faker fake = new Faker();
-        for (int i = 0; i < 10; i++) {
-            String login = fake.name().username();
+        for (int i = 0; i < 40; i++) {
+            String login = fake.name().username() + fake.random().nextInt(1,100).toString();
             SignupRequest request = new SignupRequest(login, login+"@gmail.com", "password");
 
             authController.registerUser(request);

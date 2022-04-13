@@ -1,6 +1,8 @@
 package com.assigment.suretime.dbSeeders;
 
 
+import com.assigment.suretime.competition.Competition;
+import com.assigment.suretime.competition.CompetitionRepository;
 import com.assigment.suretime.securityJwt.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +19,14 @@ public class SeederEntryPoint implements ISeeder{
     private final ClubSeeder clubSeeder;
     private final UserPersonSeeder userPersonSeeder;
     private final RoleSeeder roleSeeder;
+    private final CompetitonSeeder competitonSeeder;
 
     @Override
     public void seed() {
            roleSeeder.seed();
            clubSeeder.seed();
            userPersonSeeder.seed();
+           competitonSeeder.seed();
     }
 
     @Override
@@ -30,6 +34,7 @@ public class SeederEntryPoint implements ISeeder{
         roleSeeder.resetDb();
         clubSeeder.resetDb();
         userPersonSeeder.resetDb();
+        competitonSeeder.resetDb();
     }
 
     @Bean

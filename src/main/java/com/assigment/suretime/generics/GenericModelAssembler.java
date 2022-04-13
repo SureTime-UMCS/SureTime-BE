@@ -14,9 +14,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class GenericModelAssembler<T extends MongoModel<T>> implements RepresentationModelAssembler<T, EntityModel<T>> {
 
     Class<? extends IGenericController> tControllerClass;
-    Class<? extends MongoModel> tClass;
+    Class<T> tClass;
 
-    public GenericModelAssembler(Class<? extends MongoModel<T>> tClass, Class<? extends IGenericController> tControllerClass) {
+    public GenericModelAssembler(Class<T> tClass, Class<? extends IGenericController> tControllerClass) {
         this.tControllerClass = tControllerClass;
         this.tClass = tClass;
     }
