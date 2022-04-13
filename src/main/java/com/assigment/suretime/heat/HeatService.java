@@ -1,40 +1,57 @@
 package com.assigment.suretime.heat;
 
+import com.assigment.suretime.event.Event;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericModelAssembler;
+import com.assigment.suretime.generics.GenericService;
+import com.assigment.suretime.person.models.Person;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-@Service
-public class HeatService {
+import java.util.List;
+import java.util.Map;
 
-    HeatRepository heatRepository;
-    GenericModelAssembler<Heat> heatModelAssembler;
+
+@Service
+@Slf4j
+public class HeatService extends GenericService<Heat,HeatRepository> {
+
+    final HeatRepository heatRepository;
+    final GenericModelAssembler<Heat> heatModelAssembler;
 
     public HeatService(HeatRepository heatRepository) {
+        super(heatRepository, Heat.class, new GenericModelAssembler<>(Heat.class, HeatController.class));
         this.heatRepository = heatRepository;
         this.heatModelAssembler = new GenericModelAssembler<>(Heat.class, HeatController.class);
     }
 
-    public ResponseEntity<?> getOne(String id){
-        Heat heat = heatRepository.findById(id).orElseThrow(()-> new NotFoundException("Heat", id));
-        return ResponseEntity.ok(heatModelAssembler.toModel(heat));
+    public ResponseEntity<?> addCompetitors(String heatId, List<Person> competitors){
+        Heat heat = heatRepository.findById(heatId)
+                .orElseThrow(()->new NotFoundException(Heat.class.getSimpleName(), heatId));
+        heat.setCompetitors(competitors);
+        Heat updated = heatRepository.save(heat);
+        log.info("Updated heat: "+ heat);
+        return ResponseEntity.ok(updated);
     }
 
-    public CollectionModel<?> getAll(){
-        return heatModelAssembler.toCollectionModel(heatRepository.findAll());
+    public ResponseEntity<?> addResults(String heatId, Map<Person, Float> results){
+        Heat heat = heatRepository.findById(heatId)
+                .orElseThrow(()->new NotFoundException(Heat.class.getSimpleName(), heatId));
+        heat.setResults(results);
+        Heat updated = heatRepository.save(heat);
+        log.info("Updated heat: "+ heat);
+        return ResponseEntity.ok(updated);
     }
 
-    public ResponseEntity<?> addOne(Heat heat) {
-        return ResponseEntity.ok(heatRepository.insert(heat));
+    public ResponseEntity<?> updateName(String heatId, String newName){
+        var heat = heatRepository.findById(heatId)
+                .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), heatId));
+        heat.setName(newName);
+        return ResponseEntity.ok(heatRepository.save(heat));
     }
 
-    public ResponseEntity<?> updateOne(Heat heat) {
-        Heat toUpdateHeat = heatRepository.findById(heat.getId())
-                .orElseThrow(()->new NotFoundException("Heat", heat.getId()));
-        toUpdateHeat.update(heat);
-        Heat updated = heatRepository.save(toUpdateHeat);
-        return ResponseEntity.ok(heatModelAssembler.toModel(updated));
-    }
 }

@@ -2,7 +2,7 @@ package com.assigment.suretime.heat;
 
 
 import com.assigment.suretime.generics.IGenericController;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/heats")
-@AllArgsConstructor
 public class HeatController implements IGenericController {
 
+    @Autowired
     HeatService heatService;
 
     @GetMapping("{id}")

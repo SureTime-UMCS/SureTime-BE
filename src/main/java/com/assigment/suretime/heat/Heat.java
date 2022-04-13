@@ -21,9 +21,10 @@ import java.util.Map;
 @Setter
 @Document
 @NoArgsConstructor
-public class Heat implements MongoModel {
+public class Heat implements MongoModel<Heat> {
     @Id
     private String id;
+    private String name;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -34,31 +35,25 @@ public class Heat implements MongoModel {
     Map<Person, Float> results;
 
     @PersistenceConstructor
-    public Heat(LocalDateTime startTime) {
+    public Heat(String name, LocalDateTime startTime) {
+        this.name = name;
         this.startTime = startTime;
     }
 
-    public Heat(String id, LocalDateTime startTime, List<Person> competitors, Map<Person, Float> results) {
+    public Heat(String id,String name, LocalDateTime startTime, List<Person> competitors, Map<Person, Float> results) {
         this.id = id;
+        this.name = name;
         this.startTime = startTime;
         this.competitors = competitors;
         this.results = results;
     }
+
+    @Override
     public void update(Heat heat){
         this.startTime = heat.getStartTime();
+        this.name = heat.getName();
         this.competitors = heat.getCompetitors();
         this.results = heat.getResults();
     }
-
-    public void addResult(Person person, Float result){
-        results.put(person, result);
-    }
-    public void addCompetitor(Person person){
-        competitors.add(person);
-    }
-    public void removeCompetitor(Person person){
-        competitors.remove(person);
-    }
-
 
 }

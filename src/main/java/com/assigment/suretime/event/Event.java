@@ -26,12 +26,13 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Event implements MongoModel {
+public class Event implements MongoModel<Event> {
 
     @Id
     private String id;
 
     private String name;
+
     @DBRef(lazy = true)
     private List<Person> competitors;
 
@@ -61,9 +62,11 @@ public class Event implements MongoModel {
         this.heats = heats;
         this.startTime = startTime;
     }
-
+    @Override
     public void update(Event event) {
-
-        throw new NotImplementedException("DO IT.");
+        this.competitors = event.getCompetitors();
+        this.heats = event.getHeats();
+        this.startTime = event.getStartTime();
+        this.name = event.getName();
     }
 }

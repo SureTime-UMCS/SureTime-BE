@@ -1,6 +1,10 @@
 package com.assigment.suretime.generics;
 
-public interface MongoModel {
+import org.apache.commons.lang3.NotImplementedException;
+
+public interface MongoModel<T> {
 
     public String getId();
+
+    public void update(T model);
 }

@@ -15,19 +15,22 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
 @NoArgsConstructor
 public class GenericService<
-        T extends MongoModel,
-        TRepository extends MongoRepository<T, String>,
-        TController extends IGenericController> {
+        T extends MongoModel<T>,
+        TRepository extends MongoRepository<T, String>> {
 
     TRepository repository;
-    TController controller;
     Class<T> tClass;
     GenericModelAssembler<T> modelAssembler;
 
-
+    public GenericService(TRepository repository,
+                          Class<T> tClass,
+                          GenericModelAssembler<T> modelAssembler) {
+        this.repository = repository;
+        this.tClass = tClass;
+        this.modelAssembler = modelAssembler;
+    }
 
     public ResponseEntity<?> getOne(String id){
         T t = repository.findById(id).orElseThrow(()-> new NotFoundException("Heat", id));
@@ -38,5 +41,24 @@ public class GenericService<
         List<T > models = repository.findAll();
         return modelAssembler.toCollectionModel(models);
     }
+
+    public ResponseEntity<?> addOne(T t) {
+        return ResponseEntity.ok(repository.insert(t));
+    }
+
+    public ResponseEntity<?> updateOne(T t) {
+        T toUpdate = repository.findById(t.getId())
+                .orElseThrow(()->new NotFoundException(tClass.getSimpleName(), t.getId()));
+        toUpdate.update(t);
+        T updated = repository.save(toUpdate);
+        return ResponseEntity.ok(modelAssembler.toModel(updated));
+    }
+
+    public ResponseEntity<?> removeOne(String id){
+        repository.deleteById(id);
+        return ResponseEntity.ok("");
+    }
+
+
 
 }
