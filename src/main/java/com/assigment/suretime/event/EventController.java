@@ -1,25 +1,31 @@
-package com.assigment.suretime.competition;
-
+package com.assigment.suretime.event;
 
 import com.assigment.suretime.generics.IGenericController;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
-@RequestMapping("api/v1/competitions")
+@RequestMapping("api/v1/events")
 @AllArgsConstructor
-public class CompetitionController implements IGenericController {
+public class EventController implements IGenericController {
+
+
+
     @Override
-    public ResponseEntity<?> one(String id) {
+    @GetMapping("{id}")
+    public ResponseEntity<?> one(@PathVariable String id) {
         return null;
     }
 
+    @GetMapping
     @Override
-    public CollectionModel<EntityModel<Competition>> all() {
+    public CollectionModel<?> all() {
         return null;
     }
 }

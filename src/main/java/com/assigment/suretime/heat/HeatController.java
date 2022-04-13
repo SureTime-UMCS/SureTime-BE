@@ -1,11 +1,9 @@
 package com.assigment.suretime.heat;
 
 
-import com.assigment.suretime.competition.Competition;
-import com.assigment.suretime.generics.IController;
+import com.assigment.suretime.generics.IGenericController;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/heats")
 @AllArgsConstructor
-public class HeatController implements IController {
+public class HeatController implements IGenericController {
 
     HeatService heatService;
 

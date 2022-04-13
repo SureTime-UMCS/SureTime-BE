@@ -4,8 +4,8 @@ import com.assigment.suretime.event.Event;
 import com.assigment.suretime.event.EventRepository;
 import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
-import com.assigment.suretime.generics.IController;
-import com.assigment.suretime.generics.ModelAssembler;
+import com.assigment.suretime.generics.IGenericController;
+import com.assigment.suretime.generics.GenericModelAssembler;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.models.Person;
 import lombok.AllArgsConstructor;
@@ -15,19 +15,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @AllArgsConstructor
-public class CompetitionService implements IController {
+public class CompetitionService implements IGenericController {
 
-    final ModelAssembler<Competition> modelAssembler = new ModelAssembler<>(Competition.class, CompetitionController.class);
+    final GenericModelAssembler<Competition> modelAssembler = new GenericModelAssembler<>(Competition.class, CompetitionController.class);
     final CompetitionRepository competitionRepository;
     final PersonRepository personRepository;
     final EventRepository eventRepository;

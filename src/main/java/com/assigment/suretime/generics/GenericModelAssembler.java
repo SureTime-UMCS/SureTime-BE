@@ -1,10 +1,8 @@
 package com.assigment.suretime.generics;
 
-import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Locale;
@@ -13,12 +11,12 @@ import java.util.stream.StreamSupport;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public class ModelAssembler<T extends MongoModel> implements RepresentationModelAssembler<T, EntityModel<T>> {
+public class GenericModelAssembler<T extends MongoModel> implements RepresentationModelAssembler<T, EntityModel<T>> {
 
-    Class<? extends IController> tControllerClass;
+    Class<? extends IGenericController> tControllerClass;
     Class<? extends MongoModel> tClass;
 
-    public ModelAssembler(Class<? extends MongoModel> tClass, Class<? extends IController> tControllerClass) {
+    public GenericModelAssembler(Class<? extends MongoModel> tClass, Class<? extends IGenericController> tControllerClass) {
         this.tControllerClass = tControllerClass;
         this.tClass = tClass;
     }
