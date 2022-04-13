@@ -4,6 +4,7 @@ import com.assigment.suretime.event.Event;
 import com.assigment.suretime.event.EventRepository;
 import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
+import com.assigment.suretime.generics.GenericService;
 import com.assigment.suretime.generics.IGenericController;
 import com.assigment.suretime.generics.GenericModelAssembler;
 import com.assigment.suretime.person.PersonRepository;
@@ -23,25 +24,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class CompetitionService implements IGenericController {
+public class CompetitionService extends GenericService<Competition, CompetitionRepository> {
 
     final GenericModelAssembler<Competition> modelAssembler = new GenericModelAssembler<>(Competition.class, CompetitionController.class);
     final CompetitionRepository competitionRepository;
     final PersonRepository personRepository;
     final EventRepository eventRepository;
-
-    @Override
-    public ResponseEntity<?> one(String id) {
-        return competitionRepository.findById(id)
-                .map(modelAssembler::toModel)
-                .map(ResponseEntity::ok)
-                .orElseThrow(()->new NotFoundException(Competition.class.getSimpleName(), id));
-    }
-
-    @Override
-    public CollectionModel<?> all() {
-        return modelAssembler.toCollectionModel(competitionRepository.findAll());
-    }
 
     public ResponseEntity<?> addOne(CompetitionDto competitionDto){
         Competition competition = competitionFromDto(competitionDto);

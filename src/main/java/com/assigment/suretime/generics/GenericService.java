@@ -1,6 +1,7 @@
 package com.assigment.suretime.generics;
 
 
+import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.heat.Heat;
 import lombok.AllArgsConstructor;
@@ -32,33 +33,33 @@ public class GenericService<
         this.modelAssembler = modelAssembler;
     }
 
-    public ResponseEntity<?> getOne(String id){
-        T t = repository.findById(id).orElseThrow(()-> new NotFoundException("Heat", id));
+    public ResponseEntity<?> getOne(String id) {
+        T t = repository.findById(id).orElseThrow(() -> new NotFoundException("Heat", id));
         return ResponseEntity.ok(modelAssembler.toModel(t));
     }
 
-    public CollectionModel<EntityModel<T>> getAll(){
-        List<T > models = repository.findAll();
+    public CollectionModel<EntityModel<T>> getAll() {
+        List<T> models = repository.findAll();
         return modelAssembler.toCollectionModel(models);
     }
 
     public ResponseEntity<?> addOne(T t) {
+        if (repository.findById(t.getId()).isPresent()) {
+            throw new AlreadyExistsException(tClass.getSimpleName(), t.toString());
+        }
         return ResponseEntity.ok(repository.insert(t));
     }
 
     public ResponseEntity<?> updateOne(T t) {
         T toUpdate = repository.findById(t.getId())
-                .orElseThrow(()->new NotFoundException(tClass.getSimpleName(), t.getId()));
+                .orElseThrow(() -> new NotFoundException(tClass.getSimpleName(), t.getId()));
         toUpdate.update(t);
         T updated = repository.save(toUpdate);
         return ResponseEntity.ok(modelAssembler.toModel(updated));
     }
 
-    public ResponseEntity<?> removeOne(String id){
+    public ResponseEntity<?> removeOne(String id) {
         repository.deleteById(id);
         return ResponseEntity.ok("");
     }
-
-
-
 }

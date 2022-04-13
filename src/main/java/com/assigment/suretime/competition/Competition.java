@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.tomcat.jni.Address;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
@@ -26,7 +27,7 @@ import java.util.Map;
 @Data
 @Document
 @NoArgsConstructor
-public class Competition implements MongoModel {
+public class Competition implements MongoModel<Competition> {
     @Id
     private String id;
     @Indexed(unique = true)
@@ -71,4 +72,8 @@ public class Competition implements MongoModel {
 
     }
 
+    @Override
+    public void update(Competition model) {
+        throw new NotImplementedException("implement me");
+    }
 }
