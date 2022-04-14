@@ -3,7 +3,7 @@ package com.assigment.suretime.event;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericService;
 import com.assigment.suretime.generics.GenericModelAssembler;
-import com.assigment.suretime.heat.Heat;
+import com.assigment.suretime.heat.models.Heat;
 import com.assigment.suretime.heat.HeatRepository;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.models.Person;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.StreamSupport;

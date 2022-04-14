@@ -2,22 +2,19 @@ package com.assigment.suretime.event;
 
 import com.assigment.suretime.generics.MongoModel;
 import com.assigment.suretime.person.models.Person;
-import com.assigment.suretime.heat.Heat;
+import com.assigment.suretime.heat.models.Heat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -66,13 +63,12 @@ public class Event implements MongoModel<Event> {
         this.heats = heats;
     }
     @Override
-    public void update(Event event) {
-        this.competitors = event.getCompetitors();
-        this.heats = event.getHeats();
-        this.startTime = event.getStartTime();
-        this.name = event.getName();
+    public void updateNotNullFields(Event event) {
+        this.competitors = event.getCompetitors() != null ? event.getCompetitors(): this.competitors;
+        this.heats = event.getHeats() != null ? event.getHeats() : this.heats;
+        this.startTime = event.getStartTime()!= null ? event.getStartTime() : this.startTime;
+        this.name = event.getName() != null ? event.getName() : this.name;
     }
-
     public void addHeat(Heat heat) {
         if(this.heats == null){
             this.heats = new ArrayList<>();

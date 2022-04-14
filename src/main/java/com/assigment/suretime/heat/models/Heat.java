@@ -1,4 +1,4 @@
-package com.assigment.suretime.heat;
+package com.assigment.suretime.heat.models;
 
 import com.assigment.suretime.generics.MongoModel;
 import com.assigment.suretime.person.models.Person;
@@ -53,11 +53,11 @@ public class Heat implements MongoModel<Heat> {
     }
 
     @Override
-    public void update(Heat heat){
-        this.startTime = heat.getStartTime();
-        this.name = heat.getName();
-        this.competitors = heat.getCompetitors();
-        this.results = heat.getResults();
+    public void updateNotNullFields(Heat heat){
+        this.startTime = heat.getStartTime() != null ?  heat.getStartTime() : this.startTime;
+        this.name = heat.getName() != null ? heat.getName(): this.name;
+        this.competitors = heat.getCompetitors() != null? heat.getCompetitors() : this.competitors;
+        this.results = heat.getResults() != null ? heat.getResults() : this.results;
     }
 
 }

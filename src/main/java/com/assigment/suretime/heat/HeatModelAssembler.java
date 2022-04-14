@@ -1,7 +1,7 @@
 package com.assigment.suretime.heat;
 
 
-import com.assigment.suretime.person.PersonController;
+import com.assigment.suretime.heat.models.Heat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;

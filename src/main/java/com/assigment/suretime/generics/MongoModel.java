@@ -1,10 +1,12 @@
 package com.assigment.suretime.generics;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 public interface MongoModel<T> {
 
     public String getId();
 
-    public void update(T model);
+    /**
+     * This methods updates T.x field only if model.x != null.
+     */
+    public void updateNotNullFields(T model);
+
 }

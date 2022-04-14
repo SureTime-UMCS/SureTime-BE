@@ -76,8 +76,14 @@ public class Competition implements MongoModel<Competition> {
     }
 
     @Override
-    public void update(Competition model) {
-        throw new NotImplementedException("implement me");
+    public void updateNotNullFields(Competition model) {
+        this.competitors = model.getCompetitors() != null ? model.getCompetitors() : this.competitors;
+        this.events = model.getEvents() != null ? model.getEvents() : this.events;
+        this.name = model.getName() != null ? model.getName() : this.name;
+        this.startTime = model.getStartTime() != null ? model.getStartTime() : this.startTime;
+        this.endTime = model.getEndTime() != null ? model.getEndTime() : this.endTime;
+        this.address = model.getAddress() != null ? model.getAddress() : this.address;
+
     }
 
     public void addEvent(Event event) {

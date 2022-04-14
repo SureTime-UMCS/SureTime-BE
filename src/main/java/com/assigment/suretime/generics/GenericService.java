@@ -3,10 +3,7 @@ package com.assigment.suretime.generics;
 
 import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
-import com.assigment.suretime.heat.Heat;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -53,7 +50,7 @@ public class GenericService<
     public ResponseEntity<?> updateOne(T t) {
         T toUpdate = repository.findById(t.getId())
                 .orElseThrow(() -> new NotFoundException(tClass.getSimpleName(), t.getId()));
-        toUpdate.update(t);
+        toUpdate.updateNotNullFields(t);
         T updated = repository.save(toUpdate);
         return ResponseEntity.ok(modelAssembler.toModel(updated));
     }
