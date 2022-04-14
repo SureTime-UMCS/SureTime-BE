@@ -22,6 +22,7 @@ public class CompetitionController implements IGenericController<Competition, Co
     }
 
     @Override
+    @PostMapping
     public ResponseEntity<?> updateOne(CompetitionDto dto) {
         return service.updateOne(dto);
     }
