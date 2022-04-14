@@ -5,13 +5,10 @@ import com.assigment.suretime.event.EventRepository;
 import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericService;
-import com.assigment.suretime.generics.IGenericController;
 import com.assigment.suretime.generics.GenericModelAssembler;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.models.Person;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,16 +20,23 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
-public class CompetitionService extends GenericService<Competition, CompetitionRepository> {
+public class CompetitionService extends GenericService<Competition, CompetitionDto, CompetitionRepository> {
 
     final GenericModelAssembler<Competition> modelAssembler = new GenericModelAssembler<>(Competition.class, CompetitionController.class);
     final CompetitionRepository competitionRepository;
     final PersonRepository personRepository;
     final EventRepository eventRepository;
 
+    public CompetitionService(CompetitionRepository competitionRepository,
+                              PersonRepository personRepository,
+                              EventRepository eventRepository) {
+        this.competitionRepository = competitionRepository;
+        this.personRepository = personRepository;
+        this.eventRepository = eventRepository;
+    }
+
     public ResponseEntity<?> addOne(CompetitionDto competitionDto){
-        Competition competition = competitionFromDto(competitionDto);
+        Competition competition = fromDto(competitionDto);
         competitionRepository.findByName(competitionDto.getName())
                 .ifPresent(c -> {
                     throw new AlreadyExistsException(competition.getName(),
@@ -41,7 +45,28 @@ public class CompetitionService extends GenericService<Competition, CompetitionR
         return ResponseEntity.ok(modelAssembler.toModel(competitionRepository.insert(competition)));
     }
 
-    public ResponseEntity<?> removeOne(String competitionName){
+
+    @Override
+    public Competition fromDto(CompetitionDto competitionDto) {
+        Map<String, Person> competitors = new HashMap<>();
+        competitionDto.getCompetitors().forEach(email -> {
+            personRepository.findByEmail(email).ifPresent(person -> competitors.put(email, person));
+        });
+        List<Event> events = competitionDto.getEventsId().stream()
+                .map(eventId -> eventRepository.findById(eventId)
+                        .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId))).toList();
+        return Competition.builder()
+                .competitors(competitors)
+                .address(competitionDto.getAddress())
+                .startTime(competitionDto.getStartTime())
+                .endTime(competitionDto.getEndTime())
+                .events(events)
+                .name(competitionDto.getName())
+                .build();
+    }
+
+
+    public ResponseEntity<?> deleteOne(String competitionName){
         competitionRepository.deleteByName(competitionName);
         return ResponseEntity.ok("");
     }
@@ -81,18 +106,4 @@ public class CompetitionService extends GenericService<Competition, CompetitionR
     }
 
 
-    private Competition competitionFromDto(CompetitionDto competitionDto) {
-        Map<String, Person> competitors = new HashMap<>();
-        competitionDto.getCompetitors().forEach(email -> {
-            personRepository.findByEmail(email).ifPresent(person -> competitors.put(email, person));
-        });
-        return Competition.builder()
-                .competitors(competitors)
-                .address(competitionDto.getAddress())
-                .startTime(competitionDto.getStartTime())
-                .endTime(competitionDto.getEndTime())
-                .events(competitionDto.getEvents())
-                .name(competitionDto.getName())
-                .build();
-    }
 }

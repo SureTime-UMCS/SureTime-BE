@@ -1,12 +1,9 @@
 package com.assigment.suretime.generics;
 
-public interface MongoModel{
-
-    public String getId();
+public interface MongoDto {
 
     /**
      * This methods updates T.x field only if model.x != null.
      */
-    public void updateNotNullFields(Object o);
 
 }

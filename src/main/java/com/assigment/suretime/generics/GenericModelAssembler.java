@@ -11,7 +11,7 @@ import java.util.stream.StreamSupport;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public class GenericModelAssembler<T extends MongoModel<T>> implements RepresentationModelAssembler<T, EntityModel<T>> {
+public class GenericModelAssembler<T extends MongoModel> implements RepresentationModelAssembler<T, EntityModel<T>> {
 
     Class<? extends IGenericController> tControllerClass;
     Class<T> tClass;

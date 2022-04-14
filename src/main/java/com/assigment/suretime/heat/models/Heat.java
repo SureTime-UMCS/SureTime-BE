@@ -23,7 +23,7 @@ import java.util.Map;
 @Setter
 @Document
 @NoArgsConstructor
-public class Heat implements MongoModel<Heat> {
+public class Heat implements MongoModel {
     @Id
     private String id;
     private String name;
@@ -34,6 +34,7 @@ public class Heat implements MongoModel<Heat> {
 
     @DocumentReference(lazy = true)
     List<Person> competitors;
+
     Map<Person, Float> results;
 
     @PersistenceConstructor
@@ -53,11 +54,27 @@ public class Heat implements MongoModel<Heat> {
     }
 
     @Override
-    public void updateNotNullFields(Heat heat){
+    public void updateNotNullFields(Object o){
+        Heat heat = (Heat) o;
         this.startTime = heat.getStartTime() != null ?  heat.getStartTime() : this.startTime;
         this.name = heat.getName() != null ? heat.getName(): this.name;
         this.competitors = heat.getCompetitors() != null? heat.getCompetitors() : this.competitors;
         this.results = heat.getResults() != null ? heat.getResults() : this.results;
     }
 
+    public HeatDto toDto(){
+        HeatDto dto = new HeatDto();
+        dto.setName(this.getName());
+        dto.setId(this.getId());
+        dto.setStartTime(this.getStartTime());
+        var results = this.getResults();
+        Map<String, Float> resultDto= new HashMap<>();
+        if(results!= null){
+            results.forEach((person, result) ->
+                    resultDto.put(person.getEmail(), result));
+        }
+        dto.setResults(resultDto);
+        dto.setCompetitorsEmail(this.getCompetitors().stream().map(Person::getEmail).toList());
+        return dto;
+    }
 }

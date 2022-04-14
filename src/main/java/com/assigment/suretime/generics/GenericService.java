@@ -1,6 +1,8 @@
 package com.assigment.suretime.generics;
 
 
+import com.assigment.suretime.competition.Competition;
+import com.assigment.suretime.competition.CompetitionDto;
 import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,9 @@ import java.util.List;
 
 @Component
 @NoArgsConstructor
-public class GenericService<
-        T extends MongoModel<T>,
+public abstract class GenericService<
+        T extends MongoModel,
+        TDto extends MongoDto,
         TRepository extends MongoRepository<T, String>> {
 
     TRepository repository;
@@ -30,6 +33,8 @@ public class GenericService<
         this.modelAssembler = modelAssembler;
     }
 
+    public abstract T fromDto(TDto dto);
+
     public ResponseEntity<?> getOne(String id) {
         T t = repository.findById(id).orElseThrow(() -> new NotFoundException("Heat", id));
         return ResponseEntity.ok(modelAssembler.toModel(t));
@@ -40,14 +45,16 @@ public class GenericService<
         return modelAssembler.toCollectionModel(models);
     }
 
-    public ResponseEntity<?> addOne(T t) {
+    public ResponseEntity<?> addOne(TDto dto) {
+        T t = fromDto(dto);
         if (repository.findById(t.getId()).isPresent()) {
             throw new AlreadyExistsException(tClass.getSimpleName(), t.toString());
         }
         return ResponseEntity.ok(repository.insert(t));
     }
 
-    public ResponseEntity<?> updateOne(T t) {
+    public ResponseEntity<?> updateOne(TDto dto) {
+        T t = fromDto(dto);
         T toUpdate = repository.findById(t.getId())
                 .orElseThrow(() -> new NotFoundException(tClass.getSimpleName(), t.getId()));
         toUpdate.updateNotNullFields(t);
@@ -55,7 +62,7 @@ public class GenericService<
         return ResponseEntity.ok(modelAssembler.toModel(updated));
     }
 
-    public ResponseEntity<?> removeOne(String id) {
+    public ResponseEntity<?> deleteOne(String id) {
         repository.deleteById(id);
         return ResponseEntity.ok("");
     }

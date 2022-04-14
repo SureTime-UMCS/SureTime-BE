@@ -29,12 +29,14 @@ import java.util.Map;
 @Data
 @Document
 @NoArgsConstructor
-public class Competition implements MongoModel<Competition> {
+public class Competition implements MongoModel {
     @Id
     private String id;
+
     @Indexed(unique = true)
     private String name;
     private Address address;
+
     @DocumentReference(lazy = true)
     private List<Event> events;
 
@@ -76,7 +78,8 @@ public class Competition implements MongoModel<Competition> {
     }
 
     @Override
-    public void updateNotNullFields(Competition model) {
+    public void updateNotNullFields(Object o) {
+        Competition model = (Competition)o;
         this.competitors = model.getCompetitors() != null ? model.getCompetitors() : this.competitors;
         this.events = model.getEvents() != null ? model.getEvents() : this.events;
         this.name = model.getName() != null ? model.getName() : this.name;

@@ -5,6 +5,7 @@ import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericModelAssembler;
 import com.assigment.suretime.generics.GenericService;
 import com.assigment.suretime.heat.models.Heat;
+import com.assigment.suretime.heat.models.HeatDto;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.models.Person;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class HeatService extends GenericService<Heat, HeatRepository> {
+public class HeatService extends GenericService<Heat,HeatDto, HeatRepository> {
 
     final HeatRepository heatRepository;
     final GenericModelAssembler<Heat> heatModelAssembler;
@@ -30,6 +31,23 @@ public class HeatService extends GenericService<Heat, HeatRepository> {
         this.heatRepository = heatRepository;
         this.personRepository = personRepository;
         this.heatModelAssembler = new GenericModelAssembler<>(Heat.class, HeatController.class);
+    }
+
+    @Override
+    public Heat fromDto(HeatDto dto) {
+        Heat heat = new Heat();
+        heat.setId(dto.getId());
+        heat.setName(dto.getName());
+        heat.setStartTime(dto.getStartTime());
+        Map<Person, Float> results = new HashMap<>();
+        dto.getResults().forEach((email, result) ->{
+            var person = personRepository.findByEmail(email)
+                    .orElseThrow(()->
+                            new NotFoundException(Person.class.getSimpleName(), email));
+            results.put(person, result);
+        });
+        heat.setResults(results);
+        return heat;
     }
 
     public ResponseEntity<?> addCompetitors(String heatId, List<?> competitors) {

@@ -3,6 +3,7 @@ package com.assigment.suretime.competition;
 
 import com.assigment.suretime.address.Address;
 import com.assigment.suretime.event.Event;
+import com.assigment.suretime.generics.MongoDto;
 import com.assigment.suretime.person.models.Person;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -22,13 +23,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Builder
-public class CompetitionDto {
+public class CompetitionDto implements MongoDto {
 
     private String id;
     private String name;
     private Address address;
-    private List<Event> events;
-
+    private List<String> eventsId;
     private Set<String> competitors;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -36,9 +36,5 @@ public class CompetitionDto {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime, endTime;
 
-    public Competition fromDto(CompetitionDto dto){
-        Competition competition = new Competition();
-        return competition;
-    }
 
 }

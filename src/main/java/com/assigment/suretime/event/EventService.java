@@ -3,6 +3,7 @@ package com.assigment.suretime.event;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericService;
 import com.assigment.suretime.generics.GenericModelAssembler;
+import com.assigment.suretime.generics.MongoDto;
 import com.assigment.suretime.heat.models.Heat;
 import com.assigment.suretime.heat.HeatRepository;
 import com.assigment.suretime.person.PersonRepository;
@@ -17,7 +18,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @Slf4j
-public class EventService extends GenericService<Event,EventRepository> {
+public class EventService extends GenericService<Event,EventDto,EventRepository> {
 
     final EventRepository eventRepository;
     final PersonRepository personRepository;
@@ -71,5 +72,10 @@ public class EventService extends GenericService<Event,EventRepository> {
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
         return ResponseEntity.ok(updated);
+    }
+
+    @Override
+    public Event fromDto(EventDto dto) {
+        return new Event();
     }
 }

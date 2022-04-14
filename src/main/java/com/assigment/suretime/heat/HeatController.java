@@ -5,17 +5,20 @@ import com.assigment.suretime.generics.IGenericController;
 import com.assigment.suretime.heat.models.AddCompetitorsRequest;
 import com.assigment.suretime.heat.models.AddResultsRequest;
 import com.assigment.suretime.heat.models.Heat;
+import com.assigment.suretime.heat.models.HeatDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+
 
 import javax.validation.Valid;
 
 
 @RestController
 @RequestMapping("api/v1/heats")
-public class HeatController implements IGenericController {
+public class HeatController implements IGenericController<Heat, HeatDto> {
 
     @Autowired
     HeatService heatService;
@@ -25,22 +28,22 @@ public class HeatController implements IGenericController {
         return heatService.getOne(id);
     }
 
+    @Override
+    @PutMapping
+    public ResponseEntity<?> updateOne(@RequestBody HeatDto t) {
+        return heatService.updateOne(t);
+    }
+
     @GetMapping
     public CollectionModel<?> all() {
         return heatService.getAll();
     }
 
-
-    @PostMapping
-    public ResponseEntity<?> addOne(@RequestBody Heat heat) {
-        return heatService.addOne(heat);
+    @Override
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteOne(@PathVariable String id) {
+        return heatService.deleteOne(id);
     }
-
-    @PutMapping
-    public ResponseEntity<?> updateOne(@RequestBody Heat heat) {
-        return heatService.updateOne(heat);
-    }
-
 
     @PostMapping("add_competitors")
     public ResponseEntity<?> addCompetitor(

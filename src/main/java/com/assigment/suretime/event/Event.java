@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Event implements MongoModel<Event> {
+public class Event implements MongoModel {
 
     @Id
     private String id;
@@ -63,7 +63,8 @@ public class Event implements MongoModel<Event> {
         this.heats = heats;
     }
     @Override
-    public void updateNotNullFields(Event event) {
+    public void updateNotNullFields(Object o) {
+        Event event = (Event)o;
         this.competitors = event.getCompetitors() != null ? event.getCompetitors(): this.competitors;
         this.heats = event.getHeats() != null ? event.getHeats() : this.heats;
         this.startTime = event.getStartTime()!= null ? event.getStartTime() : this.startTime;
