@@ -36,7 +36,7 @@ public class HeatDto implements MongoDto {
 
     List<String> competitorsEmail;
 
-    Map<String, Float> results;
+    Map<String, String> results;
 
     @PersistenceConstructor
     public HeatDto(String name, LocalDateTime startTime) {
@@ -48,7 +48,7 @@ public class HeatDto implements MongoDto {
 
     public HeatDto(String id, String name, LocalDateTime startTime,
                    List<String> competitorsEmail,
-                   Map<String, Float> results) {
+                   Map<String, String> results) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;

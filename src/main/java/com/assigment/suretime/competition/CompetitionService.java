@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,10 +49,8 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
     @Override
     public Competition fromDto(CompetitionDto competitionDto) {
-        Map<String, Person> competitors = new HashMap<>();
-        competitionDto.getCompetitors().forEach(email -> {
-            personRepository.findByEmail(email).ifPresent(person -> competitors.put(email, person));
-        });
+        List<String> competitors = new ArrayList<>();
+        competitionDto.getCompetitors().forEach(email -> personRepository.findByEmail(email).ifPresent(Person::getEmail));
         List<Event> events = competitionDto.getEventsId().stream()
                 .map(eventId -> eventRepository.findById(eventId)
                         .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId))).toList();
@@ -96,8 +95,7 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
         Competition competition = competitionRepository.findById(competitionId)
                 .orElseThrow(()->new NotFoundException(Competition.class.getSimpleName(), competitionId));
 
-        competition.setCompetitors(competitors.stream()
-                .collect(Collectors.toMap(Person::getEmail, person->person)));
+        competition.setCompetitors(competitors.stream().map(Person::getEmail).collect(Collectors.toList()));
 
         return new ResponseEntity<>(
                 modelAssembler.toModel(competitionRepository.save(competition)),

@@ -1,7 +1,6 @@
 package com.assigment.suretime.event;
 
 import com.assigment.suretime.generics.MongoModel;
-import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.heat.models.Heat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -12,13 +11,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Document
 @NoArgsConstructor
@@ -31,11 +31,9 @@ public class Event implements MongoModel {
 
     private String name;
 
-    @DBRef(lazy = true)
-    private List<Person> competitors;
+    private Set<String> competitorsEmail;
 
-    @DBRef(lazy = true)
-    private List<Heat> heats;
+    private Set<String> heatsId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -51,29 +49,29 @@ public class Event implements MongoModel {
     public Event(String name, LocalDateTime startTime) {
         this.name = name;
         this.startTime = startTime;
-        this.heats = new ArrayList<>();
-        this.competitors = new ArrayList<>();
+        this.heatsId = new HashSet<>();
+        this.competitorsEmail = new HashSet<>();
     }
 
     @PersistenceConstructor
-    public Event(String name, List<Person> competitors, List<Heat> heats, LocalDateTime startTime) {
+    public Event(String name, Set<String> competitors, Set<String> heatsId, LocalDateTime startTime) {
         this.name = name;
-        this.competitors = competitors;
+        this.competitorsEmail = competitors;
         this.startTime = startTime;
-        this.heats = heats;
+        this.heatsId = heatsId;
     }
     @Override
     public void updateNotNullFields(Object o) {
         Event event = (Event)o;
-        this.competitors = event.getCompetitors() != null ? event.getCompetitors(): this.competitors;
-        this.heats = event.getHeats() != null ? event.getHeats() : this.heats;
+        this.competitorsEmail = event.getCompetitorsEmail() != null ? event.getCompetitorsEmail(): this.competitorsEmail;
+        this.heatsId = event.getHeatsId() != null ? event.getHeatsId() : this.heatsId;
         this.startTime = event.getStartTime()!= null ? event.getStartTime() : this.startTime;
         this.name = event.getName() != null ? event.getName() : this.name;
     }
-    public void addHeat(Heat heat) {
-        if(this.heats == null){
-            this.heats = new ArrayList<>();
+    public void addHeat(String heatId) {
+        if(this.heatsId == null){
+            this.heatsId = new HashSet<>();
         }
-        this.heats.add(heat);
+        this.heatsId.add(heatId);
     }
 }

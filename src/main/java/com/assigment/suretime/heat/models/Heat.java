@@ -32,10 +32,9 @@ public class Heat implements MongoModel {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime;
 
-    @DocumentReference(lazy = true)
-    List<Person> competitors;
+    List<String> competitors;
 
-    Map<Person, Float> results;
+    Map<String, String> results;
 
     @PersistenceConstructor
     public Heat(String name, LocalDateTime startTime) {
@@ -45,7 +44,7 @@ public class Heat implements MongoModel {
         this.results = new HashMap<>();
     }
 
-    public Heat(String id,String name, LocalDateTime startTime, List<Person> competitors, Map<Person, Float> results) {
+    public Heat(String id,String name, LocalDateTime startTime, List<String> competitors, Map<String, String> results) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;
@@ -68,13 +67,12 @@ public class Heat implements MongoModel {
         dto.setId(this.getId());
         dto.setStartTime(this.getStartTime());
         var results = this.getResults();
-        Map<String, Float> resultDto= new HashMap<>();
+        Map<String, String> resultDto= new HashMap<>();
         if(results!= null){
-            results.forEach((person, result) ->
-                    resultDto.put(person.getEmail(), result));
+            resultDto.putAll(results);
         }
         dto.setResults(resultDto);
-        dto.setCompetitorsEmail(this.getCompetitors().stream().map(Person::getEmail).toList());
+        dto.setCompetitorsEmail(this.getCompetitors());
         return dto;
     }
 }

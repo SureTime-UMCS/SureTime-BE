@@ -3,7 +3,6 @@ package com.assigment.suretime.event;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericService;
 import com.assigment.suretime.generics.GenericModelAssembler;
-import com.assigment.suretime.generics.MongoDto;
 import com.assigment.suretime.heat.models.Heat;
 import com.assigment.suretime.heat.HeatRepository;
 import com.assigment.suretime.person.PersonRepository;
@@ -44,34 +43,22 @@ public class EventService extends GenericService<Event,EventDto,EventRepository>
     }
 
     public ResponseEntity<?> addCompetitors(String eventId, Set<String> personsId){
-        List<Person> competitors = StreamSupport
-                .stream(personRepository.findAllById(personsId).spliterator(), false).toList();
-
-        return addCompetitors(eventId, competitors);
-    }
-
-    public ResponseEntity<?> addCompetitors(String eventId, List<Person> competitors){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.setCompetitors(competitors);
+        event.setCompetitorsEmail(personsId);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
         return ResponseEntity.ok(updated);
     }
 
     public ResponseEntity<?> addHeats(String eventId, Set<String> heatsId){
-        List<Heat> heats = StreamSupport
-                .stream(heatRepository.findAllById(heatsId).spliterator(), false).toList();
-        return addHeats(eventId, heats);
-    }
-
-    public ResponseEntity<?> addHeats(String eventId, List<Heat> heats){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.setHeats(heats);
+        event.setHeatsId(heatsId);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
         return ResponseEntity.ok(updated);
+
     }
 
     @Override

@@ -48,17 +48,13 @@ public class HeatController implements IGenericController<Heat, HeatDto> {
     @PostMapping("add_competitors")
     public ResponseEntity<?> addCompetitor(
             @RequestBody @Valid AddCompetitorsRequest request) {
-        return heatService.addCompetitors(request.getHeatId(), request.getCompetitorsEmails());
+        return heatService.updateCompetitors(request.getHeatId(), request.getCompetitorsEmails());
     }
 
     @PostMapping("add_results")
     public ResponseEntity<?> addResults(
             @RequestBody @Valid AddResultsRequest request) {
-        return heatService.addResults(request.getHeatId(), request.getResults());
+        return heatService.updateResults(request.getHeatId(), request.getResults());
     }
 
-    @PutMapping("update_name/{heatId}/{new_name}")
-    public ResponseEntity<?> updateName(@PathVariable String heatId,@PathVariable String new_name) {
-        return heatService.updateName(heatId, new_name);
-    }
 }

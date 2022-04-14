@@ -11,12 +11,15 @@ import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.models.Person;
 import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.assigment.suretime.dbSeeders.SeederUtils.getFakeAddress;
@@ -61,8 +64,8 @@ public class CompetitonSeeder implements ISeeder{
             LocalDateTime endTime = LocalDateTime.of(2022,
                     startTime.getMonth(), startTime.getDayOfMonth(), 22, 0, 0);
             Competition competition = new Competition(competitionName, address, startTime, endTime);
-            competition.setCompetitors(allPersons.stream()
-                    .collect(Collectors.toMap(Person::getEmail, person -> person)));
+            List<String> competitorsEmails = allPersons.subList(0, 30).stream().map(Person::getEmail).toList();
+            competition.setCompetitors(competitorsEmails);
             for (var i=0; i<eventNames.size(); i++) {
                 Event event = createEvent(eventNames.get(i), competition.getStartTime(), i);
                 competition.addEvent(event);
@@ -75,15 +78,21 @@ public class CompetitonSeeder implements ISeeder{
 
     private Event createEvent(String name, LocalDateTime competitionStartTime, int eventNumber){
         Event event = new Event(name);
-        event.setCompetitors(allPersons);
+        event.setCompetitorsEmail(allPersons.stream().map(Person::getEmail).collect(Collectors.toSet()));
         event.setStartTime(competitionStartTime.plusMinutes(eventNumber* 10L));
 
         int numbersOfHeat = fake.random().nextInt(1,3);
         for (int i = 0; i < numbersOfHeat; i++) {
             Heat heat = new Heat(name,event.getStartTime().plusMinutes(i*2L));
-            heat.setCompetitors(allPersons.subList(i, i+8));
+            List<String> competitorsEmail = allPersons.subList(i, i + 8).stream().map(Person::getEmail).toList();
+            heat.setCompetitors(competitorsEmail);
+
+            Map<String, String> results = new HashMap<>();
+            competitorsEmail.forEach(email -> results.put(email, fake.random().nextInt(0, 230).toString()));
+            heat.setResults(results);
+
             heat = heatRepository.save(heat);
-            event.addHeat(heat);
+            event.addHeat(heat.getId());
         }
 
         return eventRepository.save(event);
@@ -92,6 +101,8 @@ public class CompetitonSeeder implements ISeeder{
 
     @Override
     public void resetDb() {
+        eventRepository.deleteAll();
+        heatRepository.deleteAll();
         competitionRepository.deleteAll();
     }
 }

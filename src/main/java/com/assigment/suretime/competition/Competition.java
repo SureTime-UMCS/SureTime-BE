@@ -40,8 +40,7 @@ public class Competition implements MongoModel {
     @DocumentReference(lazy = true)
     private List<Event> events;
 
-    @DocumentReference(lazy = true)
-    private Map<String,Person> competitors;
+    private List<String> competitors;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -50,7 +49,7 @@ public class Competition implements MongoModel {
 
     @Builder
     @PersistenceConstructor
-    public Competition(String id, String name, Address address, List<Event> events, Map<String, Person> competitors, LocalDateTime startTime, LocalDateTime endTime) {
+    public Competition(String id, String name, Address address, List<Event> events, List<String> competitors, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
         this.address = address;
         this.name = name;
@@ -67,12 +66,19 @@ public class Competition implements MongoModel {
         this.startTime = startTime;
         this.endTime = endTime;
         this.events = new ArrayList<>();
-        this.competitors = new HashMap<>();
+        this.competitors = new ArrayList<>();
     }
 
-    public static CompetitionDto toDto(Competition competition){
+    public CompetitionDto toDto(){
         //FIXME: make it work if need.
         CompetitionDto competitionDto = new CompetitionDto();
+        competitionDto.setCompetitors(this.getCompetitors());
+        competitionDto.setAddress(this.getAddress());
+        competitionDto.setEventsId(this.getEvents().stream().map(Event::getId).toList());
+        competitionDto.setId(this.getId());
+        competitionDto.setName(this.getName());
+        competitionDto.setStartTime(this.getStartTime());
+        competitionDto.setEndTime(this.getEndTime());
         return competitionDto;
 
     }

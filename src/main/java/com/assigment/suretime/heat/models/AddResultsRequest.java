@@ -2,7 +2,9 @@ package com.assigment.suretime.heat.models;
 
 
 import lombok.*;
+import org.springframework.data.util.Pair;
 
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -13,5 +15,5 @@ import java.util.Map;
 public class AddResultsRequest {
 
     String heatId;
-    Map<String, Float> results;
+    List<Pair<String, String>> results;
 }

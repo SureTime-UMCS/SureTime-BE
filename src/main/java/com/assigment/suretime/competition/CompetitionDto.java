@@ -29,7 +29,7 @@ public class CompetitionDto implements MongoDto {
     private String name;
     private Address address;
     private List<String> eventsId;
-    private Set<String> competitors;
+    private List<String> competitors;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
