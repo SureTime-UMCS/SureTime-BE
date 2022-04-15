@@ -6,6 +6,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("api/v1/events")
@@ -27,10 +29,36 @@ public class EventController implements IGenericController<Event, EventDto> {
     }
 
     @Override
-    @PostMapping
-    public ResponseEntity<?> updateOne(EventDto event) {
-        return eventService.updateOne(event);
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateOne(@PathVariable String id,
+                                       @RequestBody @Valid EventDto event) {
+        return eventService.updateOne(id, event);
     }
+
+    @PostMapping("{id}/add_heat/{heat_id}")
+    public ResponseEntity<?> addHeat(@PathVariable("id") String id,
+                                     @PathVariable("heat_id") String heatId){
+        return eventService.addHeat(id, heatId);
+    }
+    @PostMapping("{id}/delete_heat/{heat_id}")
+    public ResponseEntity<?> deleteHeat(@PathVariable("id") String id,
+                                     @PathVariable("heat_id") String heatId){
+        return eventService.deleteHeat(id, heatId);
+    }
+
+    @PostMapping("{id}/delete_competitor/{email}")
+    public ResponseEntity<?> deleteCompetitor(@PathVariable("id") String id,
+                                        @PathVariable("email") String email){
+        return eventService.deleteCompetitor(id, email);
+    }
+
+    @PostMapping("{id}/add_competitor/{email}")
+    public ResponseEntity<?> addCompetitor(@PathVariable("id") String id,
+                                              @PathVariable("email") String email){
+        return eventService.addCompetitor(id, email);
+    }
+
+
     @Override
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteOne(@PathVariable String id){

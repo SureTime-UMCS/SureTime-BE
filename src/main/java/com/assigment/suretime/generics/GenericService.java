@@ -53,9 +53,9 @@ public abstract class GenericService<
         return ResponseEntity.ok(repository.insert(t));
     }
 
-    public ResponseEntity<?> updateOne(TDto dto) {
+    public ResponseEntity<?> updateOne(String id,TDto dto) {
         T t = fromDto(dto);
-        T toUpdate = repository.findById(t.getId())
+        T toUpdate = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(tClass.getSimpleName(), t.getId()));
         toUpdate.updateNotNullFields(t);
         T updated = repository.save(toUpdate);

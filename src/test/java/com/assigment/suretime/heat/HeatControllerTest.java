@@ -107,7 +107,7 @@ class HeatControllerTest {
         dto.setStartTime(newStartTime);
         String payload = asJsonString(dto);
 
-        mockMvc.perform(put(url.toString())
+        mockMvc.perform(put(url+"/"+heat.getId())
                         .content(payload)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))

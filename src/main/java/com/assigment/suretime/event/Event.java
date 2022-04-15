@@ -1,7 +1,6 @@
 package com.assigment.suretime.event;
 
 import com.assigment.suretime.generics.MongoModel;
-import com.assigment.suretime.heat.models.Heat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -15,9 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Document
@@ -54,7 +51,7 @@ public class Event implements MongoModel {
     }
 
     @PersistenceConstructor
-    public Event(String name, Set<String> competitors, Set<String> heatsId, LocalDateTime startTime) {
+    public Event(String name, LocalDateTime startTime, Set<String> competitors, Set<String> heatsId) {
         this.name = name;
         this.competitorsEmail = competitors;
         this.startTime = startTime;

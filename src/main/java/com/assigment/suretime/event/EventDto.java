@@ -14,9 +14,12 @@ import lombok.Setter;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -27,9 +30,9 @@ public class EventDto implements MongoDto {
 
     private String name;
 
-    private List<String> competitorsEmail;
+    private Set<String> competitorsEmail;
 
-    private List<String> heatsId;
+    private Set<String> heatsId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -45,16 +48,26 @@ public class EventDto implements MongoDto {
     public EventDto(String name, LocalDateTime startTime) {
         this.name = name;
         this.startTime = startTime;
-        this.heatsId = new ArrayList<>();
-        this.competitorsEmail = new ArrayList<>();
+        this.heatsId = new HashSet<>();
+        this.competitorsEmail = new HashSet<>();
+    }
+    public EventDto(Event event){
+        this.name = event.getName();
+        this.heatsId = event.getHeatsId();
+        this.competitorsEmail = event.getCompetitorsEmail();
+        this.id = event.getId();
+        this.startTime = event.getStartTime();
     }
 
     @PersistenceConstructor
-    public EventDto(String name, List<String> competitorsEmail, List<String> heatsId, LocalDateTime startTime) {
+    public EventDto(String name, Set<String> competitorsEmail, Set<String> heatsId, LocalDateTime startTime) {
         this.name = name;
         this.competitorsEmail = competitorsEmail;
         this.startTime = startTime;
         this.heatsId = heatsId;
     }
+
+
+
 
 }

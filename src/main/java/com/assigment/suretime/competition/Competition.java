@@ -1,9 +1,7 @@
 package com.assigment.suretime.competition;
 
 import com.assigment.suretime.address.Address;
-import com.assigment.suretime.event.Event;
 import com.assigment.suretime.generics.MongoModel;
-import com.assigment.suretime.person.models.Person;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -11,20 +9,15 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Document
@@ -37,10 +30,9 @@ public class Competition implements MongoModel {
     private String name;
     private Address address;
 
-    @DocumentReference(lazy = true)
-    private List<Event> events;
+    private Set<String> eventsId;
 
-    private List<String> competitors;
+    private Set<String> competitors;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -49,11 +41,11 @@ public class Competition implements MongoModel {
 
     @Builder
     @PersistenceConstructor
-    public Competition(String id, String name, Address address, List<Event> events, List<String> competitors, LocalDateTime startTime, LocalDateTime endTime) {
+    public Competition(String id, String name, Address address, Set<String> events, Set<String> competitors, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
         this.address = address;
         this.name = name;
-        this.events = events;
+        this.eventsId = events;
         this.competitors = competitors;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -65,8 +57,8 @@ public class Competition implements MongoModel {
         this.address = address;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.events = new ArrayList<>();
-        this.competitors = new ArrayList<>();
+        this.eventsId = new HashSet<>();
+        this.competitors = new HashSet<>();
     }
 
     public CompetitionDto toDto(){
@@ -74,7 +66,7 @@ public class Competition implements MongoModel {
         CompetitionDto competitionDto = new CompetitionDto();
         competitionDto.setCompetitors(this.getCompetitors());
         competitionDto.setAddress(this.getAddress());
-        competitionDto.setEventsId(this.getEvents().stream().map(Event::getId).toList());
+        competitionDto.setEventsId(this.getEventsId());
         competitionDto.setId(this.getId());
         competitionDto.setName(this.getName());
         competitionDto.setStartTime(this.getStartTime());
@@ -87,7 +79,7 @@ public class Competition implements MongoModel {
     public void updateNotNullFields(Object o) {
         Competition model = (Competition)o;
         this.competitors = model.getCompetitors() != null ? model.getCompetitors() : this.competitors;
-        this.events = model.getEvents() != null ? model.getEvents() : this.events;
+        this.eventsId = model.getEventsId() != null ? model.getEventsId() : this.eventsId;
         this.name = model.getName() != null ? model.getName() : this.name;
         this.startTime = model.getStartTime() != null ? model.getStartTime() : this.startTime;
         this.endTime = model.getEndTime() != null ? model.getEndTime() : this.endTime;
@@ -95,7 +87,7 @@ public class Competition implements MongoModel {
 
     }
 
-    public void addEvent(Event event) {
-        this.events.add(event);
+    public void addEvent(String eventId) {
+        this.eventsId.add(eventId);
     }
 }

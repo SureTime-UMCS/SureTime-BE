@@ -13,11 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,62 +43,123 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
         return ResponseEntity.ok(modelAssembler.toModel(competitionRepository.insert(competition)));
     }
 
-
-    @Override
-    public Competition fromDto(CompetitionDto competitionDto) {
-        List<String> competitors = new ArrayList<>();
-        competitionDto.getCompetitors().forEach(email -> personRepository.findByEmail(email).ifPresent(Person::getEmail));
-        List<Event> events = competitionDto.getEventsId().stream()
-                .map(eventId -> eventRepository.findById(eventId)
-                        .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId))).toList();
-        return Competition.builder()
-                .competitors(competitors)
-                .address(competitionDto.getAddress())
-                .startTime(competitionDto.getStartTime())
-                .endTime(competitionDto.getEndTime())
-                .events(events)
-                .name(competitionDto.getName())
-                .build();
-    }
-
-
     public ResponseEntity<?> deleteOne(String competitionName){
         competitionRepository.deleteByName(competitionName);
         return ResponseEntity.ok("");
     }
 
     public ResponseEntity<?> updateCompetitionEvents(String competitionId, List<String> eventsId){
-        List<Event> events = eventsId.stream()
-                .map(id -> eventRepository.findById(id)
-                        .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), id)))
-                .toList();
+        eventsId.forEach(this::eventExistElseThrowNotFoundException);
 
-        Competition competition = competitionRepository.findById(competitionId)
-                .orElseThrow(()->new NotFoundException(Competition.class.getSimpleName(), competitionId));
+        Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
 
-        competition.setEvents(events);
+        competition.setEventsId(new HashSet<>(eventsId));
 
         return new ResponseEntity<>(modelAssembler.toModel(
                 competitionRepository.save(competition)),
                 HttpStatus.CREATED);
 
     }
-    public ResponseEntity<?> updateCompetitionCompetitors(String competitionId, List<String> emails){
-        List<Person> competitors = emails.stream()
-                .map(personEmail -> personRepository.findById(personEmail)
-                        .orElseThrow(()->new NotFoundException(Person.class.getSimpleName(), personEmail)))
-                .toList();
 
-        Competition competition = competitionRepository.findById(competitionId)
-                .orElseThrow(()->new NotFoundException(Competition.class.getSimpleName(), competitionId));
+    public ResponseEntity<?> addCompetitionEvent(String competitionId, String eventId){
+        eventExistElseThrowNotFoundException(eventId);
 
-        competition.setCompetitors(competitors.stream().map(Person::getEmail).collect(Collectors.toList()));
+        Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
 
-        return new ResponseEntity<>(
-                modelAssembler.toModel(competitionRepository.save(competition)),
-                HttpStatus.CREATED);
+        competition.getEventsId().add(eventId);
+
+        return new ResponseEntity<>(modelAssembler.toModel(
+                competitionRepository.save(competition)),
+                HttpStatus.OK);
 
     }
 
+    public ResponseEntity<?> deleteCompetitionEvent(String competitionId, String eventId){
+        eventExistElseThrowNotFoundException(eventId);
+
+        Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
+        competition.getEventsId().remove(eventId);
+
+        return new ResponseEntity<>(modelAssembler.toModel(
+                competitionRepository.save(competition)),
+                HttpStatus.OK);
+
+    }
+
+
+
+    public ResponseEntity<?> updateCompetitionCompetitors(String competitionId, List<String> emails){
+        personsExistsElseThrowNotFoundException(emails);
+
+        Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
+
+        competition.setCompetitors(new HashSet<>(emails));
+
+        return new ResponseEntity<>(
+                modelAssembler.toModel(competitionRepository.save(competition)),
+                HttpStatus.OK);
+
+    }
+
+
+    public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String email){
+        personsExistsElseThrowNotFoundException(List.of(email));
+
+        Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
+
+        competition.getCompetitors().add(email);
+
+        return new ResponseEntity<>(
+                modelAssembler.toModel(competitionRepository.save(competition)),
+                HttpStatus.OK);
+
+    }
+
+    public ResponseEntity<?> removeCompetitionCompetitor(String competitionId, String email){
+        personsExistsElseThrowNotFoundException(List.of(email));
+
+        Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
+
+        competition.getCompetitors().remove(email);
+
+        return new ResponseEntity<>(
+                modelAssembler.toModel(competitionRepository.save(competition)),
+                HttpStatus.OK);
+
+    }
+
+    private void personsExistsElseThrowNotFoundException(List<String> emails) {
+        emails.forEach(personEmail -> personRepository.findById(personEmail)
+                        .orElseThrow(() -> new NotFoundException(Person.class.getSimpleName(), personEmail)));
+    }
+
+    @Override
+    public Competition fromDto(CompetitionDto competitionDto) {
+        competitionDto.getCompetitors().forEach(this::personsExistElseThrowNotFoundException);
+        competitionDto.getEventsId().forEach(this::eventExistElseThrowNotFoundException);
+
+        return Competition.builder()
+                .competitors(competitionDto.getCompetitors())
+                .address(competitionDto.getAddress())
+                .startTime(competitionDto.getStartTime())
+                .endTime(competitionDto.getEndTime())
+                .events(competitionDto.getEventsId())
+                .name(competitionDto.getName())
+                .build();
+    }
+
+    private void personsExistElseThrowNotFoundException(String email) {
+        personRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(Person.class.getSimpleName(), email));
+    }
+
+    private Competition getCompetitionElseThrowNotFoundException(String competitionId) {
+        return competitionRepository.findById(competitionId)
+                .orElseThrow(()->new NotFoundException(Competition.class.getSimpleName(), competitionId));
+    }
+
+    private void eventExistElseThrowNotFoundException(String eventId) {
+        eventRepository.findById(eventId)
+                .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
+    }
 
 }

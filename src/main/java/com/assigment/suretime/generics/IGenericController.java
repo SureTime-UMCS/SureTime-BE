@@ -10,7 +10,7 @@ public interface IGenericController<T,TDto> {
 
     ResponseEntity<?> one(String id);
 
-    ResponseEntity<?> updateOne(TDto t);
+    ResponseEntity<?> updateOne(String id,TDto t);
 
     CollectionModel<?> all();
 

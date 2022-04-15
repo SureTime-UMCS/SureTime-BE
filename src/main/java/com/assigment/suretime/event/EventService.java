@@ -3,17 +3,13 @@ package com.assigment.suretime.event;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericService;
 import com.assigment.suretime.generics.GenericModelAssembler;
-import com.assigment.suretime.heat.models.Heat;
 import com.assigment.suretime.heat.HeatRepository;
 import com.assigment.suretime.person.PersonRepository;
-import com.assigment.suretime.person.models.Person;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.StreamSupport;
 
 @Service
 @Slf4j
@@ -22,7 +18,7 @@ public class EventService extends GenericService<Event,EventDto,EventRepository>
     final EventRepository eventRepository;
     final PersonRepository personRepository;
     final HeatRepository heatRepository;
-    final GenericModelAssembler<Event> eventModelAssembler =
+    final GenericModelAssembler<Event> assembler =
             new GenericModelAssembler<>(Event.class, EventController.class);
 
 
@@ -39,30 +35,69 @@ public class EventService extends GenericService<Event,EventDto,EventRepository>
         var event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
         event.setName(newName);
-        return ResponseEntity.ok(eventRepository.save(event));
+        return ResponseEntity.ok(assembler.toModel(eventRepository.save(event)));
     }
 
     public ResponseEntity<?> addCompetitors(String eventId, Set<String> personsId){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.setCompetitorsEmail(personsId);
+        event.getCompetitorsEmail().addAll(personsId);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(assembler.toModel(updated));
     }
 
-    public ResponseEntity<?> addHeats(String eventId, Set<String> heatsId){
+    public ResponseEntity<?> removeCompetitors(String eventId, Set<String> personsId){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.setHeatsId(heatsId);
+        event.getCompetitorsEmail().removeAll(personsId);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(assembler.toModel(updated));
+    }
 
+    public ResponseEntity<?> addHeat(String eventId, String heatId){
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
+        event.getHeatsId().add(heatId);
+        Event updated = eventRepository.save(event);
+        log.info("Updated heat: "+ event);
+        return ResponseEntity.ok(assembler.toModel(updated));
+
+    }
+    public ResponseEntity<?> deleteHeat(String eventId, String heatId){
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
+        event.getHeatsId().remove(heatId);
+        Event updated = eventRepository.save(event);
+        log.info("Updated heat: "+ event);
+        return ResponseEntity.ok(assembler.toModel(updated));
+
+    }
+
+    public ResponseEntity<?> addCompetitor(String eventId, String competitorEmail) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
+        event.getCompetitorsEmail().add(competitorEmail);
+        Event updated = eventRepository.save(event);
+        log.info("Updated heat: "+ event);
+        return ResponseEntity.ok(assembler.toModel(updated));
+    }
+
+    public ResponseEntity<?> deleteCompetitor(String eventId, String competitorEmail) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
+        event.getCompetitorsEmail().remove(competitorEmail);
+        Event updated = eventRepository.save(event);
+        log.info("Updated heat: "+ event);
+        return ResponseEntity.ok(assembler.toModel(updated));
     }
 
     @Override
     public Event fromDto(EventDto dto) {
-        return new Event();
+        return new Event(dto.getName(),
+                dto.getStartTime(), dto.getCompetitorsEmail(),
+                dto.getHeatsId()
+        );
     }
 }

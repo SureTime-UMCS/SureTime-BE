@@ -2,10 +2,7 @@ package com.assigment.suretime.heat;
 
 
 import com.assigment.suretime.generics.IGenericController;
-import com.assigment.suretime.heat.models.AddCompetitorsRequest;
-import com.assigment.suretime.heat.models.AddResultsRequest;
-import com.assigment.suretime.heat.models.Heat;
-import com.assigment.suretime.heat.models.HeatDto;
+import com.assigment.suretime.heat.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +26,10 @@ public class HeatController implements IGenericController<Heat, HeatDto> {
     }
 
     @Override
-    @PutMapping
-    public ResponseEntity<?> updateOne(@RequestBody HeatDto t) {
-        return heatService.updateOne(t);
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateOne(@PathVariable String id,
+                                       @RequestBody @Valid HeatDto t) {
+        return heatService.updateOne(id,t);
     }
 
     @GetMapping
@@ -45,16 +43,29 @@ public class HeatController implements IGenericController<Heat, HeatDto> {
         return heatService.deleteOne(id);
     }
 
-    @PostMapping("add_competitors")
+
+    @PostMapping("{id}/add_competitors")
     public ResponseEntity<?> addCompetitor(
-            @RequestBody @Valid AddCompetitorsRequest request) {
-        return heatService.updateCompetitors(request.getHeatId(), request.getCompetitorsEmails());
+            @RequestBody @Valid AddCompetitorsRequest request, @PathVariable String id) {
+        return heatService.addCompetitors(request.getHeatId(), request.getCompetitorsEmails());
     }
 
-    @PostMapping("add_results")
+    @PostMapping("{id}/delete_competitors")
+    public ResponseEntity<?> deleteCompetitor(
+            @RequestBody @Valid DeleteCompetitorsRequest request, @PathVariable String id) {
+        return heatService.deleteCompetitors(request.getHeatId(), request.getCompetitorsEmails());
+    }
+
+    @PostMapping("{id}/add_results")
     public ResponseEntity<?> addResults(
-            @RequestBody @Valid AddResultsRequest request) {
-        return heatService.updateResults(request.getHeatId(), request.getResults());
+            @RequestBody @Valid AddResultsRequest request, @PathVariable String id) {
+        return heatService.addResults(request.getHeatId(), request.getResults());
+    }
+
+    @PostMapping("{id}/delete_results")
+    public ResponseEntity<?> deleteResults(
+            @RequestBody @Valid DeleteResultsRequest request, @PathVariable String id) {
+        return heatService.deleteResults(request.getHeatId(), request.getResults());
     }
 
 }
