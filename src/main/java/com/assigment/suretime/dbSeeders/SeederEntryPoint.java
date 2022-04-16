@@ -1,15 +1,11 @@
 package com.assigment.suretime.dbSeeders;
 
 
-import com.assigment.suretime.competition.Competition;
-import com.assigment.suretime.competition.CompetitionRepository;
-import com.assigment.suretime.securityJwt.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Configuration

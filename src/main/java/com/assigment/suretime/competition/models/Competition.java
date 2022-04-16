@@ -1,4 +1,4 @@
-package com.assigment.suretime.competition;
+package com.assigment.suretime.competition.models;
 
 import com.assigment.suretime.address.Address;
 import com.assigment.suretime.generics.MongoModel;
@@ -62,7 +62,6 @@ public class Competition implements MongoModel {
     }
 
     public CompetitionDto toDto(){
-        //FIXME: make it work if need.
         CompetitionDto competitionDto = new CompetitionDto();
         competitionDto.setCompetitors(this.getCompetitors());
         competitionDto.setAddress(this.getAddress());

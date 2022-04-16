@@ -1,8 +1,6 @@
 package com.assigment.suretime.generics;
 
 
-import com.assigment.suretime.competition.Competition;
-import com.assigment.suretime.competition.CompetitionDto;
 import com.assigment.suretime.exceptions.AlreadyExistsException;
 import com.assigment.suretime.exceptions.NotFoundException;
 import lombok.NoArgsConstructor;

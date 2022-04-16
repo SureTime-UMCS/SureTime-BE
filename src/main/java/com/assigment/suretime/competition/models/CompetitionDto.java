@@ -1,4 +1,4 @@
-package com.assigment.suretime.competition;
+package com.assigment.suretime.competition.models;
 
 
 import com.assigment.suretime.address.Address;

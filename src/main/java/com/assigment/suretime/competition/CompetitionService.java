@@ -1,5 +1,7 @@
 package com.assigment.suretime.competition;
 
+import com.assigment.suretime.competition.models.Competition;
+import com.assigment.suretime.competition.models.CompetitionDto;
 import com.assigment.suretime.event.Event;
 import com.assigment.suretime.event.EventRepository;
 import com.assigment.suretime.exceptions.AlreadyExistsException;
@@ -104,14 +106,21 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
     public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String email){
         personsExistsElseThrowNotFoundException(List.of(email));
-
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
-
         competition.getCompetitors().add(email);
 
         return new ResponseEntity<>(
                 modelAssembler.toModel(competitionRepository.save(competition)),
                 HttpStatus.OK);
+
+    }
+
+    public ResponseEntity<?> removeCompetitionEvent(String id, String eventId) {
+        eventExistElseThrowNotFoundException(eventId);
+        Competition competition = getCompetitionElseThrowNotFoundException(id);
+        competition.getEventsId().remove(eventId);
+        Competition updated = competitionRepository.save(competition);
+        return ResponseEntity.ok(modelAssembler.toModel(updated));
 
     }
 
@@ -161,5 +170,4 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
         eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
     }
-
 }

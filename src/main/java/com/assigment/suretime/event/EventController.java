@@ -40,13 +40,13 @@ public class EventController implements IGenericController<Event, EventDto> {
                                      @PathVariable("heat_id") String heatId){
         return eventService.addHeat(id, heatId);
     }
-    @PostMapping("{id}/delete_heat/{heat_id}")
+    @DeleteMapping("{id}/delete_heat/{heat_id}")
     public ResponseEntity<?> deleteHeat(@PathVariable("id") String id,
                                      @PathVariable("heat_id") String heatId){
         return eventService.deleteHeat(id, heatId);
     }
 
-    @PostMapping("{id}/delete_competitor/{email}")
+    @DeleteMapping("{id}/delete_competitor/{email}")
     public ResponseEntity<?> deleteCompetitor(@PathVariable("id") String id,
                                         @PathVariable("email") String email){
         return eventService.deleteCompetitor(id, email);

@@ -1,7 +1,9 @@
 package com.assigment.suretime.event;
 
 import com.assigment.suretime.heat.HeatRepository;
+import com.assigment.suretime.heat.models.Heat;
 import com.assigment.suretime.person.PersonRepository;
+import com.assigment.suretime.person.models.Person;
 import com.github.javafaker.Faker;
 import lombok.SneakyThrows;
 import org.junit.Before;
@@ -19,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
 
 import static com.assigment.suretime.util.asJsonString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -66,6 +69,16 @@ class EventControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+
+    private Heat getRandomHeat() {
+        int randIndex = fake.random().nextInt(0, 10);
+        return heatRepository.findAll().get(randIndex);
+    }
+
+    private Person getRandomPerson() {
+        int randIndex = fake.random().nextInt(0, 10);
+        return personRepository.findAll().get(randIndex);
+    }
 
     private Event getRandomEvent(){
         int randIndex = fake.random().nextInt(0, 10);
@@ -140,5 +153,75 @@ class EventControllerTest {
                 .andExpect(status().is2xxSuccessful());
 
         assert eventRepository.findById(event.getId()).isEmpty();
+    }
+
+    @Test
+    @SneakyThrows
+    @WithUserDetails("admin")
+    void addHeat() {
+        //{id}/add_heat/{heat_id}
+        Event randomEvent = getRandomEvent();
+        String newHeatName = "New heat";
+        Heat newHeat = heatRepository.save(new Heat(newHeatName, LocalDateTime.now()));
+
+        mockMvc.perform(post(url+ "/"+randomEvent.getId() +"/add_heat/"+ newHeat.getId()))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        eventRepository.findById(randomEvent.getId()).get().getHeatsId().contains(newHeat.getId());
+        heatRepository.deleteById(newHeat.getId());
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @SneakyThrows
+    void deleteHeat() {
+        //{id}/add_heat/{heat_id}
+        Event randomEvent = getRandomEvent();
+        String newHeatName = "New heat";
+        Heat newHeat = heatRepository.save(new Heat(newHeatName, LocalDateTime.now()));
+        randomEvent.getHeatsId().add(newHeat.getId());
+        eventRepository.save(randomEvent);
+
+        mockMvc.perform(delete(url+ "/"+randomEvent.getId() +"/delete_heat/"+ newHeat.getId()))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        Event updatedHeat = eventRepository.findById(randomEvent.getId()).get();
+        assert !updatedHeat.getHeatsId().contains(newHeat.getId());
+        updatedHeat.getHeatsId().remove(newHeat.getId());
+        heatRepository.deleteById(newHeat.getId());
+        eventRepository.save(updatedHeat);
+
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @SneakyThrows
+    void deleteCompetitor() {
+        //{id}/add_heat/{heat_id}
+        Event randomEvent = getRandomEvent();
+        Person person = getRandomPerson();
+        randomEvent.getCompetitorsEmail().add(person.getEmail());
+        eventRepository.save(randomEvent);
+
+        mockMvc.perform(delete(url+"/"+ randomEvent.getId() +"/delete_competitor/"+ person.getId()))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        assert !eventRepository.findById(randomEvent.getId()).get().getCompetitorsEmail().contains(person.getId());
+
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @SneakyThrows
+    void addCompetitor() {
+        //{id}/add_heat/{heat_id}
+        Event randomEvent = getRandomEvent();
+        Person person = getRandomPerson();
+
+        mockMvc.perform(post(url+ "/"+randomEvent.getId() +"/add_competitor/"+ person.getId()))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        assert eventRepository.findById(randomEvent.getId()).get().getCompetitorsEmail().contains(person.getId());
+
     }
 }

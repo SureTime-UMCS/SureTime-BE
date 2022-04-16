@@ -211,7 +211,7 @@ class HeatControllerTest {
 
         String payload = asJsonString(
                 request);
-        mockMvc.perform(post(url+"/"+randomHeat.getId()+"/delete_competitors")
+        mockMvc.perform(delete(url+"/"+randomHeat.getId()+"/delete_competitors")
                         .accept(MediaType.APPLICATION_JSON)
                         .content(payload)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -274,7 +274,7 @@ class HeatControllerTest {
 
         String payload = asJsonString(
                 payloadObject);
-        mockMvc.perform(post(url+"/"+randomHeat.getId()+"/delete_results")
+        mockMvc.perform(delete(url+"/"+randomHeat.getId()+"/delete_results")
                         .accept(MediaType.APPLICATION_JSON)
                         .content(payload)
                         .contentType(MediaType.APPLICATION_JSON))

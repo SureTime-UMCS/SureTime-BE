@@ -1,7 +1,7 @@
 package com.assigment.suretime.dbSeeders;
 
 import com.assigment.suretime.address.Address;
-import com.assigment.suretime.competition.Competition;
+import com.assigment.suretime.competition.models.Competition;
 import com.assigment.suretime.competition.CompetitionRepository;
 import com.assigment.suretime.event.Event;
 import com.assigment.suretime.event.EventRepository;

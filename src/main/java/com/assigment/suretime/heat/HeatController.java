@@ -50,7 +50,7 @@ public class HeatController implements IGenericController<Heat, HeatDto> {
         return heatService.addCompetitors(request.getHeatId(), request.getCompetitorsEmails());
     }
 
-    @PostMapping("{id}/delete_competitors")
+    @DeleteMapping("{id}/delete_competitors")
     public ResponseEntity<?> deleteCompetitor(
             @RequestBody @Valid DeleteCompetitorsRequest request, @PathVariable String id) {
         return heatService.deleteCompetitors(request.getHeatId(), request.getCompetitorsEmails());
@@ -62,7 +62,7 @@ public class HeatController implements IGenericController<Heat, HeatDto> {
         return heatService.addResults(request.getHeatId(), request.getResults());
     }
 
-    @PostMapping("{id}/delete_results")
+    @DeleteMapping("{id}/delete_results")
     public ResponseEntity<?> deleteResults(
             @RequestBody @Valid DeleteResultsRequest request, @PathVariable String id) {
         return heatService.deleteResults(request.getHeatId(), request.getResults());
