@@ -1,9 +1,6 @@
 package com.assigment.suretime.heat;
 
-import com.assigment.suretime.heat.models.AddCompetitorsRequest;
-import com.assigment.suretime.heat.models.AddResultsRequest;
-import com.assigment.suretime.heat.models.Heat;
-import com.assigment.suretime.heat.models.HeatDto;
+import com.assigment.suretime.heat.models.*;
 import com.assigment.suretime.person.PersonRepository;
 import lombok.SneakyThrows;
 import org.junit.Before;
@@ -146,7 +143,7 @@ class HeatControllerTest {
         String payload = asJsonString(new AddCompetitorsRequest(heat.getId(),
                 competitorsEmails));
 
-        mockMvc.perform(post(url + "/add_competitors")
+        mockMvc.perform(post(url + "/"+heat.getId()+"/add_competitors")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload)
                         .accept(MediaType.APPLICATION_JSON))
@@ -185,7 +182,7 @@ class HeatControllerTest {
 
         String payload = asJsonString(
                 payloadObject);
-        mockMvc.perform(post(url+"/add_results")
+        mockMvc.perform(post(url+"/"+randomHeat.getId()+"/add_results")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(payload)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -201,9 +198,35 @@ class HeatControllerTest {
     }
 
     @Test
+    @WithUserDetails("admin")
+    @SneakyThrows
+    void deleteCompetitor() throws Exception {
+        Heat randomHeat = getRandomHeat();
+        List<String> heatCompetitors = randomHeat.getCompetitors();
+        String email1 = heatCompetitors.get(new Random().nextInt(0, heatCompetitors.size()));
+        String email2 = heatCompetitors.get(new Random().nextInt(0, heatCompetitors.size()));
+
+        DeleteCompetitorsRequest request = new DeleteCompetitorsRequest(randomHeat.getId(),
+                List.of(email1, email2));
+
+        String payload = asJsonString(
+                request);
+        mockMvc.perform(post(url+"/"+randomHeat.getId()+"/delete_competitors")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+        Heat updated = heatRepository.findById(randomHeat.getId()).get();
+        assert !updated.getCompetitors().contains(email1);
+        assert !updated.getCompetitors().contains(email2);
+
+    }
+
+    @Test
     @SneakyThrows
     @WithUserDetails("admin")
-    void updateName() {
+    void updateHeatTEst() {
         Heat heat = getRandomHeat();
         HeatDto dto = heat.toDto();
         String newName = "Memorial czasu poswieconego temu projektowi.";
@@ -213,7 +236,7 @@ class HeatControllerTest {
 
         String payload = asJsonString(dto);
 
-        mockMvc.perform(put(url.toString())
+        mockMvc.perform(put(url + "/"+heat.getId())
                         .content(payload)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -225,8 +248,42 @@ class HeatControllerTest {
         assert afterUpdate.getCompetitors() != null;
         assert afterUpdate.getResults() != null;
         assert afterUpdate.getName().equals(newName);
+    }
 
+    @Test
+    @SneakyThrows
+    @WithUserDetails("admin")
+    void deleteResults() {
+        Person randomPerson = getRandomPerson();
+        Person randomPerson2 = getRandomPerson();
 
+        String result = String.valueOf(209.0);
+        String result2 =String.valueOf(210.0);
 
+        Heat randomHeat = getRandomHeat();
+
+        List<Pair<String, String>> results = List.of(
+                Pair.of(randomPerson.getEmail(), result),
+                Pair.of(randomPerson2.getEmail(), result2)
+        );
+        randomHeat.getResults().put(randomPerson.getEmail(), result);
+        randomHeat.getResults().put(randomPerson2.getEmail(), result2);
+
+        DeleteResultsRequest payloadObject = new DeleteResultsRequest(randomHeat.getId(),
+                results);
+
+        String payload = asJsonString(
+                payloadObject);
+        mockMvc.perform(post(url+"/"+randomHeat.getId()+"/delete_results")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+
+        Heat updatedHeat = heatRepository.findById(randomHeat.getId()).get();
+        Map<String, String> updatedHeatResults = updatedHeat.getResults();
+        assert !updatedHeatResults.containsKey(randomPerson.getEmail());
+        assert !updatedHeatResults.containsKey(randomPerson2.getEmail());
     }
 }

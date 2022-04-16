@@ -73,7 +73,7 @@ public class HeatService extends GenericService<Heat,HeatDto, HeatRepository> {
             return ResponseEntity.ok("");
         }
         Heat heat = heatRepository.findById(heatId).orElseThrow(() -> new NotFoundException(Heat.class.getSimpleName(), heatId));
-        heat.getCompetitors().addAll(competitors);
+        heat.getCompetitors().removeAll(competitors);
 
         Heat updated = heatRepository.save(heat);
         log.info("Updated heat: " + heat);
