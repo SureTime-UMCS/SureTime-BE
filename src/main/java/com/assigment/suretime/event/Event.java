@@ -38,24 +38,28 @@ public class Event implements MongoModel {
     private LocalDateTime startTime;
 
     @PersistenceConstructor
-    public Event(String name) {
+    public Event(String id, String name, Set<String> competitorsEmail,
+                 Set<String> heatsId, LocalDateTime startTime) {
+        this.id = id;
         this.name = name;
+        this.competitorsEmail = competitorsEmail == null ? new HashSet<>(): competitorsEmail;
+        this.heatsId = heatsId == null ? new HashSet<>(): heatsId;
+        this.startTime = startTime;
+    }
+
+    @PersistenceConstructor
+    public Event(String name) {
+        this(null, name, null, null, null);
     }
 
     @PersistenceConstructor
     public Event(String name, LocalDateTime startTime) {
-        this.name = name;
-        this.startTime = startTime;
-        this.heatsId = new HashSet<>();
-        this.competitorsEmail = new HashSet<>();
+        this(null, name, null, null, startTime);
     }
 
     @PersistenceConstructor
-    public Event(String name, LocalDateTime startTime, Set<String> competitors, Set<String> heatsId) {
-        this.name = name;
-        this.competitorsEmail = competitors;
-        this.startTime = startTime;
-        this.heatsId = heatsId;
+    public Event(String name, LocalDateTime startTime, Set<String> competitorsEmail, Set<String> heatsId) {
+        this(null, name, competitorsEmail, heatsId, startTime);
     }
     @Override
     public void updateNotNullFields(Object o) {

@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -19,7 +17,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Document
 @NoArgsConstructor
 public class Competition implements MongoModel {
@@ -39,27 +38,18 @@ public class Competition implements MongoModel {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime, endTime;
 
-    @Builder
     @PersistenceConstructor
-    public Competition(String id, String name, Address address, Set<String> events, Set<String> competitors, LocalDateTime startTime, LocalDateTime endTime) {
+    public Competition(String id, String name, Address address, Set<String> eventsId, Set<String> competitors, LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
-        this.address = address;
         this.name = name;
-        this.eventsId = events;
+        this.address = address;
+        this.eventsId = eventsId;
         this.competitors = competitors;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    @PersistenceConstructor
-    public Competition(String name, Address address, LocalDateTime startTime, LocalDateTime endTime) {
-        this.name = name;
-        this.address = address;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.eventsId = new HashSet<>();
-        this.competitors = new HashSet<>();
-    }
+
 
     public CompetitionDto toDto(){
         CompetitionDto competitionDto = new CompetitionDto();

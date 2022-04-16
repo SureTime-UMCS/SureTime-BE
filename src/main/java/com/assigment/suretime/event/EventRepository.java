@@ -5,5 +5,4 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface EventRepository extends MongoRepository<Event, String> {
-    void deleteByName(String name);
 }

@@ -84,6 +84,7 @@ class CompetitionControllerTest {
 
     @Test
     @SneakyThrows
+    @WithUserDetails("user")
     void one() {
         Competition competition = getRandomCompetition();
         mockMvc.perform(get(url + "/" + competition.getId()))
@@ -120,8 +121,9 @@ class CompetitionControllerTest {
 
     @Test
     @SneakyThrows
+    @WithUserDetails("user")
     void all() {
-        mockMvc.perform(post(url.toURI()))
+        mockMvc.perform(get(url.toURI()))
                 .andExpect(status().is2xxSuccessful());
     }
 
@@ -233,7 +235,7 @@ class CompetitionControllerTest {
     }
 
     private Competition getRandomCompetition() {
-        int randIndex = fake.random().nextInt(0, 5);
+        int randIndex = fake.random().nextInt(0, 4);
         return competitionRepository.findAll().get(randIndex);
     }
 

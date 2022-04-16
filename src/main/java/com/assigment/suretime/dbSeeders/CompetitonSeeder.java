@@ -22,7 +22,7 @@ import static com.assigment.suretime.dbSeeders.SeederUtils.getFakeAddress;
 
 @Component
 @Slf4j
-public class CompetitonSeeder implements ISeeder{
+public class CompetitonSeeder implements ISeeder {
 
     final private PersonRepository personRepository;
     final private EventRepository eventRepository;
@@ -36,7 +36,7 @@ public class CompetitonSeeder implements ISeeder{
                             EventRepository eventRepository,
                             HeatRepository heatRepository,
                             CompetitionRepository competitionRepository
-                            ) {
+    ) {
         this.personRepository = personRepository;
         this.eventRepository = eventRepository;
         this.heatRepository = heatRepository;
@@ -47,22 +47,25 @@ public class CompetitonSeeder implements ISeeder{
 
     @Override
     public void seed() {
-        assert allPersons.size() > 30: "Create at least 30 persons in UserPersonSeeder";
+        assert allPersons.size() > 30 : "Create at least 30 persons in UserPersonSeeder";
 
         List<String> competitionNames = List.of("Memorial Kamili Skomilowskiej",
-                "Żylewicz", "Copernicus Cup");
-        List<String> eventNames = List.of("800m", "1500m", "3000m", "Rzut młotem", "Skok o tyczce", "100m");
+                "Żylewicz", "Copernicus Cup", "European Athletics U23 Championship",
+                "HMP 2022", "MMP 20222");
+        List<String> eventNames = List.of("800m", "1500m", "3000m", "Rzut młotem",
+                "Skok o tyczce", "100m", "200m", "Skok w dal", "trojskok", "4x400m");
 
-        for (var competitionName: competitionNames) {
+        for (var competitionName : competitionNames) {
             Address address = getFakeAddress(fake);
             LocalDateTime startTime = LocalDateTime.of(2022,
-                    Month.of(fake.random().nextInt(1,12)), fake.random().nextInt(1,29), 18, 0, 0);
+                    Month.of(fake.random().nextInt(1, 12)), fake.random().nextInt(1, 29), 18, 0, 0);
             LocalDateTime endTime = LocalDateTime.of(2022,
                     startTime.getMonth(), startTime.getDayOfMonth(), 22, 0, 0);
-            Competition competition = new Competition(competitionName, address, startTime, endTime);
+            Competition competition = new Competition(null, competitionName, address,new HashSet<>(),
+                    new HashSet<>(),startTime, endTime);
             Set<String> competitorsEmails = allPersons.subList(0, 30).stream().map(Person::getEmail).collect(Collectors.toSet());
             competition.setCompetitors(competitorsEmails);
-            for (var i=0; i<eventNames.size(); i++) {
+            for (var i = 0; i < eventNames.size(); i++) {
                 Event event = createAndSaveEvent(eventNames.get(i), competition.getStartTime(), i);
                 competition.addEvent(event.getId());
             }
@@ -72,14 +75,14 @@ public class CompetitonSeeder implements ISeeder{
 
     }
 
-    private Event createAndSaveEvent(String name, LocalDateTime competitionStartTime, int eventNumber){
+    private Event createAndSaveEvent(String name, LocalDateTime competitionStartTime, int eventNumber) {
         Event event = new Event(name);
         event.setCompetitorsEmail(allPersons.stream().map(Person::getEmail).collect(Collectors.toSet()));
-        event.setStartTime(competitionStartTime.plusMinutes(eventNumber* 10L));
+        event.setStartTime(competitionStartTime.plusMinutes(eventNumber * 10L));
 
-        int numbersOfHeat = fake.random().nextInt(1,3);
+        int numbersOfHeat = fake.random().nextInt(1, 3);
         for (int i = 0; i < numbersOfHeat; i++) {
-            Heat heat = new Heat(name,event.getStartTime().plusMinutes(i*2L));
+            Heat heat = new Heat(name, event.getStartTime().plusMinutes(i * 2L));
             List<String> competitorsEmail = allPersons.subList(i, i + 8).stream().map(Person::getEmail).toList();
             heat.setCompetitors(competitorsEmail);
 

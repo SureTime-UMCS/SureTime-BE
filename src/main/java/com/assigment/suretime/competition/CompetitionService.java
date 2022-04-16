@@ -11,6 +11,7 @@ import com.assigment.suretime.generics.GenericModelAssembler;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.models.Person;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     public CompetitionService(CompetitionRepository competitionRepository,
                               PersonRepository personRepository,
                               EventRepository eventRepository) {
+        super(competitionRepository, Competition.class, new GenericModelAssembler<>(Competition.class, CompetitionController.class));
         this.competitionRepository = competitionRepository;
         this.personRepository = personRepository;
         this.eventRepository = eventRepository;
@@ -45,8 +47,8 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
         return ResponseEntity.ok(modelAssembler.toModel(competitionRepository.insert(competition)));
     }
 
-    public ResponseEntity<?> deleteOne(String competitionName){
-        competitionRepository.deleteByName(competitionName);
+    public ResponseEntity<?> deleteOne(String id){
+        competitionRepository.deleteById(id);
         return ResponseEntity.ok("");
     }
 
@@ -105,7 +107,7 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
 
     public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String email){
-        personsExistsElseThrowNotFoundException(List.of(email));
+        //personsExistsElseThrowNotFoundException(List.of(email));
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
         competition.getCompetitors().add(email);
 
@@ -125,7 +127,6 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
     public ResponseEntity<?> removeCompetitionCompetitor(String competitionId, String email){
-        personsExistsElseThrowNotFoundException(List.of(email));
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
 
@@ -143,18 +144,18 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
     @Override
-    public Competition fromDto(CompetitionDto competitionDto) {
-        competitionDto.getCompetitors().forEach(this::personsExistElseThrowNotFoundException);
-        competitionDto.getEventsId().forEach(this::eventExistElseThrowNotFoundException);
+    public Competition fromDto(@NotNull CompetitionDto competitionDto) {
+        //competitionDto.getCompetitors().forEach(this::personsExistElseThrowNotFoundException);
+        //competitionDto.getEventsId().forEach(this::eventExistElseThrowNotFoundException);
 
-        return Competition.builder()
-                .competitors(competitionDto.getCompetitors())
-                .address(competitionDto.getAddress())
-                .startTime(competitionDto.getStartTime())
-                .endTime(competitionDto.getEndTime())
-                .events(competitionDto.getEventsId())
-                .name(competitionDto.getName())
-                .build();
+        return new Competition(competitionDto.getId(),
+                competitionDto.getName(),
+                competitionDto.getAddress(),
+                competitionDto.getEventsId(),
+                competitionDto.getCompetitors(),
+                competitionDto.getStartTime(),
+                competitionDto.getEndTime());
+
     }
 
     private void personsExistElseThrowNotFoundException(String email) {
