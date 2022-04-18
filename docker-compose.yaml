@@ -20,6 +20,15 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
       - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
       - ME_CONFIG_MONGODB_SERVER=mongodb
+  frontend:
+    build: ../suretime-fe/
+    container_name: frontend
+    ports: 
+      - 3000:3000
+    volumes: 
+      - '../suretime-fe/:/app'
+      - '/app/node_modules'
+    stdin_open: true
 volumes:
   data: {}
 
