@@ -1,0 +1,29 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      username: rootuser
+      password: rootpass
+      database: appdatabase
+      port: 27017
+      host: localhost
+      auto-index-creation: true
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  hateoas:
+    use-hal-as-default-json-media-type: false
+
+springdoc:
+  api-docs:
+    path: /api/v1/docs
+
+bezkoder:
+  app:
+    jwtSecret: bezKoderSecretKey
+    jwtExpirationMs: 86400000
+
+suretime:
+  app:
+    isSeederOn: true
+    isSecureMode: true
