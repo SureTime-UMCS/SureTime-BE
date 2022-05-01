@@ -71,7 +71,7 @@ class ClubControllerTest {
     }
 
 
-    @WithMockUser(value = "admin", roles = {"ADMIN", "MOD", "USER"})
+    @WithUserDetails("admin")
     @Test
     void removeOneAsAdminIsOk() throws Exception {
         //GIVEN

@@ -45,7 +45,6 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toCollectionModel(clubRepository.findAll()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EntityModel<Club>> addOne(Club newClub) {
         Optional<Club> club = clubRepository.findByName(newClub.getName());
         if(club.isEmpty()){
@@ -75,7 +74,6 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toModel(modifiedClub));
 
     }
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteByName(String name) {
         clubRepository.deleteClubByName(name);
         return ResponseEntity.ok("");
@@ -97,7 +95,7 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toModel(club));
 
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<?> removeOne(String name){
         clubRepository.findByName(name)
                 .ifPresentOrElse(c-> {
