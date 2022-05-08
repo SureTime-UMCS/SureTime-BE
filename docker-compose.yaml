@@ -20,6 +20,14 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
       - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
       - ME_CONFIG_MONGODB_SERVER=mongodb
+  backend:
+    build: ./
+    container_name: backend
+    ports:
+      - 8080:8080
+    volumes:
+      - ${APPLICATION_ROOT_FOLDER}:/usr/src/mymaven
+
 volumes:
   data: {}
 
