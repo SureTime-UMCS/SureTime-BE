@@ -7,6 +7,7 @@ import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.models.PersonDTO;
 import com.assigment.suretime.person.models.RolesCollection;
+import com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade;
 import com.assigment.suretime.securityJwt.models.ERole;
 import com.assigment.suretime.securityJwt.models.Role;
 import com.assigment.suretime.securityJwt.repository.RoleRepository;
@@ -17,13 +18,10 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade.isAdmin;
 import static com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade.isModifingOwnData;
 
 @Slf4j
@@ -36,6 +34,8 @@ public class PersonService {
     protected final ClubRepository clubRepository;
     protected final RoleRepository roleRepository;
     protected final UserRepository userRepository;
+    protected final AuthenticationFacade authenticationFacade;
+
     private Person createPersonFromDTO(PersonDTO personDTO){
         var coachOptional = personRepository.findByEmail(personDTO.getCoachEmail());
         var clubOptional = clubRepository.findByName(personDTO.getClubName());
@@ -53,13 +53,14 @@ public class PersonService {
         Person person = new Person(personDTO.getFirstName(), personDTO.getSecondName(),
                 personDTO.getEmail(), gender, club, coach);
         return person;
+
     }
     public CollectionModel<EntityModel<Person>> all() {
         log.info("Returning all persons");
         return personAssembler.toCollectionModel(personRepository.findAll());
     }
 
-    public ResponseEntity<EntityModel<Person>> getByEmail(String email) {
+    public ResponseEntity<?> getByEmail(String email) {
         log.info("Getting person:<"+email+">");
         return personRepository.findByEmail(email)
                 .map(personAssembler::toModel).map(ResponseEntity::ok)
@@ -68,39 +69,31 @@ public class PersonService {
     }
 
     public ResponseEntity<?> removeOne(String email){
+        if(!AuthenticationFacade.isAdmin()){
+            return new ResponseEntity<>("You are not allowed to modify this content", HttpStatus.FORBIDDEN);
+        }
         personRepository.findByEmail(email)
                 .ifPresentOrElse(p-> {
-                    log.info("Deleted: "+ email);
+                    log.info("Deleted: "+ email + " from person repository");
                     personRepository.delete(p)
                     ;}, ()->{log.info("Not deleted: "+email+" because do not exist already.");});
+
+        userRepository.findByEmail(email)
+                .ifPresentOrElse(u-> {
+                    log.info("Deleted: "+ email + " from user repository");
+                    userRepository.delete(u)
+                    ;}, ()->{log.info("Not deleted: "+email+" because do not exist already.");});
+
         return ResponseEntity.ok("");
     }
 
-    public ResponseEntity<EntityModel<Person>> updateOrCreate(PersonDTO personDTO) {
-        return updatePerson(personDTO);
+    public ResponseEntity<?> updateOrCreate(Person person){
+        return updateOrCreate(new PersonDTO(person));
     }
-    public ResponseEntity<EntityModel<Person>> updateOrCreate(Person person) {
-        PersonDTO personDTO = createDTOFromPerson(person);
-        return updatePerson(personDTO);
-    }
-
-    private PersonDTO createDTOFromPerson(Person person) {
-        return new PersonDTO(person);
-    }
-
-    public ResponseEntity<?> updateOrCreate(PersonDTO personDTO, Authentication auth ) {
-        Person person = createPersonFromDTO(personDTO);
-        boolean isAdmin = isAdmin(auth);
-        boolean isModifingOwnData = isModifingOwnData(person, auth);
-        if( !isAdmin && !isModifingOwnData){
-            return new ResponseEntity<>("It's possible to edit only own data.", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?> updateOrCreate(PersonDTO personDTO) {
+        if(!AuthenticationFacade.isAdmin() && !AuthenticationFacade.isModifingOwnData(personDTO.getEmail())) {
+            return new ResponseEntity<>("You are not allowed to modify thihs content", HttpStatus.FORBIDDEN);
         }
-        return updatePerson(personDTO);
-    }
-
-
-
-    private ResponseEntity<EntityModel<Person>> updatePerson(PersonDTO personDTO) {
         //if person is found then return response with 203 status (See other)
         //else create new person.
         return personRepository.findByEmail(personDTO.getEmail()).
@@ -123,10 +116,10 @@ public class PersonService {
 
     @Deprecated
     ResponseEntity<?> updateCoach(String personEmail, String coachEmail) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!isAdmin(authentication) && !isModifingOwnData(personEmail, authentication)){
+        if(!AuthenticationFacade.isAdmin() && !AuthenticationFacade.isModifingOwnData(personEmail)){
             return new ResponseEntity<>("You are not allowed to modify thihs content", HttpStatus.FORBIDDEN);
         }
+
         var coach = personRepository.findByEmail(coachEmail).
                 orElseThrow(() -> new NotFoundException("Person", coachEmail));
         var person = personRepository.findByEmail(personEmail).
@@ -139,23 +132,34 @@ public class PersonService {
 
 
     }
-
+    //Only for Admin. 
+    //If Club Admin want to add Club Admin role. Needs to use endpoint in clubs.
+    
     public ResponseEntity<?> updateRoles(String email, RolesCollection newRoles) {
+        if(!AuthenticationFacade.isAdmin()){
+            return new ResponseEntity<>("You are not allowed to modify thihs content", HttpStatus.FORBIDDEN);
+        }
         var user = userRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("User", email));
-        Map<ERole,Role> rolesMap = new HashMap<>();
+        Set<Role> roles = new HashSet<>();
+        //Prepare rolesObjects
         for (String roleStr: newRoles.getRoles()) {
             ERole eRole = ERole.valueOf(roleStr);
             Role role = roleRepository.findByName(eRole)
-                    .orElseThrow(()-> new NotFoundException("Role", eRole.toString()));
-            rolesMap.put(eRole, role);
+                    .orElseGet(()->roleRepository.insert(new Role(eRole)));
+            roles.add(role);
         }
-        if(!rolesMap.containsKey(ERole.ROLE_USER)){
-            Role role = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(()-> new NotFoundException("Role", ERole.ROLE_USER.toString()));
-            rolesMap.put(ERole.ROLE_USER, role);
-        }
-        user.setRoles(new HashSet<>(rolesMap.values()));
+        
+        //Assert user has basic user role.
+        Role role = roleRepository.findByName(ERole.ROLE_BASIC_USER)
+                .orElseGet(()->roleRepository.insert(new Role(ERole.ROLE_BASIC_USER)));
+        roles.add(role);
+        
+        
+        user.setRoles(roles);
         userRepository.save(user);
         return ResponseEntity.ok("");
+        
+
+
     }
 }

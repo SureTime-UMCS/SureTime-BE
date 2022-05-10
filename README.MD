@@ -23,8 +23,8 @@ The following guides illustrate how to use some features concretely:
 
 Use a [IntelliJ IDEA Ultimate](https://www.jetbrains.com/lp/intellij-frameworks/)
 
-Use a [API-DOCS](http://localhost:8080/swagger-ui/index.html)
-        ```http://localhost:8080/swagger-ui/index.html```
+Use a [API-DOCS](http://localhost:8080/swagger-ui.html)
+        ```http://localhost:8080/swagger-ui.html```
 #### Requirements
 
 * [ Maven](https://maven.apache.org/)

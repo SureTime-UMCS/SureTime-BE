@@ -32,9 +32,9 @@ public class ClubController {
         return service.getClubById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping()
-    ResponseEntity<EntityModel<Club>> addOne(@RequestBody Club club){
+    ResponseEntity<?> addOne(@RequestBody Club club){
         return service.addOne(club);
     }
 

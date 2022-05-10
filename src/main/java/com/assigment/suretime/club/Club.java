@@ -27,7 +27,7 @@ public class Club {
     @Indexed(unique = true)
     private String name;
 
-    @DocumentReference
+    @DocumentReference(lazy = true)
     private Set<Person> members, clubModerators;
 
     @Indexed(direction = IndexDirection.DESCENDING)
