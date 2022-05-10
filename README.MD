@@ -79,13 +79,13 @@ curl --location --request GET 'http://localhost:8080/api/test/admin' \
 
 - [x] Kod ma być dostępny w zewnętrznym repozytorium razem z dokumentacją
 
-- [ ] min 10 poprawnych (zgodnych z REST) endpoint-ów (min. 4 metody GET / POST / PUT / DELETE) Należy znać sens
+- [x] min 10 poprawnych (zgodnych z REST) endpoint-ów (min. 4 metody GET / POST / PUT / DELETE) Należy znać sens
   wykorzystywanych metod.
 
 - [ ] Do wszystkich endpointów należy przygotować kolekcję requestów za pomocą programu Postman (wyeksportowana kolekcja
   ma znaleźć się w repozytorium razem z kodem oraz dokumentacją w oddzielnych katalogach)
 
-- [ ] min 5 tabel w bazie wykorzystywanej przez aplikację
+- [x] min 5 tabel w bazie wykorzystywanej przez aplikację
 
 - [x] Logika biznesowa wykorzystująca DI oraz IoC
 
@@ -93,15 +93,15 @@ curl --location --request GET 'http://localhost:8080/api/test/admin' \
 
 ### Project requirements for grade > 4
 
-- [ ]  Osiągnięcie "glory of rest" (hateoas)
+- [x]  Osiągnięcie "glory of rest" (hateoas)
 - [x] Wykorzystanie do projektowania i dokumentacji API narzędzia typu [swagger.io](https://swagger.io/) lub
   alternatywnych (Postman może importować ze swaggera)
-- [ ] Bardziej złożona logika wykorzystująca wzorce projektowe ale nie wymuszane przez framework Spring
-- [ ] Poprawnie wykorzystać jeden ze starterów aplikacji SpringBoot’a
+- [x] Bardziej złożona logika wykorzystująca wzorce projektowe ale nie wymuszane przez framework Spring
+- [x] Poprawnie wykorzystać jeden ze starterów aplikacji SpringBoot’a
 
 ### Dla chętnych
 
-- [ ] Prosty front-end do konsumpcji endpointów Rest-owych
-- [ ] Wykorzystać JWT jwt.io
+- [x] Prosty front-end do konsumpcji endpointów Rest-owych
+- [x] Wykorzystać JWT jwt.io
 
 
