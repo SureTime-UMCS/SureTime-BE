@@ -10,6 +10,7 @@ import com.assigment.suretime.generics.GenericService;
 import com.assigment.suretime.generics.GenericModelAssembler;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.person.models.Person;
+import com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,12 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
         this.eventRepository = eventRepository;
     }
 
+
     public ResponseEntity<?> addOne(CompetitionDto competitionDto){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
+
         Competition competition = fromDto(competitionDto);
         competitionRepository.findByName(competitionDto.getName())
                 .ifPresent(c -> {
@@ -45,14 +51,21 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
                             "First delete "+competition.getName()+"Object");});
         log.info("inserted: "+ competition.getName());
         return ResponseEntity.ok(modelAssembler.toModel(competitionRepository.insert(competition)));
+
     }
 
     public ResponseEntity<?> deleteOne(String id){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
         competitionRepository.deleteById(id);
         return ResponseEntity.ok("");
     }
 
     public ResponseEntity<?> updateCompetitionEvents(String competitionId, List<String> eventsId){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
         eventsId.forEach(this::eventExistElseThrowNotFoundException);
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
@@ -66,6 +79,9 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
     public ResponseEntity<?> addCompetitionEvent(String competitionId, String eventId){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
         eventExistElseThrowNotFoundException(eventId);
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
@@ -79,6 +95,9 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
     public ResponseEntity<?> deleteCompetitionEvent(String competitionId, String eventId){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
         eventExistElseThrowNotFoundException(eventId);
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
@@ -93,6 +112,9 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
 
     public ResponseEntity<?> updateCompetitionCompetitors(String competitionId, List<String> emails){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
         personsExistsElseThrowNotFoundException(emails);
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
@@ -107,6 +129,9 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
 
     public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String email){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
         //personsExistsElseThrowNotFoundException(List.of(email));
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
         competition.getCompetitors().add(email);
@@ -118,6 +143,9 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
     public ResponseEntity<?> removeCompetitionEvent(String id, String eventId) {
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
         eventExistElseThrowNotFoundException(eventId);
         Competition competition = getCompetitionElseThrowNotFoundException(id);
         competition.getEventsId().remove(eventId);
@@ -127,6 +155,9 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
     public ResponseEntity<?> removeCompetitionCompetitor(String competitionId, String email){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to create this content", HttpStatus.FORBIDDEN);
+        }
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
 
@@ -139,6 +170,7 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
     private void personsExistsElseThrowNotFoundException(List<String> emails) {
+
         emails.forEach(personEmail -> personRepository.findById(personEmail)
                         .orElseThrow(() -> new NotFoundException(Person.class.getSimpleName(), personEmail)));
     }

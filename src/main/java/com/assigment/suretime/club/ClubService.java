@@ -45,8 +45,11 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toCollectionModel(clubRepository.findAll()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EntityModel<Club>> addOne(Club newClub) {
+
+    public ResponseEntity<?> addOne(Club newClub) {
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to modify this content", HttpStatus.FORBIDDEN);
+        }
         Optional<Club> club = clubRepository.findByName(newClub.getName());
         if(club.isEmpty()){
             EntityModel<Club> responseEntity = clubModelAssembler.toModel(clubRepository.insert(newClub));
@@ -58,6 +61,7 @@ public class ClubService
     }
 
     public ResponseEntity<?> updateClub(Club newClub, String name) {
+
         //if other club has newClub.getName() will not allowed to make two clubs have same unique name.
         clubRepository.findByName(newClub.getName())
                 .ifPresent(c->{
@@ -75,8 +79,11 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toModel(modifiedClub));
 
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<?> deleteByName(String name) {
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to modify this content", HttpStatus.FORBIDDEN);
+        }
         clubRepository.deleteClubByName(name);
         return ResponseEntity.ok("");
     }
@@ -97,8 +104,11 @@ public class ClubService
         return ResponseEntity.ok(clubModelAssembler.toModel(club));
 
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<?> removeOne(String name){
+        if(!AuthenticationFacade.isAdmin()) {
+            return new ResponseEntity<>("You are not allowed to modify this content", HttpStatus.FORBIDDEN);
+        }
         clubRepository.findByName(name)
                 .ifPresentOrElse(c-> {
                     log.info("Deleted club: "+ name);
