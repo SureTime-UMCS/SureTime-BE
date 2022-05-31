@@ -1,4 +1,4 @@
-package com.assigment.suretime.securityJwt.security.jwt;
+package com.assigment.suretime.securityJwt.jwt;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.assigment.suretime.securityJwt.security.services.UserDetailsServiceImpl;
+import com.assigment.suretime.securityJwt.services.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

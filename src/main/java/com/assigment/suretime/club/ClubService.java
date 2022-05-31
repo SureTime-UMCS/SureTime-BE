@@ -7,16 +7,12 @@ import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.PersonRepository;
 import com.assigment.suretime.securityJwt.authenticationFacade.AuthenticationFacade;
-import com.assigment.suretime.securityJwt.models.ERole;
-import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

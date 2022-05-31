@@ -1,8 +1,8 @@
-package com.assigment.suretime.securityJwt.security;
+package com.assigment.suretime.securityJwt.configuration;
 
-import com.assigment.suretime.securityJwt.security.jwt.AuthEntryPointJwt;
-import com.assigment.suretime.securityJwt.security.jwt.AuthTokenFilter;
-import com.assigment.suretime.securityJwt.security.services.UserDetailsServiceImpl;
+import com.assigment.suretime.securityJwt.jwt.AuthEntryPointJwt;
+import com.assigment.suretime.securityJwt.jwt.AuthTokenFilter;
+import com.assigment.suretime.securityJwt.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

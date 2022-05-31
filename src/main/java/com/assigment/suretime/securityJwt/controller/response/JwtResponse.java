@@ -1,4 +1,4 @@
-package com.assigment.suretime.securityJwt.payload.response;
+package com.assigment.suretime.securityJwt.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

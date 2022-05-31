@@ -1,8 +1,8 @@
-package com.assigment.suretime.securityJwt.security.jwt;
+package com.assigment.suretime.securityJwt.jwt;
 
 import java.util.Date;
 
-import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
+import com.assigment.suretime.securityJwt.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

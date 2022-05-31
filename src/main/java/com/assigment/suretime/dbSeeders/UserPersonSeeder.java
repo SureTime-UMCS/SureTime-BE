@@ -6,7 +6,7 @@ import com.assigment.suretime.securityJwt.controller.AuthController;
 import com.assigment.suretime.securityJwt.models.ERole;
 import com.assigment.suretime.securityJwt.models.Role;
 import com.assigment.suretime.securityJwt.models.User;
-import com.assigment.suretime.securityJwt.payload.request.SignupRequest;
+import com.assigment.suretime.securityJwt.controller.request.SignupRequest;
 import com.assigment.suretime.securityJwt.repository.RoleRepository;
 import com.assigment.suretime.securityJwt.repository.UserRepository;
 import com.github.javafaker.Faker;

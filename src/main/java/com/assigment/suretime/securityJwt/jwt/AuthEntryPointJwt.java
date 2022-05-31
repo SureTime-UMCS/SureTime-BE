@@ -1,4 +1,4 @@
-package com.assigment.suretime.securityJwt.security.jwt;
+package com.assigment.suretime.securityJwt.jwt;
 
 import java.io.IOException;
 

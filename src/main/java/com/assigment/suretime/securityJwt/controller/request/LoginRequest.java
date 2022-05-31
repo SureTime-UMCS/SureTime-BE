@@ -1,4 +1,4 @@
-package com.assigment.suretime.securityJwt.payload.request;
+package com.assigment.suretime.securityJwt.controller.request;
 
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;

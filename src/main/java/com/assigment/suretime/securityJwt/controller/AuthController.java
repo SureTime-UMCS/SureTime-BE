@@ -9,12 +9,12 @@ import javax.validation.Valid;
 
 import com.assigment.suretime.person.models.Person;
 import com.assigment.suretime.person.PersonRepository;
-import com.assigment.suretime.securityJwt.payload.request.LoginRequest;
-import com.assigment.suretime.securityJwt.payload.request.SignupRequest;
-import com.assigment.suretime.securityJwt.payload.response.JwtResponse;
-import com.assigment.suretime.securityJwt.payload.response.MessageResponse;
-import com.assigment.suretime.securityJwt.security.jwt.JwtUtils;
-import com.assigment.suretime.securityJwt.security.services.UserDetailsImpl;
+import com.assigment.suretime.securityJwt.controller.request.LoginRequest;
+import com.assigment.suretime.securityJwt.controller.request.SignupRequest;
+import com.assigment.suretime.securityJwt.controller.response.JwtResponse;
+import com.assigment.suretime.securityJwt.controller.response.MessageResponse;
+import com.assigment.suretime.securityJwt.jwt.JwtUtils;
+import com.assigment.suretime.securityJwt.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

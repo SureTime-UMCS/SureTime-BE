@@ -1,4 +1,4 @@
-package com.assigment.suretime.securityJwt.security.services;
+package com.assigment.suretime.securityJwt.services;
 
 import java.util.Collection;
 import java.util.List;

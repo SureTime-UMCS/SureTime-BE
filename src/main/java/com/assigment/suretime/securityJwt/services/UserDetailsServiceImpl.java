@@ -1,4 +1,4 @@
-package com.assigment.suretime.securityJwt.security.services;
+package com.assigment.suretime.securityJwt.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
