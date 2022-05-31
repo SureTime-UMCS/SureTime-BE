@@ -50,18 +50,16 @@ public class ClubController {
         return service.deleteByName(name);
     }
 
-    @PutMapping("/{name}/add_person_to_club")
+    @PostMapping("/{name}/person")
     ResponseEntity<?> addPersonToClub(@PathVariable String name, @RequestBody String personEmail){
         return service.addPersonToClub(name, personEmail);
     }
 
-    @PutMapping("{clubName}/add_moderators")
+    @PostMapping("{clubName}/moderators")
     ResponseEntity<?> addModeratorsToClub(
             @PathVariable String clubName,
             @RequestBody @Valid AddPersonsToClubModeratorModel persons){
         return service.addModeratorsToClub(clubName, persons);
     }
-
-
 
 }

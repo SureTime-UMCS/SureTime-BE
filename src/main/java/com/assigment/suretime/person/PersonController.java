@@ -51,7 +51,7 @@ public class PersonController {
         return personService.removeOne(email);
     }
 
-    @PutMapping("update_roles/{email}")
+    @PutMapping("roles/{email}")
     public ResponseEntity<?> updateRolesForPerson(@PathVariable String email, @Valid @RequestBody RolesCollection roles){
         return personService.updateRoles(email, roles);
     }

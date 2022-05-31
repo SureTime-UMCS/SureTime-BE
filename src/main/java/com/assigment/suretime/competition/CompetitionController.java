@@ -47,22 +47,22 @@ public class CompetitionController implements IGenericController<Competition, Co
         return competitionService.deleteOne(id);
     }
 
-    @PostMapping("{id}/add_competitor/{email}")
+    @PostMapping("{id}/competitor/{email}")
     public ResponseEntity<?> addCompetitor(@PathVariable("id") String id ,
                                            @PathVariable("email") String competitorEmail ){
         return competitionService.addCompetitionCompetitor(id, competitorEmail);
     }
-    @DeleteMapping("{id}/remove_competitor/{email}")
+    @DeleteMapping("{id}/competitor/{email}")
     public ResponseEntity<?> removeCompetitor(@PathVariable("id") String id ,
                                            @PathVariable("email") String email ){
         return competitionService.removeCompetitionCompetitor(id, email);
     }
-    @PostMapping("{id}/add_event/{event_id}")
+    @PostMapping("{id}/event/{event_id}")
     public ResponseEntity<?> addEvent(@PathVariable("id") String id
             , @PathVariable("event_id") String eventId){
         return competitionService.addCompetitionEvent(id, eventId);
     }
-    @DeleteMapping ("{id}/remove_event/{event_id}")
+    @DeleteMapping ("{id}/event/{event_id}")
     public ResponseEntity<?> removeEvent(@PathVariable("id") String id,
                                          @PathVariable("event_id") String eventId){
         return competitionService.removeCompetitionEvent(id, eventId);
