@@ -1,16 +1,10 @@
 package com.assigment.suretime.dbSeeders;
 
-import com.assigment.suretime.securityJwt.models.ERole;
-import com.assigment.suretime.securityJwt.models.Role;
-import com.assigment.suretime.securityJwt.repository.RoleRepository;
+import com.assigment.suretime.securityJwt.domain.models.ERole;
+import com.assigment.suretime.securityJwt.domain.models.Role;
+import com.assigment.suretime.securityJwt.domain.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

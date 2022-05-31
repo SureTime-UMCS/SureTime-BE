@@ -1,7 +1,13 @@
 package com.assigment.suretime.heat;
 
-import com.assigment.suretime.heat.models.*;
-import com.assigment.suretime.person.PersonRepository;
+import com.assigment.suretime.heat.application.request.AddCompetitorsRequest;
+import com.assigment.suretime.heat.application.request.AddResultsRequest;
+import com.assigment.suretime.heat.application.request.DeleteCompetitorsRequest;
+import com.assigment.suretime.heat.application.request.DeleteResultsRequest;
+import com.assigment.suretime.heat.application.response.HeatDto;
+import com.assigment.suretime.heat.domain.Heat;
+import com.assigment.suretime.heat.domain.repository.HeatRepository;
+import com.assigment.suretime.person.domain.repository.PersonRepository;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
@@ -16,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.assigment.suretime.person.models.Person;
+import com.assigment.suretime.person.domain.models.Person;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
@@ -143,7 +149,7 @@ class HeatControllerTest {
         String payload = asJsonString(new AddCompetitorsRequest(heat.getId(),
                 competitorsEmails));
 
-        mockMvc.perform(post(url + "/"+heat.getId()+"/add_competitors")
+        mockMvc.perform(post(url + "/"+heat.getId()+"/competitors")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload)
                         .accept(MediaType.APPLICATION_JSON))
@@ -182,7 +188,7 @@ class HeatControllerTest {
 
         String payload = asJsonString(
                 payloadObject);
-        mockMvc.perform(post(url+"/"+randomHeat.getId()+"/add_results")
+        mockMvc.perform(post(url+"/"+randomHeat.getId()+"/results")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(payload)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -211,7 +217,7 @@ class HeatControllerTest {
 
         String payload = asJsonString(
                 request);
-        mockMvc.perform(delete(url+"/"+randomHeat.getId()+"/delete_competitors")
+        mockMvc.perform(delete(url+"/"+randomHeat.getId()+"/competitors")
                         .accept(MediaType.APPLICATION_JSON)
                         .content(payload)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -274,7 +280,7 @@ class HeatControllerTest {
 
         String payload = asJsonString(
                 payloadObject);
-        mockMvc.perform(delete(url+"/"+randomHeat.getId()+"/delete_results")
+        mockMvc.perform(delete(url+"/"+randomHeat.getId()+"/results")
                         .accept(MediaType.APPLICATION_JSON)
                         .content(payload)
                         .contentType(MediaType.APPLICATION_JSON))

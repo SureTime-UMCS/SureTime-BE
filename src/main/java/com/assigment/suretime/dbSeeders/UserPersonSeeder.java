@@ -1,14 +1,14 @@
 package com.assigment.suretime.dbSeeders;
 
 import com.assigment.suretime.exceptions.NotFoundException;
-import com.assigment.suretime.person.PersonRepository;
-import com.assigment.suretime.securityJwt.controller.AuthController;
-import com.assigment.suretime.securityJwt.models.ERole;
-import com.assigment.suretime.securityJwt.models.Role;
-import com.assigment.suretime.securityJwt.models.User;
-import com.assigment.suretime.securityJwt.controller.request.SignupRequest;
-import com.assigment.suretime.securityJwt.repository.RoleRepository;
-import com.assigment.suretime.securityJwt.repository.UserRepository;
+import com.assigment.suretime.person.domain.repository.PersonRepository;
+import com.assigment.suretime.securityJwt.application.controller.AuthController;
+import com.assigment.suretime.securityJwt.domain.models.ERole;
+import com.assigment.suretime.securityJwt.domain.models.Role;
+import com.assigment.suretime.securityJwt.domain.models.User;
+import com.assigment.suretime.securityJwt.application.request.SignupRequest;
+import com.assigment.suretime.securityJwt.domain.repository.RoleRepository;
+import com.assigment.suretime.securityJwt.domain.repository.UserRepository;
 import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

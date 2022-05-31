@@ -1,11 +1,9 @@
 package com.assigment.suretime.securityJwt.models;
 
+import com.assigment.suretime.securityJwt.domain.models.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 
 class UserTest {

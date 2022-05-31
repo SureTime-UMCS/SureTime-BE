@@ -1,8 +1,9 @@
 package com.assigment.suretime.securityJwt.models;
 
 import com.assigment.suretime.dbSeeders.RoleSeeder;
-import com.assigment.suretime.securityJwt.repository.RoleRepository;
-import lombok.AllArgsConstructor;
+import com.assigment.suretime.securityJwt.domain.models.ERole;
+import com.assigment.suretime.securityJwt.domain.models.Role;
+import com.assigment.suretime.securityJwt.domain.repository.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Component
 @SpringBootTest

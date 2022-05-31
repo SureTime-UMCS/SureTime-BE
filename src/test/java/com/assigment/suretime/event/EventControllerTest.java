@@ -1,9 +1,12 @@
 package com.assigment.suretime.event;
 
-import com.assigment.suretime.heat.HeatRepository;
-import com.assigment.suretime.heat.models.Heat;
-import com.assigment.suretime.person.PersonRepository;
-import com.assigment.suretime.person.models.Person;
+import com.assigment.suretime.event.application.response.EventDto;
+import com.assigment.suretime.event.domain.Event;
+import com.assigment.suretime.event.domain.repository.EventRepository;
+import com.assigment.suretime.heat.domain.repository.HeatRepository;
+import com.assigment.suretime.heat.domain.Heat;
+import com.assigment.suretime.person.domain.repository.PersonRepository;
+import com.assigment.suretime.person.domain.models.Person;
 import com.github.javafaker.Faker;
 import lombok.SneakyThrows;
 import org.junit.Before;
@@ -164,7 +167,7 @@ class EventControllerTest {
         String newHeatName = "New heat";
         Heat newHeat = heatRepository.save(new Heat(newHeatName, LocalDateTime.now()));
 
-        mockMvc.perform(post(url+ "/"+randomEvent.getId() +"/add_heat/"+ newHeat.getId()))
+        mockMvc.perform(post(url+ "/"+randomEvent.getId() +"/heat/"+ newHeat.getId()))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
 
         eventRepository.findById(randomEvent.getId()).get().getHeatsId().contains(newHeat.getId());
@@ -182,7 +185,7 @@ class EventControllerTest {
         randomEvent.getHeatsId().add(newHeat.getId());
         eventRepository.save(randomEvent);
 
-        mockMvc.perform(delete(url+ "/"+randomEvent.getId() +"/delete_heat/"+ newHeat.getId()))
+        mockMvc.perform(delete(url+ "/"+randomEvent.getId() +"/heat/"+ newHeat.getId()))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
 
         Event updatedHeat = eventRepository.findById(randomEvent.getId()).get();
@@ -203,7 +206,7 @@ class EventControllerTest {
         randomEvent.getCompetitorsEmail().add(person.getEmail());
         eventRepository.save(randomEvent);
 
-        mockMvc.perform(delete(url+"/"+ randomEvent.getId() +"/delete_competitor/"+ person.getId()))
+        mockMvc.perform(delete(url+"/"+ randomEvent.getId() +"/competitor/"+ person.getId()))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
 
         assert !eventRepository.findById(randomEvent.getId()).get().getCompetitorsEmail().contains(person.getId());
@@ -218,7 +221,7 @@ class EventControllerTest {
         Event randomEvent = getRandomEvent();
         Person person = getRandomPerson();
 
-        mockMvc.perform(post(url+ "/"+randomEvent.getId() +"/add_competitor/"+ person.getId()))
+        mockMvc.perform(post(url+ "/"+randomEvent.getId() +"/competitor/"+ person.getId()))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
 
         assert eventRepository.findById(randomEvent.getId()).get().getCompetitorsEmail().contains(person.getId());
