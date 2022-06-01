@@ -18,43 +18,43 @@ import javax.validation.Valid;
 @AllArgsConstructor
 public class PersonController {
 
-    private final PersonService personService;
+    private final PersonService domainPersonService;
 
     private final IAuthenticationFacade authenticationFacade;
 
     @GetMapping()
     public CollectionModel<EntityModel<Person>> all(){
-        return personService.all();
+        return domainPersonService.all();
     }
 
     @GetMapping("{email}")
     public ResponseEntity<?> one(@PathVariable String email){
-        return personService.getByEmail(email);
+        return domainPersonService.getByEmail(email);
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> me(){
-        return personService.getByEmail(authenticationFacade.getUserDetailsImpl().getEmail());
+        return domainPersonService.getByEmail(authenticationFacade.getUserDetailsImpl().getEmail());
     }
 
     @PostMapping("")
     public ResponseEntity<?> addOne(@RequestBody PersonDTO personDTO) {
-            return personService.updateOrCreate(personDTO);
+            return domainPersonService.updateOrCreate(personDTO);
     }
 
     @PutMapping("")
     public ResponseEntity<?> update(@RequestBody PersonDTO person){
-            return personService.updateOrCreate(person);
+            return domainPersonService.updateOrCreate(person);
     }
 
     @DeleteMapping("{email}")
     public ResponseEntity<?> removeOne(@PathVariable String email){
-        return personService.removeOne(email);
+        return domainPersonService.removeOne(email);
     }
 
     @PutMapping("roles/{email}")
     public ResponseEntity<?> updateRolesForPerson(@PathVariable String email, @Valid @RequestBody RolesCollection roles){
-        return personService.updateRoles(email, roles);
+        return domainPersonService.updateRoles(email, roles);
     }
 
 

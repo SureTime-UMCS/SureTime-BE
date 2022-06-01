@@ -5,7 +5,7 @@ import com.assigment.suretime.person.domain.models.Gender;
 import com.assigment.suretime.person.domain.models.Person;
 import com.assigment.suretime.person.domain.models.RolesCollection;
 import com.assigment.suretime.person.domain.repository.PersonRepository;
-import com.assigment.suretime.person.domain.service.PersonService;
+import com.assigment.suretime.person.domain.service.DomainPersonService;
 import com.assigment.suretime.securityJwt.domain.models.ERole;
 import com.assigment.suretime.securityJwt.domain.models.User;
 import com.assigment.suretime.securityJwt.domain.repository.UserRepository;
@@ -66,7 +66,7 @@ class PersonControllerTest {
     private URL url = new URL("http", "localhost", 8080, "/api/v1");
 
     @Autowired
-    private PersonService personService;
+    private DomainPersonService domainPersonService;
 
 
     PersonControllerTest() throws MalformedURLException {
@@ -85,7 +85,7 @@ class PersonControllerTest {
     void removeOneAsAdminIsOk() throws Exception {
         //GIVEN
         Person person = new Person("szymonzywko@gmail.com");
-        personService.updateOrCreate(person);
+        domainPersonService.updateOrCreate(person);
         //WHEN
         mockMvc.perform(delete(url.toString() + "/persons/" + person.getEmail()))
                 .andDo(print())
@@ -93,7 +93,7 @@ class PersonControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()));
 
         assert personRepository.findByEmail(person.getEmail()).isEmpty();
-        personService.removeOne(person.getEmail());
+        domainPersonService.removeOne(person.getEmail());
     }
 
     @WithMockUser()
@@ -116,7 +116,7 @@ class PersonControllerTest {
 
         Optional<Person> byEmail = personRepository.findByEmail(person.getEmail());
         assert byEmail.isPresent();
-        personService.removeOne(person.getEmail());
+        domainPersonService.removeOne(person.getEmail());
     }
 
     @Test
@@ -124,7 +124,7 @@ class PersonControllerTest {
     void addOneAsAdminIsOk() throws Exception {
         //GIVEN
         PersonDTO personDTO = new PersonDTO("Szymon", "Zywko", "zywko@gmail.com", Gender.MALE, "AZS", "admin@gmail.com");
-        personService.removeOne(personDTO.getEmail());
+        domainPersonService.removeOne(personDTO.getEmail());
 
         //WHEN
         mockMvc.perform(post(url.toString() + "/persons")
@@ -136,14 +136,14 @@ class PersonControllerTest {
                 .andExpect(status().is(HttpStatus.CREATED.value()));
         Person p =personRepository.findByEmail(personDTO.getEmail()).get();
         assert personRepository.findByEmail(personDTO.getEmail()).isPresent();
-        personService.removeOne(personDTO.getEmail());
+        domainPersonService.removeOne(personDTO.getEmail());
     }
 
     @Test
     @WithUserDetails(value = "mod")
     void getMyData() throws Exception {
         Person person = new Person("mod@gmail.com");
-        ResponseEntity<?> entityModelResponseEntity = personService.updateOrCreate(person);
+        ResponseEntity<?> entityModelResponseEntity = domainPersonService.updateOrCreate(person);
 
         //WHEN
         mockMvc.perform(get(url.toString() + "/persons/me"))
@@ -152,7 +152,7 @@ class PersonControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()));
 
         assert personRepository.findByEmail(person.getEmail()).isPresent();
-        personService.removeOne(person.getEmail());
+        domainPersonService.removeOne(person.getEmail());
     }
 
 
@@ -162,7 +162,7 @@ class PersonControllerTest {
         //GIVEN
         Person person = new Person("testuser@gmial.com");
 
-        personService.updateOrCreate(person);
+        domainPersonService.updateOrCreate(person);
         //WHEN
         mockMvc.perform(post(url.toString() + "/persons")
                         .content(asJsonString(person))
@@ -172,7 +172,7 @@ class PersonControllerTest {
                 //THEN
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
 
-        personService.removeOne(person.getEmail());
+        domainPersonService.removeOne(person.getEmail());
     }
 
     @Test

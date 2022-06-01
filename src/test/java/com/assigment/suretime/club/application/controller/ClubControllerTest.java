@@ -5,7 +5,7 @@ import com.assigment.suretime.club.domain.Club;
 import com.assigment.suretime.club.domain.service.ClubService;
 import com.assigment.suretime.person.domain.models.Person;
 import com.assigment.suretime.person.domain.repository.PersonRepository;
-import com.assigment.suretime.person.domain.service.PersonService;
+import com.assigment.suretime.person.domain.service.DomainPersonService;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +55,7 @@ class ClubControllerTest {
     @Autowired
     private ClubService clubService;
     @Autowired
-    private PersonService personService;
+    private DomainPersonService domainPersonService;
     @Autowired
     private PersonRepository personRepository;
 
@@ -150,7 +150,7 @@ class ClubControllerTest {
         clubService.addOne(club);
         String email = "testuasdlem@gmail.com";
         Person person = new Person(email);
-        personService.updateOrCreate(person);
+        domainPersonService.updateOrCreate(person);
 
         //WHEN
 
@@ -162,7 +162,7 @@ class ClubControllerTest {
                 .andDo(print()).andExpect(status().is(HttpStatus.OK.value()));
         //AFTER
         clubService.removeOne(club.getName());
-        personService.removeOne(person.getEmail());
+        domainPersonService.removeOne(person.getEmail());
     }
 
 //    @Test
