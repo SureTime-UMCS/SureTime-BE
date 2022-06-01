@@ -39,8 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class PersonControllerTest {
 
-
-
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -52,8 +50,6 @@ class PersonControllerTest {
 
     @Autowired
     protected PersonRepository personRepository;
-
-
 
     @Before()
     public void setup()
