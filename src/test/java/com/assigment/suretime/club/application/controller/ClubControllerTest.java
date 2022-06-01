@@ -2,7 +2,7 @@ package com.assigment.suretime.club.application.controller;
 
 import com.assigment.suretime.generics.models.Address;
 import com.assigment.suretime.club.domain.Club;
-import com.assigment.suretime.club.domain.service.ClubService;
+import com.assigment.suretime.club.domain.service.DomainClubService;
 import com.assigment.suretime.person.domain.models.Person;
 import com.assigment.suretime.person.domain.repository.PersonRepository;
 import com.assigment.suretime.person.domain.service.DomainPersonService;
@@ -53,7 +53,7 @@ class ClubControllerTest {
     private URL url = new URL("http", "localhost", 8080, "/api/v1");
 
     @Autowired
-    private ClubService clubService;
+    private DomainClubService domainClubService;
     @Autowired
     private DomainPersonService domainPersonService;
     @Autowired
@@ -76,13 +76,13 @@ class ClubControllerTest {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
         Club club = new Club(address, "newClub");
-        clubService.addOne(club);
+        domainClubService.addOne(club);
         //WHEN
         mockMvc.perform(delete(url.toString() + "/clubs/" + club.getName()))
                 .andDo(print())
                 //THEN
                 .andExpect(status().is(HttpStatus.OK.value()));
-        clubService.removeOne(club.getName());
+        domainClubService.removeOne(club.getName());
     }
 
     @WithMockUser()
@@ -96,7 +96,7 @@ class ClubControllerTest {
                 .andDo(print())
                 //THEN
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
-        clubService.removeOne(club.getName());
+        domainClubService.removeOne(club.getName());
 
     }
 
@@ -106,7 +106,7 @@ class ClubControllerTest {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
         Club club = new Club(address, "newClub");
-        clubService.removeOne(club.getName());
+        domainClubService.removeOne(club.getName());
 
         //WHEN
         mockMvc.perform(post(url.toString() + "/clubs")
@@ -116,7 +116,7 @@ class ClubControllerTest {
                 .andDo(print())
                 //THEN
                 .andExpect(status().is(HttpStatus.CREATED.value()));
-        clubService.removeOne(club.getName());
+        domainClubService.removeOne(club.getName());
 
     }
 
@@ -147,7 +147,7 @@ class ClubControllerTest {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
         Club club = new Club(address, "club");
-        clubService.addOne(club);
+        domainClubService.addOne(club);
         String email = "testuasdlem@gmail.com";
         Person person = new Person(email);
         domainPersonService.updateOrCreate(person);
@@ -161,7 +161,7 @@ class ClubControllerTest {
                 //THEN
                 .andDo(print()).andExpect(status().is(HttpStatus.OK.value()));
         //AFTER
-        clubService.removeOne(club.getName());
+        domainClubService.removeOne(club.getName());
         domainPersonService.removeOne(person.getEmail());
     }
 
