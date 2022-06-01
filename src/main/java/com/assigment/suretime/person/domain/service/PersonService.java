@@ -16,6 +16,8 @@ public interface PersonService {
 
     ResponseEntity<?> getByEmail(String email);
 
+    ResponseEntity<?> getByUUID(String email);
+
     ResponseEntity<?> removeOne(String email);
 
     ResponseEntity<?> updateOrCreate(Person person);
@@ -24,5 +26,5 @@ public interface PersonService {
 
     ResponseEntity<?> updateCoach(String personEmail, String coachEmail);
 
-    ResponseEntity<?> updateRoles(String email, RolesCollection newRoles);
+    ResponseEntity<?> updateRoles(String uuid, RolesCollection newRoles);
 }

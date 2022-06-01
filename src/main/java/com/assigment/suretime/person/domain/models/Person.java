@@ -24,6 +24,10 @@ public class Person {
 
     @Indexed(unique = true)
     private String email;
+
+    @Indexed(unique = true)
+    private String userUUID;
+
     private Gender gender;
 
     @DocumentReference

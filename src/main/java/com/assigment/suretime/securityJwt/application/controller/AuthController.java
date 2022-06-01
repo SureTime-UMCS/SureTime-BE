@@ -139,6 +139,7 @@ public class AuthController {
 
 		Person person = new Person(user.getEmail());
 		person.setUser(user);
+		person.setUserUUID(user.getUserUUID());
 		personRepository.findByEmail(user.getEmail())
 				.ifPresentOrElse(p->{
 					log.warn("Person: "+ p +" already exist but should not.");

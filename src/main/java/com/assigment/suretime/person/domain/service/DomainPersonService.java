@@ -69,21 +69,29 @@ public class DomainPersonService implements PersonService {
 
     }
 
-    public ResponseEntity<?> removeOne(String email){
+    public ResponseEntity<?> getByUUID(String uuid) {
+        log.info("Getting person:<"+uuid+">");
+        return personRepository.findByUserUUID(uuid)
+                .map(personAssembler::toModel).map(ResponseEntity::ok)
+                .orElseThrow(() -> new NotFoundException("Person", uuid));
+
+    }
+
+    public ResponseEntity<?> removeOne(String uuid){
         if(!AuthenticationFacade.isAdmin()){
             return new ResponseEntity<>("You are not allowed to modify this content", HttpStatus.FORBIDDEN);
         }
-        personRepository.findByEmail(email)
+        personRepository.findByUserUUID(uuid)
                 .ifPresentOrElse(p-> {
-                    log.info("Deleted: "+ email + " from person repository");
+                    log.info("Deleted: "+ uuid + " from person repository");
                     personRepository.delete(p)
-                    ;}, ()->{log.info("Not deleted: "+email+" because do not exist already.");});
+                    ;}, ()->{log.info("Not deleted: "+uuid+" because do not exist already.");});
 
-        userRepository.findByEmail(email)
+        userRepository.findByUserUUID(uuid)
                 .ifPresentOrElse(u-> {
-                    log.info("Deleted: "+ email + " from user repository");
+                    log.info("Deleted: "+ uuid + " from user repository");
                     userRepository.delete(u)
-                    ;}, ()->{log.info("Not deleted: "+email+" because do not exist already.");});
+                    ;}, ()->{log.info("Not deleted: "+uuid+" because do not exist already.");});
 
         return ResponseEntity.ok("");
     }
@@ -136,11 +144,11 @@ public class DomainPersonService implements PersonService {
     //Only for Admin. 
     //If Club Admin want to add Club Admin role. Needs to use endpoint in clubs.
     
-    public ResponseEntity<?> updateRoles(String email, RolesCollection newRoles) {
+    public ResponseEntity<?> updateRoles(String uuid, RolesCollection newRoles) {
         if(!AuthenticationFacade.isAdmin()){
             return new ResponseEntity<>("You are not allowed to modify thihs content", HttpStatus.FORBIDDEN);
         }
-        var user = userRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("User", email));
+        var user = userRepository.findByUserUUID(uuid).orElseThrow(()-> new NotFoundException("User", uuid));
         Set<Role> roles = new HashSet<>();
         //Prepare rolesObjects
         for (String roleStr: newRoles.getRoles()) {

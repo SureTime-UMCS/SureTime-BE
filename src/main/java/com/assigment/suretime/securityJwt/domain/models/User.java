@@ -3,6 +3,7 @@ package com.assigment.suretime.securityJwt.domain.models;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -35,6 +36,9 @@ public class User {
   private String email;
 
   @NotBlank
+  private String userUUID;
+
+  @NotBlank
   @Size(max = 120)
   private String password;
 
@@ -45,6 +49,7 @@ public class User {
     this.username = username;
     this.email = email;
     this.password = password;
+    this.userUUID = UUID.randomUUID().toString();
 
   }
   public User(){}
@@ -53,6 +58,7 @@ public class User {
     this.email = email;
     this.password = password;
     this.roles = roles;
+    this.userUUID = UUID.randomUUID().toString();
   }
 
 

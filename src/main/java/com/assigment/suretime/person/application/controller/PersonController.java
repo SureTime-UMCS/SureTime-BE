@@ -27,9 +27,9 @@ public class PersonController {
         return domainPersonService.all();
     }
 
-    @GetMapping("{email}")
-    public ResponseEntity<?> one(@PathVariable String email){
-        return domainPersonService.getByEmail(email);
+    @GetMapping("{uuid}")
+    public ResponseEntity<?> one(@PathVariable String uuid){
+        return domainPersonService.getByUUID(uuid);
     }
 
     @GetMapping("/me")
@@ -47,14 +47,14 @@ public class PersonController {
             return domainPersonService.updateOrCreate(person);
     }
 
-    @DeleteMapping("{email}")
-    public ResponseEntity<?> removeOne(@PathVariable String email){
-        return domainPersonService.removeOne(email);
+    @DeleteMapping("{uuid}")
+    public ResponseEntity<?> removeOne(@PathVariable String uuid){
+        return domainPersonService.removeOne(uuid);
     }
 
-    @PutMapping("roles/{email}")
-    public ResponseEntity<?> updateRolesForPerson(@PathVariable String email, @Valid @RequestBody RolesCollection roles){
-        return domainPersonService.updateRoles(email, roles);
+    @PutMapping("roles/{uuid}")
+    public ResponseEntity<?> updateRolesForPerson(@PathVariable String uuid, @Valid @RequestBody RolesCollection roles){
+        return domainPersonService.updateRoles(uuid, roles);
     }
 
 
