@@ -1,14 +1,14 @@
 package com.assigment.suretime.dbSeeders;
 
 import com.assigment.suretime.address.Address;
-import com.assigment.suretime.competition.models.Competition;
-import com.assigment.suretime.competition.CompetitionRepository;
-import com.assigment.suretime.event.Event;
-import com.assigment.suretime.event.EventRepository;
-import com.assigment.suretime.heat.models.Heat;
-import com.assigment.suretime.heat.HeatRepository;
-import com.assigment.suretime.person.PersonRepository;
-import com.assigment.suretime.person.models.Person;
+import com.assigment.suretime.competition.domain.Competition;
+import com.assigment.suretime.competition.domain.repository.CompetitionRepository;
+import com.assigment.suretime.event.domain.Event;
+import com.assigment.suretime.event.domain.repository.EventRepository;
+import com.assigment.suretime.heat.domain.Heat;
+import com.assigment.suretime.heat.domain.repository.HeatRepository;
+import com.assigment.suretime.person.domain.repository.PersonRepository;
+import com.assigment.suretime.person.domain.models.Person;
 import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

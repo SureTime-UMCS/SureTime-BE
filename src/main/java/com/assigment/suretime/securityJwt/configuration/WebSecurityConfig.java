@@ -1,8 +1,8 @@
 package com.assigment.suretime.securityJwt.configuration;
 
-import com.assigment.suretime.securityJwt.jwt.AuthEntryPointJwt;
-import com.assigment.suretime.securityJwt.jwt.AuthTokenFilter;
-import com.assigment.suretime.securityJwt.services.UserDetailsServiceImpl;
+import com.assigment.suretime.securityJwt.domain.jwt.AuthEntryPointJwt;
+import com.assigment.suretime.securityJwt.domain.jwt.AuthTokenFilter;
+import com.assigment.suretime.securityJwt.domain.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -50,8 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/api/test"
+            "/swagger-ui/**"
             // other public endpoints of your API may be appended to this array
     };
 

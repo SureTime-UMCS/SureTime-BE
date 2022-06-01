@@ -1,15 +1,11 @@
 package com.assigment.suretime.dbSeeders;
 
-import com.assigment.suretime.club.Club;
-import com.assigment.suretime.club.ClubRepository;
+import com.assigment.suretime.club.domain.Club;
+import com.assigment.suretime.club.domain.repository.ClubRepository;
 import com.assigment.suretime.address.Address;
 import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

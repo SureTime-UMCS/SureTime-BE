@@ -1,9 +1,9 @@
 package com.assigment.suretime.dbSeeders;
 
 import com.assigment.suretime.address.Address;
-import com.assigment.suretime.securityJwt.models.ERole;
-import com.assigment.suretime.securityJwt.models.Role;
-import com.assigment.suretime.securityJwt.repository.RoleRepository;
+import com.assigment.suretime.securityJwt.domain.models.ERole;
+import com.assigment.suretime.securityJwt.domain.models.Role;
+import com.assigment.suretime.securityJwt.domain.repository.RoleRepository;
 import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

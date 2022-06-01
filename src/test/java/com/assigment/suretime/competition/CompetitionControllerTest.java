@@ -1,15 +1,15 @@
 package com.assigment.suretime.competition;
 
-import com.assigment.suretime.competition.models.Competition;
-import com.assigment.suretime.competition.models.CompetitionDto;
-import com.assigment.suretime.event.Event;
-import com.assigment.suretime.event.EventRepository;
-import com.assigment.suretime.heat.HeatRepository;
-import com.assigment.suretime.person.PersonRepository;
-import com.assigment.suretime.person.models.Person;
+import com.assigment.suretime.competition.domain.Competition;
+import com.assigment.suretime.competition.application.response.CompetitionDto;
+import com.assigment.suretime.competition.domain.repository.CompetitionRepository;
+import com.assigment.suretime.event.domain.Event;
+import com.assigment.suretime.event.domain.repository.EventRepository;
+import com.assigment.suretime.heat.domain.repository.HeatRepository;
+import com.assigment.suretime.person.domain.repository.PersonRepository;
+import com.assigment.suretime.person.domain.models.Person;
 import com.github.javafaker.Faker;
 import lombok.SneakyThrows;
-import netscape.javascript.JSObject;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -35,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
-import java.util.Random;
 
 
 @RunWith(SpringRunner.class)
@@ -151,7 +149,7 @@ class CompetitionControllerTest {
         String payload = asJsonString(updated.toDto());
 
         mockMvc.perform(post(url + "/" + randCompetition.getId() +
-                        "/add_competitor/" + randPerson.getEmail())
+                        "/competitor/" + randPerson.getEmail())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .contentType(payload))
@@ -175,7 +173,7 @@ class CompetitionControllerTest {
         String payload = asJsonString(updated.toDto());
 
         mockMvc.perform(delete(url + "/" + randCompetition.getId() +
-                        "/remove_competitor/" + randPerson.getEmail())
+                        "/competitor/" + randPerson.getEmail())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .contentType(payload))
@@ -199,7 +197,7 @@ class CompetitionControllerTest {
         String payload = asJsonString(updated.toDto());
 
         mockMvc.perform(post(url + "/" + randCompetition.getId() +
-                        "/add_event/" + randEvent.getId())
+                        "/event/" + randEvent.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .contentType(payload))
@@ -222,7 +220,7 @@ class CompetitionControllerTest {
         String payload = asJsonString(updated.toDto());
 
         mockMvc.perform(delete(url + "/" + randCompetition.getId() +
-                        "/remove_event/" + randEvent.getId())
+                        "/event/" + randEvent.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .contentType(payload))
