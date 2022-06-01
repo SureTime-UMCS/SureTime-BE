@@ -1,7 +1,7 @@
 package com.assigment.suretime.competition.application.response;
 
 
-import com.assigment.suretime.address.Address;
+import com.assigment.suretime.generics.models.Address;
 import com.assigment.suretime.generics.MongoDto;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

@@ -2,7 +2,7 @@ package com.assigment.suretime.dbSeeders;
 
 import com.assigment.suretime.club.domain.Club;
 import com.assigment.suretime.club.domain.repository.ClubRepository;
-import com.assigment.suretime.address.Address;
+import com.assigment.suretime.generics.models.Address;
 import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

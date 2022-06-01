@@ -1,6 +1,6 @@
 package com.assigment.suretime.dbSeeders;
 
-import com.assigment.suretime.address.Address;
+import com.assigment.suretime.generics.models.Address;
 import com.assigment.suretime.securityJwt.domain.models.ERole;
 import com.assigment.suretime.securityJwt.domain.models.Role;
 import com.assigment.suretime.securityJwt.domain.repository.RoleRepository;

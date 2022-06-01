@@ -1,6 +1,6 @@
 package com.assigment.suretime.competition.domain;
 
-import com.assigment.suretime.address.Address;
+import com.assigment.suretime.generics.models.Address;
 import com.assigment.suretime.competition.application.response.CompetitionDto;
 import com.assigment.suretime.generics.MongoModel;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

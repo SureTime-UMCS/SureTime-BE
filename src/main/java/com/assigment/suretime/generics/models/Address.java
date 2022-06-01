@@ -1,4 +1,4 @@
-package com.assigment.suretime.address;
+package com.assigment.suretime.generics.models;
 
 
 import lombok.AllArgsConstructor;

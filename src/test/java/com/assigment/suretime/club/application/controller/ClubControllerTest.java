@@ -1,9 +1,7 @@
 package com.assigment.suretime.club.application.controller;
 
-import com.assigment.suretime.address.Address;
-import com.assigment.suretime.club.application.request.AddPersonsToClubModeratorModel;
+import com.assigment.suretime.generics.models.Address;
 import com.assigment.suretime.club.domain.Club;
-import com.assigment.suretime.club.domain.repository.ClubRepository;
 import com.assigment.suretime.club.domain.service.ClubService;
 import com.assigment.suretime.person.domain.models.Person;
 import com.assigment.suretime.person.domain.repository.PersonRepository;
@@ -26,8 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Set;
 
 import static com.assigment.suretime.util.asJsonString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

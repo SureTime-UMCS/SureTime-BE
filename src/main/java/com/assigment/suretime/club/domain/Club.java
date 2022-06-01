@@ -1,6 +1,6 @@
 package com.assigment.suretime.club.domain;
 
-import com.assigment.suretime.address.Address;
+import com.assigment.suretime.generics.models.Address;
 import com.assigment.suretime.person.domain.models.Person;
 import lombok.Data;
 import lombok.NoArgsConstructor;
