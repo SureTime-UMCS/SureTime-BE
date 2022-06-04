@@ -13,6 +13,4 @@ import java.util.Set;
 public class EventRequest {
     String name;
     LocalDateTime startTime;
-    java.util.Set<String> competitorsUuid;
-    Set<String> heatsId;
 }

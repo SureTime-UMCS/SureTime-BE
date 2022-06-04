@@ -38,9 +38,9 @@ public class EventService extends GenericService<Event, EventDto, EventRepositor
     }
 
     public ResponseEntity<?> createEvent(EventRequest request){
-        var event = new Event(request.getName(), request.getStartTime(), request.getCompetitorsUuid(), request.getHeatsId());
-        Event newEvent = eventRepository.save(event);
-        return ResponseEntity.ok(assembler.toModel(newEvent));
+        var event = new Event(request.getName(), request.getStartTime());
+
+        return ResponseEntity.ok(assembler.toModel(eventRepository.save(event)));
     }
 
     public ResponseEntity<?> updateName(String eventId, String newName){

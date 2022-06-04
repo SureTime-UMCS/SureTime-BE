@@ -40,7 +40,7 @@ public class EventController implements IGenericController<Event, EventDto> {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addHeat(@RequestBody @Valid EventRequest request){
+    public ResponseEntity<?> createEvent(@RequestBody @Valid EventRequest request){
         return eventService.createEvent(request);
     }
 
