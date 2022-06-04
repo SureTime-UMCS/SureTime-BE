@@ -15,7 +15,7 @@ public class PersonDTO {
     private String secondName;
     private String email;
     private Gender gender;
-    private String clubName;
+    private String clubUUID;
     private String coachEmail;
 
     @PersistenceConstructor
@@ -25,7 +25,7 @@ public class PersonDTO {
         this.secondName = secondName;
         this.email = email;
         this.gender = gender;
-        this.clubName = clubName;
+        this.clubUUID = clubName;
         this.coachEmail = coachEmail;
     }
 
@@ -34,7 +34,7 @@ public class PersonDTO {
         this.secondName = person.getSecondName();
         this.email = person.getEmail();
         this.gender = person.getGender();
-        this.clubName = person.getClub() != null ? person.getClub().getName(): null;
+        this.clubUUID = person.getClubUUID();
         this.coachEmail =person.getCoach() != null ? person.getCoach().getEmail(): null;
     }
 }

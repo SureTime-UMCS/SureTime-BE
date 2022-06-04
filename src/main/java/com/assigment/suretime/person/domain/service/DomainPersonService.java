@@ -1,7 +1,5 @@
 package com.assigment.suretime.person.domain.service;
 
-
-import com.assigment.suretime.club.domain.Club;
 import com.assigment.suretime.club.domain.repository.ClubRepository;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.application.response.PersonDTO;
@@ -39,13 +37,13 @@ public class DomainPersonService implements PersonService {
 
     private Person createPersonFromDTO(PersonDTO personDTO){
         var coachOptional = personRepository.findByEmail(personDTO.getCoachEmail());
-        var clubOptional = clubRepository.findByName(personDTO.getClubName());
+        var clubOptional = clubRepository.findByClubUUID(personDTO.getClubUUID());
         Person coach = null;
-        Club club = null;
+        String club = "";
         if(coachOptional.isPresent())
             coach = coachOptional.get();
         if(clubOptional.isPresent())
-            club = clubOptional.get();
+            club = clubOptional.get().getClubUUID();
 
         Gender gender = null;
         if (personDTO.getGender()!=null)

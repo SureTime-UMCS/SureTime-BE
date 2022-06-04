@@ -93,6 +93,8 @@ public class DomainClubService implements ClubService {
         Set<String> clubMembers = club.getMembers();
         for(var person: personList){
             clubMembers.add(person.getUserUUID());
+            person.setClubUUID(club.getClubUUID());
+            personRepository.save(person);
         }
 
         club.setMembers(clubMembers);

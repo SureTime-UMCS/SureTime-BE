@@ -1,6 +1,5 @@
 package com.assigment.suretime.person.domain.models;
 
-import com.assigment.suretime.club.domain.Club;
 import com.assigment.suretime.securityJwt.domain.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Document
+@AllArgsConstructor
 public class Person {
     @Id
     private String id;
@@ -29,9 +29,7 @@ public class Person {
     private String userUUID;
 
     private Gender gender;
-
-    @DocumentReference
-    private Club club;
+    private String clubUUID;
 
     @DocumentReference
     private Person coach;
@@ -44,38 +42,31 @@ public class Person {
     @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDateTime created = LocalDateTime.now();
 
-    //For deserialisation purposes Person must have a zero-arg constructor.
-    public Person(){}
-
     @PersistenceConstructor
     public Person(String email){
         this.email = email;
     }
 
-    /**
-     * Annotation PersistenceConstructor is needed to mapping object when retrieved from db.
-     */
-    @org.springframework.data.annotation.PersistenceConstructor
     public Person(String id, String firstName, String secondName, String email,
-                  Gender gender, Club club, Person coach, LocalDateTime created) {
+                  Gender gender, String club, Person coach) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
         this.gender = gender;
-        this.club = club;
+        this.clubUUID = club;
         this.coach = coach;
         this.created = LocalDateTime.now();
 
     }
     @Builder
     public Person(String firstName, String secondName, String email,
-                  Gender gender, Club club, Person coach) {
+                  Gender gender, String club, Person coach) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
         this.gender = gender;
-        this.club = club;
+        this.clubUUID = club;
         this.coach = coach;
     }
 
@@ -84,7 +75,7 @@ public class Person {
         this.secondName = p.getSecondName();
         this.email = p.getEmail();
         this.gender = p.getGender();
-        this.club = p.getClub();
+        this.clubUUID = p.getClubUUID();
         this.coach = p.getCoach();
         this.user = p.getUser();
     }
@@ -94,7 +85,7 @@ public class Person {
         this.secondName = p.getSecondName();
         this.email = p.getEmail();
         this.gender = p.getGender();
-        this.club = p.getClub();
+        this.clubUUID = p.getClubUUID();
         this.coach = p.getCoach();
         this.user = p.getUser();
     }

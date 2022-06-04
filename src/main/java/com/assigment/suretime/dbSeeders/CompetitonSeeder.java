@@ -24,12 +24,11 @@ import static com.assigment.suretime.dbSeeders.SeederUtils.getFakeAddress;
 @Slf4j
 public class CompetitonSeeder implements ISeeder {
 
-    final private PersonRepository personRepository;
     final private EventRepository eventRepository;
     final private HeatRepository heatRepository;
     final private CompetitionRepository competitionRepository;
     final private Faker fake;
-    private List<Person> allPersons;
+    private final List<Person> allPersons;
 
 
     public CompetitonSeeder(PersonRepository personRepository,
@@ -37,7 +36,6 @@ public class CompetitonSeeder implements ISeeder {
                             HeatRepository heatRepository,
                             CompetitionRepository competitionRepository
     ) {
-        this.personRepository = personRepository;
         this.eventRepository = eventRepository;
         this.heatRepository = heatRepository;
         this.competitionRepository = competitionRepository;
