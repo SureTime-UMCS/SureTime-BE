@@ -1,5 +1,6 @@
 package com.assigment.suretime.event.application.controller;
 
+import com.assigment.suretime.event.application.request.EventDTO;
 import com.assigment.suretime.event.domain.Event;
 import com.assigment.suretime.event.application.response.EventDto;
 import com.assigment.suretime.event.domain.service.EventService;
@@ -36,6 +37,11 @@ public class EventController implements IGenericController<Event, EventDto> {
     public ResponseEntity<?> updateOne(@PathVariable String id,
                                        @RequestBody @Valid EventDto event) {
         return eventService.updateOne(id, event);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> addHeat(@RequestBody @Valid  EventDTO request){
+        return eventService.createEvent(request);
     }
 
     @PostMapping("{id}/heat/{heat_id}")

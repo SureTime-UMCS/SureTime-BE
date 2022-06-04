@@ -1,5 +1,6 @@
 package com.assigment.suretime.event.domain.service;
 
+import com.assigment.suretime.event.application.request.EventDTO;
 import com.assigment.suretime.event.domain.Event;
 import com.assigment.suretime.event.application.response.EventDto;
 import com.assigment.suretime.event.domain.repository.EventRepository;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -35,6 +37,13 @@ public class EventService extends GenericService<Event, EventDto, EventRepositor
         this.heatRepository = heatRepository;
         
     }
+
+    public ResponseEntity<?> createEvent(EventDTO request){
+        var event = new Event(request.getName(), request.getStartTime(), request.getCompetitorsUuid(), request.getHeatsId());
+        Event newEvent = eventRepository.save(event);
+        return ResponseEntity.ok(assembler.toModel(newEvent));
+    }
+
     public ResponseEntity<?> updateName(String eventId, String newName){
         var event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
