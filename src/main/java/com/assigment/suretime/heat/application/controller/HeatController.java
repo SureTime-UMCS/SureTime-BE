@@ -1,12 +1,10 @@
 package com.assigment.suretime.heat.application.controller;
 
 
+import com.assigment.suretime.event.application.request.EventRequest;
 import com.assigment.suretime.generics.IGenericController;
+import com.assigment.suretime.heat.application.request.*;
 import com.assigment.suretime.heat.domain.service.HeatService;
-import com.assigment.suretime.heat.application.request.AddCompetitorsRequest;
-import com.assigment.suretime.heat.application.request.AddResultsRequest;
-import com.assigment.suretime.heat.application.request.DeleteCompetitorsRequest;
-import com.assigment.suretime.heat.application.request.DeleteResultsRequest;
 import com.assigment.suretime.heat.application.response.HeatDto;
 import com.assigment.suretime.heat.domain.Heat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,11 @@ public class HeatController implements IGenericController<Heat, HeatDto> {
     @GetMapping("{id}")
     public ResponseEntity<?> one(@PathVariable String id) {
         return heatService.getOne(id);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> createHeat(@RequestBody @Valid HeatRequest request){
+        return heatService.createHeat(request);
     }
 
     @Override
