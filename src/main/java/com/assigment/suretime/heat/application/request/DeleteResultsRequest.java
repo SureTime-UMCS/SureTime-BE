@@ -12,7 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeleteResultsRequest {
-
-    String heatId;
     List<Pair<String, String>> results;
 }

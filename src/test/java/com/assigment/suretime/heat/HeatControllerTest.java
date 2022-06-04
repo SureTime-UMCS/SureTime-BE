@@ -146,8 +146,7 @@ class HeatControllerTest {
     void addCompetitors() {
         Heat heat = getRandomHeat();
         List<String> competitorsUUIDs = List.of(getRandomPerson().getUserUUID(), getRandomPerson().getEmail());
-        String payload = asJsonString(new AddCompetitorsRequest(heat.getId(),
-                competitorsUUIDs));
+        String payload = asJsonString(new AddCompetitorsRequest(competitorsUUIDs));
 
         mockMvc.perform(post(url + "/"+heat.getId()+"/competitors")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -183,8 +182,7 @@ class HeatControllerTest {
                 Pair.of(randomPerson2.getEmail(), result2)
         );
 
-        AddResultsRequest payloadObject = new AddResultsRequest(randomHeat.getId(),
-                results);
+        AddResultsRequest payloadObject = new AddResultsRequest(results);
 
         String payload = asJsonString(
                 payloadObject);
@@ -212,8 +210,7 @@ class HeatControllerTest {
         String email1 = heatCompetitors.get(new Random().nextInt(0, heatCompetitors.size()));
         String email2 = heatCompetitors.get(new Random().nextInt(0, heatCompetitors.size()));
 
-        DeleteCompetitorsRequest request = new DeleteCompetitorsRequest(randomHeat.getId(),
-                List.of(email1, email2));
+        DeleteCompetitorsRequest request = new DeleteCompetitorsRequest(List.of(email1, email2));
 
         String payload = asJsonString(
                 request);
@@ -275,8 +272,7 @@ class HeatControllerTest {
         randomHeat.getResults().put(randomPerson.getEmail(), result);
         randomHeat.getResults().put(randomPerson2.getEmail(), result2);
 
-        DeleteResultsRequest payloadObject = new DeleteResultsRequest(randomHeat.getId(),
-                results);
+        DeleteResultsRequest payloadObject = new DeleteResultsRequest(results);
 
         String payload = asJsonString(
                 payloadObject);
