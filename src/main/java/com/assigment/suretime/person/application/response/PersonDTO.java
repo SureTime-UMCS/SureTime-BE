@@ -16,7 +16,7 @@ public class PersonDTO {
     private String email;
     private Gender gender;
     private String clubUUID;
-    private String coachEmail;
+    private String coachUUID;
 
     @PersistenceConstructor
     @Builder
@@ -26,7 +26,7 @@ public class PersonDTO {
         this.email = email;
         this.gender = gender;
         this.clubUUID = clubName;
-        this.coachEmail = coachEmail;
+        this.coachUUID = coachEmail;
     }
 
     public PersonDTO(Person person) {
@@ -35,6 +35,6 @@ public class PersonDTO {
         this.email = person.getEmail();
         this.gender = person.getGender();
         this.clubUUID = person.getClubUUID();
-        this.coachEmail =person.getCoach() != null ? person.getCoach().getEmail(): null;
+        this.coachUUID =person.getCoachUUID();
     }
 }

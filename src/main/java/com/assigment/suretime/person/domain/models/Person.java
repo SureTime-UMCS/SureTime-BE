@@ -30,9 +30,7 @@ public class Person {
 
     private Gender gender;
     private String clubUUID;
-
-    @DocumentReference
-    private Person coach;
+    private String coachUUID;
 
     @DocumentReference
     @JsonIgnore
@@ -48,26 +46,26 @@ public class Person {
     }
 
     public Person(String id, String firstName, String secondName, String email,
-                  Gender gender, String club, Person coach) {
+                  Gender gender, String club, String coach) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
         this.gender = gender;
         this.clubUUID = club;
-        this.coach = coach;
+        this.coachUUID = coach;
         this.created = LocalDateTime.now();
 
     }
     @Builder
     public Person(String firstName, String secondName, String email,
-                  Gender gender, String club, Person coach) {
+                  Gender gender, String club, String coach) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
         this.gender = gender;
         this.clubUUID = club;
-        this.coach = coach;
+        this.coachUUID = coach;
     }
 
     public Person(Person p) {
@@ -76,7 +74,7 @@ public class Person {
         this.email = p.getEmail();
         this.gender = p.getGender();
         this.clubUUID = p.getClubUUID();
-        this.coach = p.getCoach();
+        this.coachUUID = p.getCoachUUID();
         this.user = p.getUser();
     }
 
@@ -86,7 +84,7 @@ public class Person {
         this.email = p.getEmail();
         this.gender = p.getGender();
         this.clubUUID = p.getClubUUID();
-        this.coach = p.getCoach();
+        this.coachUUID = p.getCoachUUID();
         this.user = p.getUser();
     }
 
