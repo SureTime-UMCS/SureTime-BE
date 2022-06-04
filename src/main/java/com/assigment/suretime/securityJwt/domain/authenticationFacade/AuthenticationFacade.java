@@ -70,7 +70,7 @@ public class AuthenticationFacade implements IAuthenticationFacade {
     }
     public boolean isClubModerator(Club club) {
         UserDetailsImpl userDetails = getUserDetailsImpl();
-        boolean isClubModerator = userDetails != null && club.getClubModerators().stream().anyMatch(person -> person.getEmail().equals(userDetails.getEmail()));
+        boolean isClubModerator = userDetails != null && club.getClubModerators().stream().anyMatch(person -> person.equals(userDetails.getUserUUID()));
         return isClubModerator;
     }
 

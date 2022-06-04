@@ -64,6 +64,9 @@ public class UserDetailsImpl implements UserDetails {
 	public String getEmail() {
 		return email;
 	}
+	public String getUserUUID() {
+		return userUUID;
+	}
 
 	@Override
 	public String getPassword() {

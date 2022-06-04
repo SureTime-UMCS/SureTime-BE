@@ -76,7 +76,7 @@ class ClubControllerTest {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
         Club club = new Club(address, "newClub");
-        domainClubService.addOne(club);
+        //domainClubService.addOne(club);
         //WHEN
         mockMvc.perform(delete(url.toString() + "/clubs/" + club.getName()))
                 .andDo(print())
@@ -147,7 +147,7 @@ class ClubControllerTest {
         //GIVEN
         Address address = new Address("c", ",", new BigDecimal("0"), new BigDecimal("0"));
         Club club = new Club(address, "club");
-        domainClubService.addOne(club);
+        //domainClubService.addOne(club);
         String email = "testuasdlem@gmail.com";
         Person person = new Person(email);
         domainPersonService.updateOrCreate(person);

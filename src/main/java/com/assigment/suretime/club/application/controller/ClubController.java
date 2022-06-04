@@ -1,8 +1,9 @@
 package com.assigment.suretime.club.application.controller;
 
+import com.assigment.suretime.club.application.request.ClubDTO;
 import com.assigment.suretime.club.domain.Club;
 import com.assigment.suretime.club.domain.service.ClubService;
-import com.assigment.suretime.club.application.request.AddPersonsToClubModeratorModel;
+import com.assigment.suretime.club.application.request.AddPersonsToClubModel;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -24,44 +25,38 @@ public class ClubController {
         return service.getAll();
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<EntityModel<Club>> getOne(@PathVariable String name){
-        return service.getByName(name);
+    @GetMapping("/{clubUUID}")
+    public ResponseEntity<EntityModel<Club>> getOne(@PathVariable String clubUUID){
+        return service.getByUUID(clubUUID);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Club>> getOneById(@PathVariable String id){
-        return service.getClubById(id);
-    }
-
 
     @PostMapping()
-    ResponseEntity<?> addOne(@RequestBody Club club){
+    ResponseEntity<?> addOne(@RequestBody ClubDTO club){
         return service.addOne(club);
     }
 
-    @PutMapping("/{name}")
-    ResponseEntity<?> updateClub(@PathVariable String name, @RequestBody Club newClub){
-        ResponseEntity<?> entityModel = service.updateClub(newClub, name);
+    @PutMapping("/{clubUUID}")
+    ResponseEntity<?> updateClub(@PathVariable String clubUUID, @RequestBody ClubDTO newClub){
+        ResponseEntity<?> entityModel = service.updateClub(newClub, clubUUID);
         return entityModel;
 
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{name}")
-    ResponseEntity<?> deleteClub(@PathVariable String name){
-        return service.deleteByName(name);
+    @DeleteMapping("/{clubUUID}")
+    ResponseEntity<?> deleteClub(@PathVariable String clubUUID){
+        return service.deleteByUUID(clubUUID);
     }
 
-    @PostMapping("/{name}/person")
-    ResponseEntity<?> addPersonToClub(@PathVariable String name, @RequestBody String personEmail){
-        return service.addPersonToClub(name, personEmail);
+    @PostMapping("/{clubUUID}/person")
+    ResponseEntity<?> addPersonToClub(@PathVariable String clubUUID, @RequestBody @Valid AddPersonsToClubModel persons){
+        return service.addPersonToClub(clubUUID, persons);
     }
 
-    @PostMapping("{clubName}/moderators")
+    @PostMapping("{clubUUID}/moderators")
     ResponseEntity<?> addModeratorsToClub(
-            @PathVariable String clubName,
-            @RequestBody @Valid AddPersonsToClubModeratorModel persons){
-        return service.addModeratorsToClub(clubName, persons);
+            @PathVariable String clubUUID,
+            @RequestBody @Valid AddPersonsToClubModel persons){
+        return service.addModeratorsToClub(clubUUID, persons);
     }
 
 }

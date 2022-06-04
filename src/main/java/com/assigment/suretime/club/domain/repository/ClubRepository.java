@@ -8,8 +8,9 @@ import java.util.Optional;
 public interface ClubRepository extends MongoRepository<Club, String> {
 
     Optional<Club> findByName(String name);
+    Optional<Club> findByClubUUID(String uuid);
 
-    void deleteClubByName(String name);
+    void deleteClubByClubUUID(String uuid);
 
 
 }
