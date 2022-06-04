@@ -25,7 +25,7 @@ public class EventDto implements MongoDto {
 
     private String name;
 
-    private Set<String> competitorsEmail;
+    private Set<String> competitorsUuid;
 
     private Set<String> heatsId;
 
@@ -44,25 +44,21 @@ public class EventDto implements MongoDto {
         this.name = name;
         this.startTime = startTime;
         this.heatsId = new HashSet<>();
-        this.competitorsEmail = new HashSet<>();
+        this.competitorsUuid = new HashSet<>();
     }
     public EventDto(Event event){
         this.name = event.getName();
         this.heatsId = event.getHeatsId();
-        this.competitorsEmail = event.getCompetitorsEmail();
+        this.competitorsUuid = event.getCompetitorsUuid();
         this.id = event.getId();
         this.startTime = event.getStartTime();
     }
 
     @PersistenceConstructor
-    public EventDto(String name, Set<String> competitorsEmail, Set<String> heatsId, LocalDateTime startTime) {
+    public EventDto(String name, Set<String> competitorsUuid, Set<String> heatsId, LocalDateTime startTime) {
         this.name = name;
-        this.competitorsEmail = competitorsEmail;
+        this.competitorsUuid = competitorsUuid;
         this.startTime = startTime;
         this.heatsId = heatsId;
     }
-
-
-
-
 }

@@ -28,7 +28,7 @@ public class Event implements MongoModel {
 
     private String name;
 
-    private Set<String> competitorsEmail;
+    private Set<String> competitorsUuid;
 
     private Set<String> heatsId;
 
@@ -38,11 +38,11 @@ public class Event implements MongoModel {
     private LocalDateTime startTime;
 
     @PersistenceConstructor
-    public Event(String id, String name, Set<String> competitorsEmail,
+    public Event(String id, String name, Set<String> competitorsUuid,
                  Set<String> heatsId, LocalDateTime startTime) {
         this.id = id;
         this.name = name;
-        this.competitorsEmail = competitorsEmail == null ? new HashSet<>(): competitorsEmail;
+        this.competitorsUuid = competitorsUuid == null ? new HashSet<>(): competitorsUuid;
         this.heatsId = heatsId == null ? new HashSet<>(): heatsId;
         this.startTime = startTime;
     }
@@ -58,13 +58,13 @@ public class Event implements MongoModel {
     }
 
     @PersistenceConstructor
-    public Event(String name, LocalDateTime startTime, Set<String> competitorsEmail, Set<String> heatsId) {
-        this(null, name, competitorsEmail, heatsId, startTime);
+    public Event(String name, LocalDateTime startTime, Set<String> competitorsUuid, Set<String> heatsId) {
+        this(null, name, competitorsUuid, heatsId, startTime);
     }
     @Override
     public void updateNotNullFields(Object o) {
         Event event = (Event)o;
-        this.competitorsEmail = event.getCompetitorsEmail() != null ? event.getCompetitorsEmail(): this.competitorsEmail;
+        this.competitorsUuid = event.getCompetitorsUuid() != null ? event.getCompetitorsUuid(): this.competitorsUuid;
         this.heatsId = event.getHeatsId() != null ? event.getHeatsId() : this.heatsId;
         this.startTime = event.getStartTime()!= null ? event.getStartTime() : this.startTime;
         this.name = event.getName() != null ? event.getName() : this.name;

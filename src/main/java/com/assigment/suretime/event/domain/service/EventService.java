@@ -45,7 +45,7 @@ public class EventService extends GenericService<Event, EventDto, EventRepositor
     public ResponseEntity<?> addCompetitors(String eventId, Set<String> personsId){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.getCompetitorsEmail().addAll(personsId);
+        event.getCompetitorsUuid().addAll(personsId);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
         return ResponseEntity.ok(assembler.toModel(updated));
@@ -54,7 +54,7 @@ public class EventService extends GenericService<Event, EventDto, EventRepositor
     public ResponseEntity<?> removeCompetitors(String eventId, Set<String> personsId){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.getCompetitorsEmail().removeAll(personsId);
+        event.getCompetitorsUuid().removeAll(personsId);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
         return ResponseEntity.ok(assembler.toModel(updated));
@@ -79,19 +79,19 @@ public class EventService extends GenericService<Event, EventDto, EventRepositor
 
     }
 
-    public ResponseEntity<?> addCompetitor(String eventId, String competitorEmail) {
+    public ResponseEntity<?> addCompetitor(String eventId, String competitorUuid) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.getCompetitorsEmail().add(competitorEmail);
+        event.getCompetitorsUuid().add(competitorUuid);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
         return ResponseEntity.ok(assembler.toModel(updated));
     }
 
-    public ResponseEntity<?> deleteCompetitor(String eventId, String competitorEmail) {
+    public ResponseEntity<?> deleteCompetitor(String eventId, String competitorUuid) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));
-        event.getCompetitorsEmail().remove(competitorEmail);
+        event.getCompetitorsUuid().remove(competitorUuid);
         Event updated = eventRepository.save(event);
         log.info("Updated heat: "+ event);
         return ResponseEntity.ok(assembler.toModel(updated));
@@ -100,7 +100,7 @@ public class EventService extends GenericService<Event, EventDto, EventRepositor
     @Override
     public Event fromDto(EventDto dto) {
         return new Event(dto.getName(),
-                dto.getStartTime(), dto.getCompetitorsEmail(),
+                dto.getStartTime(), dto.getCompetitorsUuid(),
                 dto.getHeatsId()
         );
     }

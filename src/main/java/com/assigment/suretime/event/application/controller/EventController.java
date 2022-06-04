@@ -49,16 +49,16 @@ public class EventController implements IGenericController<Event, EventDto> {
         return eventService.deleteHeat(id, heatId);
     }
 
-    @DeleteMapping("{id}/competitor/{email}")
+    @DeleteMapping("{id}/competitor/{uuid}")
     public ResponseEntity<?> deleteCompetitor(@PathVariable("id") String id,
-                                        @PathVariable("email") String email){
-        return eventService.deleteCompetitor(id, email);
+                                        @PathVariable("uuid") String uuid){
+        return eventService.deleteCompetitor(id, uuid);
     }
 
-    @PostMapping("{id}/competitor/{email}")
+    @PostMapping("{id}/competitor/{uuid}")
     public ResponseEntity<?> addCompetitor(@PathVariable("id") String id,
-                                              @PathVariable("email") String email){
-        return eventService.addCompetitor(id, email);
+                                              @PathVariable("uuid") String uuid){
+        return eventService.addCompetitor(id, uuid);
     }
 
 

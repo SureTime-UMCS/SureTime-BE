@@ -77,7 +77,7 @@ public class CompetitonSeeder implements ISeeder {
 
     private Event createAndSaveEvent(String name, LocalDateTime competitionStartTime, int eventNumber) {
         Event event = new Event(name);
-        event.setCompetitorsEmail(allPersons.stream().map(Person::getEmail).collect(Collectors.toSet()));
+        event.setCompetitorsUuid(allPersons.stream().map(Person::getUserUUID).collect(Collectors.toSet()));
         event.setStartTime(competitionStartTime.plusMinutes(eventNumber * 10L));
 
         int numbersOfHeat = fake.random().nextInt(1, 3);

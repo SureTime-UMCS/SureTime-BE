@@ -117,12 +117,12 @@ class EventControllerTest {
         //GIVEN
         Event event = getRandomEvent();
         String oldCompetitor = "oldCompetitos53421@gmail.com";
-        event.getCompetitorsEmail().add(oldCompetitor);
+        event.getCompetitorsUuid().add(oldCompetitor);
         eventRepository.save(event);
         String newName = "Skok przez plot.";
         String newCompetitor = "xdd16575@gmail.com";
         EventDto eventPayload = new EventDto(event);
-        eventPayload.getCompetitorsEmail().add(newCompetitor);
+        eventPayload.getCompetitorsUuid().add(newCompetitor);
         eventPayload.setName(newName);
 
         String payload = asJsonString(eventPayload);
@@ -139,8 +139,8 @@ class EventControllerTest {
 
         Event updated = eventRepository.findById(event.getId()).get();
         assert updated.getName().equals(newName);
-        assert updated.getCompetitorsEmail().contains(oldCompetitor);
-        assert updated.getCompetitorsEmail().contains(newCompetitor);
+        assert updated.getCompetitorsUuid().contains(oldCompetitor);
+        assert updated.getCompetitorsUuid().contains(newCompetitor);
 
 
     }
@@ -203,13 +203,13 @@ class EventControllerTest {
         //{id}/add_heat/{heat_id}
         Event randomEvent = getRandomEvent();
         Person person = getRandomPerson();
-        randomEvent.getCompetitorsEmail().add(person.getEmail());
+        randomEvent.getCompetitorsUuid().add(person.getEmail());
         eventRepository.save(randomEvent);
 
         mockMvc.perform(delete(url+"/"+ randomEvent.getId() +"/competitor/"+ person.getId()))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
 
-        assert !eventRepository.findById(randomEvent.getId()).get().getCompetitorsEmail().contains(person.getId());
+        assert !eventRepository.findById(randomEvent.getId()).get().getCompetitorsUuid().contains(person.getId());
 
     }
 
@@ -224,7 +224,7 @@ class EventControllerTest {
         mockMvc.perform(post(url+ "/"+randomEvent.getId() +"/competitor/"+ person.getId()))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
 
-        assert eventRepository.findById(randomEvent.getId()).get().getCompetitorsEmail().contains(person.getId());
+        assert eventRepository.findById(randomEvent.getId()).get().getCompetitorsUuid().contains(person.getId());
 
     }
 }
