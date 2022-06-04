@@ -119,10 +119,10 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
 
-    public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String email){
+    public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String uuid){
         //personsExistsElseThrowNotFoundException(List.of(email));
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
-        competition.getCompetitors().add(email);
+        competition.getCompetitors().add(uuid);
 
         return new ResponseEntity<>(
                 modelAssembler.toModel(competitionRepository.save(competition)),
@@ -139,11 +139,11 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
     }
 
-    public ResponseEntity<?> removeCompetitionCompetitor(String competitionId, String email){
+    public ResponseEntity<?> removeCompetitionCompetitor(String competitionId, String uuid){
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
 
-        competition.getCompetitors().remove(email);
+        competition.getCompetitors().remove(uuid);
 
         return new ResponseEntity<>(
                 modelAssembler.toModel(competitionRepository.save(competition)),
