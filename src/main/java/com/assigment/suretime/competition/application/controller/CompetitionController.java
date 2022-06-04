@@ -1,9 +1,11 @@
 package com.assigment.suretime.competition.application.controller;
 
 
+import com.assigment.suretime.competition.application.request.CompetitionRequest;
 import com.assigment.suretime.competition.domain.service.CompetitionService;
 import com.assigment.suretime.competition.domain.Competition;
 import com.assigment.suretime.competition.application.response.CompetitionDto;
+import com.assigment.suretime.event.application.request.EventRequest;
 import com.assigment.suretime.generics.IGenericController;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,10 @@ public class CompetitionController implements IGenericController<Competition, Co
         return competitionService.getAll();
     }
 
+    @PostMapping("")
+    public ResponseEntity<?> createCompetition(@RequestBody @Valid CompetitionRequest request){
+        return competitionService.createCompetition(request);
+    }
 
     @Override
     @DeleteMapping("{id}")

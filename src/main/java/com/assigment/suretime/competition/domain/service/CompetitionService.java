@@ -1,6 +1,7 @@
 package com.assigment.suretime.competition.domain.service;
 
 import com.assigment.suretime.competition.application.controller.CompetitionController;
+import com.assigment.suretime.competition.application.request.CompetitionRequest;
 import com.assigment.suretime.competition.domain.Competition;
 import com.assigment.suretime.competition.application.response.CompetitionDto;
 import com.assigment.suretime.competition.domain.repository.CompetitionRepository;
@@ -37,6 +38,16 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
         this.competitionRepository = competitionRepository;
         this.personRepository = personRepository;
         this.eventRepository = eventRepository;
+    }
+
+    public ResponseEntity<?> createCompetition(CompetitionRequest request) {
+        Competition comp = new Competition();
+        comp.setName(request.getName());
+        comp.setAddress(request.getAddress());
+        comp.setStartTime(request.getStartTime());
+        comp.setEndTime(request.getEndTime());
+
+        return ResponseEntity.ok(modelAssembler.toModel(competitionRepository.save(comp)));
     }
 
     public ResponseEntity<?> addOne(CompetitionDto competitionDto){
