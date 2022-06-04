@@ -14,5 +14,5 @@ import java.util.List;
 public class AddCompetitorsRequest {
 
     String heatId;
-    List<String> competitorsEmails;
+    List<String> competitorsUUIDs;
 }

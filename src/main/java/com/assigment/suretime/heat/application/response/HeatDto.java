@@ -29,7 +29,7 @@ public class HeatDto implements MongoDto {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime;
 
-    List<String> competitorsEmail;
+    List<String> competitorsUUID;
 
     Map<String, String> results;
 
@@ -37,17 +37,17 @@ public class HeatDto implements MongoDto {
     public HeatDto(String name, LocalDateTime startTime) {
         this.name = name;
         this.startTime = startTime;
-        this.competitorsEmail = new ArrayList<>();
+        this.competitorsUUID = new ArrayList<>();
         this.results = new HashMap<>();
     }
 
     public HeatDto(String id, String name, LocalDateTime startTime,
-                   List<String> competitorsEmail,
+                   List<String> competitorsUUID,
                    Map<String, String> results) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;
-        this.competitorsEmail = competitorsEmail;
+        this.competitorsUUID = competitorsUUID;
         this.results = results;
     }
 

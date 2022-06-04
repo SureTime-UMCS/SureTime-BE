@@ -12,5 +12,5 @@ import java.util.List;
 public class DeleteCompetitorsRequest {
 
     String heatId;
-    List<String> competitorsEmails;
+    List<String> competitorsUUIDs;
 }

@@ -71,7 +71,7 @@ public class Heat implements MongoModel {
             resultDto.putAll(results);
         }
         dto.setResults(resultDto);
-        dto.setCompetitorsEmail(this.getCompetitors());
+        dto.setCompetitorsUUID(this.getCompetitors());
         return dto;
     }
 }

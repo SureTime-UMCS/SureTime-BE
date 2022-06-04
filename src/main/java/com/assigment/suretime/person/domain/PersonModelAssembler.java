@@ -23,7 +23,7 @@ public class PersonModelAssembler implements RepresentationModelAssembler<Person
     @Override
     public EntityModel<Person> toModel(Person person){
         return EntityModel.of(person,
-                WebMvcLinkBuilder.linkTo(methodOn(PersonController.class).one(person.getEmail())).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(methodOn(PersonController.class).one(person.getUserUUID())).withSelfRel(),
                 linkTo(methodOn(PersonController.class).all()).withRel("persons"));
     }
 

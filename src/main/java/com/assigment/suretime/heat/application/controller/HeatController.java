@@ -53,13 +53,13 @@ public class HeatController implements IGenericController<Heat, HeatDto> {
     @PostMapping("{id}/competitors")
     public ResponseEntity<?> addCompetitor(
             @RequestBody @Valid AddCompetitorsRequest request, @PathVariable String id) {
-        return heatService.addCompetitors(request.getHeatId(), request.getCompetitorsEmails());
+        return heatService.addCompetitors(request.getHeatId(), request.getCompetitorsUUIDs());
     }
 
     @DeleteMapping("{id}/competitors")
     public ResponseEntity<?> deleteCompetitor(
             @RequestBody @Valid DeleteCompetitorsRequest request, @PathVariable String id) {
-        return heatService.deleteCompetitors(request.getHeatId(), request.getCompetitorsEmails());
+        return heatService.deleteCompetitors(request.getHeatId(), request.getCompetitorsUUIDs());
     }
 
     @PostMapping("{id}/results")

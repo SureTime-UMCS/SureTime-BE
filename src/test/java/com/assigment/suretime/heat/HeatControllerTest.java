@@ -145,9 +145,9 @@ class HeatControllerTest {
     @WithUserDetails("admin")
     void addCompetitors() {
         Heat heat = getRandomHeat();
-        List<String> competitorsEmails = List.of(getRandomPerson().getEmail(), getRandomPerson().getEmail());
+        List<String> competitorsUUIDs = List.of(getRandomPerson().getUserUUID(), getRandomPerson().getEmail());
         String payload = asJsonString(new AddCompetitorsRequest(heat.getId(),
-                competitorsEmails));
+                competitorsUUIDs));
 
         mockMvc.perform(post(url + "/"+heat.getId()+"/competitors")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +158,7 @@ class HeatControllerTest {
 
 
         List<String> competitors = heatRepository.findById(heat.getId()).get().getCompetitors();
-        competitorsEmails.forEach(s ->
+        competitorsUUIDs.forEach(s ->
                 {
                     assert competitors.stream().anyMatch(person -> person.equals(s));
                 }
@@ -238,7 +238,7 @@ class HeatControllerTest {
         String newName = "Memorial czasu poswieconego temu projektowi.";
         dto.setName(newName);
         dto.setResults(null);
-        dto.setCompetitorsEmail(null);
+        dto.setCompetitorsUUID(null);
 
         String payload = asJsonString(dto);
 
