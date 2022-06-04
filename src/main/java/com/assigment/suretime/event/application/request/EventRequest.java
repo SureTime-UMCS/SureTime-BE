@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class EventDTO {
+public class EventRequest {
     String name;
     LocalDateTime startTime;
     java.util.Set<String> competitorsUuid;
