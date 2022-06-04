@@ -24,7 +24,7 @@ public interface PersonService {
 
     ResponseEntity<?> updateOrCreate(PersonDTO personDTO);
 
-    ResponseEntity<?> updateCoach(String personEmail, String coachEmail);
+    ResponseEntity<?> updateCoach(String personUUID, String coachUUID);
 
     ResponseEntity<?> updateRoles(String uuid, RolesCollection newRoles);
 }

@@ -47,6 +47,11 @@ public class PersonController {
             return domainPersonService.updateOrCreate(person);
     }
 
+    @PutMapping("{personUUID}/coach/{coachUUID}")
+    public ResponseEntity<?> updateCoach(@PathVariable String coachUUID, @PathVariable String personUUID){
+        return domainPersonService.updateCoach(personUUID, coachUUID);
+    }
+
     @DeleteMapping("{uuid}")
     public ResponseEntity<?> removeOne(@PathVariable String uuid){
         return domainPersonService.removeOne(uuid);

@@ -1,7 +1,5 @@
 package com.assigment.suretime.person.domain.service;
 
-
-import com.assigment.suretime.club.domain.Club;
 import com.assigment.suretime.club.domain.repository.ClubRepository;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.person.application.response.PersonDTO;
@@ -38,22 +36,21 @@ public class DomainPersonService implements PersonService {
     protected final AuthenticationFacade authenticationFacade;
 
     private Person createPersonFromDTO(PersonDTO personDTO){
-        var coachOptional = personRepository.findByEmail(personDTO.getCoachEmail());
-        var clubOptional = clubRepository.findByName(personDTO.getClubName());
-        Person coach = null;
-        Club club = null;
+        var coachOptional = personRepository.findByUserUUID(personDTO.getCoachUUID());
+        var clubOptional = clubRepository.findByClubUUID(personDTO.getClubUUID());
+        String coach = "";
+        String club = "";
         if(coachOptional.isPresent())
-            coach = coachOptional.get();
+            coach = coachOptional.get().getCoachUUID();
         if(clubOptional.isPresent())
-            club = clubOptional.get();
+            club = clubOptional.get().getClubUUID();
 
         Gender gender = null;
         if (personDTO.getGender()!=null)
             gender = Gender.valueOf(personDTO.getGender().toString().toUpperCase(Locale.ROOT));
 
-        Person person = new Person(personDTO.getFirstName(), personDTO.getSecondName(),
+        return new Person(personDTO.getFirstName(), personDTO.getSecondName(),
                 personDTO.getEmail(), gender, club, coach);
-        return person;
 
     }
     public CollectionModel<EntityModel<Person>> all() {
@@ -124,19 +121,22 @@ public class DomainPersonService implements PersonService {
     }
 
     @Deprecated
-    public ResponseEntity<?> updateCoach(String personEmail, String coachEmail) {
-        if(!AuthenticationFacade.isAdmin() && !AuthenticationFacade.isModifingOwnData(personEmail)){
+    public ResponseEntity<?> updateCoach(String personUUID, String coachUUID) {
+        if(!AuthenticationFacade.isAdmin() && !AuthenticationFacade.isModifingOwnData(personUUID)){
             return new ResponseEntity<>("You are not allowed to modify thihs content", HttpStatus.FORBIDDEN);
         }
 
-        var coach = personRepository.findByEmail(coachEmail).
-                orElseThrow(() -> new NotFoundException("Person", coachEmail));
-        var person = personRepository.findByEmail(personEmail).
-                orElseThrow(() -> new NotFoundException("Person", personEmail));
+        if(personUUID.equals(coachUUID)){
+            return new ResponseEntity<>("You can't be your own coach", HttpStatus.FORBIDDEN);
+        }
 
-        person.setCoach(coach);
+        var coach = personRepository.findByUserUUID(coachUUID).
+                orElseThrow(() -> new NotFoundException("Person", coachUUID));
+        var person = personRepository.findByUserUUID(personUUID).
+                orElseThrow(() -> new NotFoundException("Person", personUUID));
+
+        person.setCoachUUID(coach.getUserUUID());
         var updatedPerson = personRepository.save(person);
-        log.info("Added coach"+coachEmail+ "to person"+ personEmail);
         return ResponseEntity.ok(personAssembler.toModel(updatedPerson));
 
 
