@@ -14,8 +14,6 @@ public interface PersonService {
 
     CollectionModel<EntityModel<Person>> all();
 
-    ResponseEntity<?> getByEmail(String email);
-
     ResponseEntity<?> getByUUID(String email);
 
     ResponseEntity<?> removeOne(String email);

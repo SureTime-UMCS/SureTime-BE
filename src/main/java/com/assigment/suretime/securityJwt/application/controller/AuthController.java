@@ -137,10 +137,10 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 
-		Person person = new Person(user.getEmail());
+		Person person = new Person(user.getUserUUID());
 		person.setUser(user);
 		person.setUserUUID(user.getUserUUID());
-		personRepository.findByEmail(user.getEmail())
+		personRepository.findByUserUUID(user.getUserUUID())
 				.ifPresentOrElse(p->{
 					log.warn("Person: "+ p +" already exist but should not.");
 					p.setUser(user);

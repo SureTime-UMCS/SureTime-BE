@@ -160,10 +160,6 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
     }
 
-    private void personsExistElseThrowNotFoundException(String email) {
-        personRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(Person.class.getSimpleName(), email));
-    }
-
     private Competition getCompetitionElseThrowNotFoundException(String competitionId) {
         return competitionRepository.findById(competitionId)
                 .orElseThrow(()->new NotFoundException(Competition.class.getSimpleName(), competitionId));
