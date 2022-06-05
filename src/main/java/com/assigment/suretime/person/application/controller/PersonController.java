@@ -34,7 +34,7 @@ public class PersonController {
 
     @GetMapping("/me")
     public ResponseEntity<?> me(){
-        return domainPersonService.getByEmail(authenticationFacade.getUserDetailsImpl().getEmail());
+        return domainPersonService.getByUUID(authenticationFacade.getUserDetailsImpl().getUserUUID());
     }
 
     @PostMapping("")

@@ -4,6 +4,7 @@ import com.assigment.suretime.event.domain.Event;
 import com.assigment.suretime.exceptions.NotFoundException;
 import com.assigment.suretime.generics.GenericModelAssembler;
 import com.assigment.suretime.generics.GenericService;
+import com.assigment.suretime.heat.application.request.HeatRequest;
 import com.assigment.suretime.heat.domain.repository.HeatRepository;
 import com.assigment.suretime.heat.application.controller.HeatController;
 import com.assigment.suretime.heat.domain.Heat;
@@ -42,6 +43,12 @@ public class HeatService extends GenericService<Heat,HeatDto, HeatRepository> {
 
         heat.setResults(heat.getResults());
         return heat;
+    }
+
+    public ResponseEntity<?> createHeat(HeatRequest request) {
+        Heat heat = new Heat(request.getName(), request.getStartTime());
+
+        return ResponseEntity.ok(assembler.toModel(heatRepository.save(heat)));
     }
 
     public ResponseEntity<?> addCompetitors(String heatId, List<String> competitors) {

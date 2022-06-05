@@ -1,5 +1,6 @@
 package com.assigment.suretime.event.domain.service;
 
+import com.assigment.suretime.event.application.request.EventRequest;
 import com.assigment.suretime.event.domain.Event;
 import com.assigment.suretime.event.application.response.EventDto;
 import com.assigment.suretime.event.domain.repository.EventRepository;
@@ -35,6 +36,13 @@ public class EventService extends GenericService<Event, EventDto, EventRepositor
         this.heatRepository = heatRepository;
         
     }
+
+    public ResponseEntity<?> createEvent(EventRequest request){
+        var event = new Event(request.getName(), request.getStartTime());
+
+        return ResponseEntity.ok(assembler.toModel(eventRepository.save(event)));
+    }
+
     public ResponseEntity<?> updateName(String eventId, String newName){
         var event = eventRepository.findById(eventId)
                 .orElseThrow(()->new NotFoundException(Event.class.getSimpleName(), eventId));

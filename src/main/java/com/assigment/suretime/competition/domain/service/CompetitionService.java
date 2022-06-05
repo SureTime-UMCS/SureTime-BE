@@ -1,6 +1,7 @@
 package com.assigment.suretime.competition.domain.service;
 
 import com.assigment.suretime.competition.application.controller.CompetitionController;
+import com.assigment.suretime.competition.application.request.CompetitionRequest;
 import com.assigment.suretime.competition.domain.Competition;
 import com.assigment.suretime.competition.application.response.CompetitionDto;
 import com.assigment.suretime.competition.domain.repository.CompetitionRepository;
@@ -37,6 +38,16 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
         this.competitionRepository = competitionRepository;
         this.personRepository = personRepository;
         this.eventRepository = eventRepository;
+    }
+
+    public ResponseEntity<?> createCompetition(CompetitionRequest request) {
+        Competition comp = new Competition();
+        comp.setName(request.getName());
+        comp.setAddress(request.getAddress());
+        comp.setStartTime(request.getStartTime());
+        comp.setEndTime(request.getEndTime());
+
+        return ResponseEntity.ok(modelAssembler.toModel(competitionRepository.save(comp)));
     }
 
     public ResponseEntity<?> addOne(CompetitionDto competitionDto){
@@ -108,10 +119,10 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
     }
 
 
-    public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String email){
+    public ResponseEntity<?> addCompetitionCompetitor(String competitionId, String uuid){
         //personsExistsElseThrowNotFoundException(List.of(email));
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
-        competition.getCompetitors().add(email);
+        competition.getCompetitors().add(uuid);
 
         return new ResponseEntity<>(
                 modelAssembler.toModel(competitionRepository.save(competition)),
@@ -128,11 +139,11 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
 
     }
 
-    public ResponseEntity<?> removeCompetitionCompetitor(String competitionId, String email){
+    public ResponseEntity<?> removeCompetitionCompetitor(String competitionId, String uuid){
 
         Competition competition = getCompetitionElseThrowNotFoundException(competitionId);
 
-        competition.getCompetitors().remove(email);
+        competition.getCompetitors().remove(uuid);
 
         return new ResponseEntity<>(
                 modelAssembler.toModel(competitionRepository.save(competition)),
@@ -158,10 +169,6 @@ public class CompetitionService extends GenericService<Competition, CompetitionD
                 competitionDto.getStartTime(),
                 competitionDto.getEndTime());
 
-    }
-
-    private void personsExistElseThrowNotFoundException(String email) {
-        personRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(Person.class.getSimpleName(), email));
     }
 
     private Competition getCompetitionElseThrowNotFoundException(String competitionId) {

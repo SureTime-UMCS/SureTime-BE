@@ -58,14 +58,6 @@ public class DomainPersonService implements PersonService {
         return personAssembler.toCollectionModel(personRepository.findAll());
     }
 
-    public ResponseEntity<?> getByEmail(String email) {
-        log.info("Getting person:<"+email+">");
-        return personRepository.findByEmail(email)
-                .map(personAssembler::toModel).map(ResponseEntity::ok)
-                .orElseThrow(() -> new NotFoundException("Person", email));
-
-    }
-
     public ResponseEntity<?> getByUUID(String uuid) {
         log.info("Getting person:<"+uuid+">");
         return personRepository.findByUserUUID(uuid)

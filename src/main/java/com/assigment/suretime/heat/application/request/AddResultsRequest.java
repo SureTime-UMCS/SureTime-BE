@@ -5,7 +5,6 @@ import lombok.*;
 import org.springframework.data.util.Pair;
 
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -13,7 +12,5 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddResultsRequest {
-
-    String heatId;
     List<Pair<String, String>> results;
 }

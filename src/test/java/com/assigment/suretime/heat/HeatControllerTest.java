@@ -145,9 +145,8 @@ class HeatControllerTest {
     @WithUserDetails("admin")
     void addCompetitors() {
         Heat heat = getRandomHeat();
-        List<String> competitorsEmails = List.of(getRandomPerson().getEmail(), getRandomPerson().getEmail());
-        String payload = asJsonString(new AddCompetitorsRequest(heat.getId(),
-                competitorsEmails));
+        List<String> competitorsUUIDs = List.of(getRandomPerson().getUserUUID(), getRandomPerson().getEmail());
+        String payload = asJsonString(new AddCompetitorsRequest(competitorsUUIDs));
 
         mockMvc.perform(post(url + "/"+heat.getId()+"/competitors")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -158,7 +157,7 @@ class HeatControllerTest {
 
 
         List<String> competitors = heatRepository.findById(heat.getId()).get().getCompetitors();
-        competitorsEmails.forEach(s ->
+        competitorsUUIDs.forEach(s ->
                 {
                     assert competitors.stream().anyMatch(person -> person.equals(s));
                 }
@@ -183,8 +182,7 @@ class HeatControllerTest {
                 Pair.of(randomPerson2.getEmail(), result2)
         );
 
-        AddResultsRequest payloadObject = new AddResultsRequest(randomHeat.getId(),
-                results);
+        AddResultsRequest payloadObject = new AddResultsRequest(results);
 
         String payload = asJsonString(
                 payloadObject);
@@ -212,8 +210,7 @@ class HeatControllerTest {
         String email1 = heatCompetitors.get(new Random().nextInt(0, heatCompetitors.size()));
         String email2 = heatCompetitors.get(new Random().nextInt(0, heatCompetitors.size()));
 
-        DeleteCompetitorsRequest request = new DeleteCompetitorsRequest(randomHeat.getId(),
-                List.of(email1, email2));
+        DeleteCompetitorsRequest request = new DeleteCompetitorsRequest(List.of(email1, email2));
 
         String payload = asJsonString(
                 request);
@@ -238,7 +235,7 @@ class HeatControllerTest {
         String newName = "Memorial czasu poswieconego temu projektowi.";
         dto.setName(newName);
         dto.setResults(null);
-        dto.setCompetitorsEmail(null);
+        dto.setCompetitorsUUID(null);
 
         String payload = asJsonString(dto);
 
@@ -275,8 +272,7 @@ class HeatControllerTest {
         randomHeat.getResults().put(randomPerson.getEmail(), result);
         randomHeat.getResults().put(randomPerson2.getEmail(), result2);
 
-        DeleteResultsRequest payloadObject = new DeleteResultsRequest(randomHeat.getId(),
-                results);
+        DeleteResultsRequest payloadObject = new DeleteResultsRequest(results);
 
         String payload = asJsonString(
                 payloadObject);

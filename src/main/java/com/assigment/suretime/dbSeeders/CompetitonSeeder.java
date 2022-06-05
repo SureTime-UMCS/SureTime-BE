@@ -61,8 +61,8 @@ public class CompetitonSeeder implements ISeeder {
                     startTime.getMonth(), startTime.getDayOfMonth(), 22, 0, 0);
             Competition competition = new Competition(null, competitionName, address,new HashSet<>(),
                     new HashSet<>(),startTime, endTime);
-            Set<String> competitorsEmails = allPersons.subList(0, 30).stream().map(Person::getEmail).collect(Collectors.toSet());
-            competition.setCompetitors(competitorsEmails);
+            Set<String> competitorsUUIDs = allPersons.subList(0, 30).stream().map(Person::getUserUUID).collect(Collectors.toSet());
+            competition.setCompetitors(competitorsUUIDs);
             for (var i = 0; i < eventNames.size(); i++) {
                 Event event = createAndSaveEvent(eventNames.get(i), competition.getStartTime(), i);
                 competition.addEvent(event.getId());
@@ -81,11 +81,11 @@ public class CompetitonSeeder implements ISeeder {
         int numbersOfHeat = fake.random().nextInt(1, 3);
         for (int i = 0; i < numbersOfHeat; i++) {
             Heat heat = new Heat(name, event.getStartTime().plusMinutes(i * 2L));
-            List<String> competitorsEmail = allPersons.subList(i, i + 8).stream().map(Person::getEmail).toList();
-            heat.setCompetitors(competitorsEmail);
+            List<String> competitorsUUIDs = allPersons.subList(i, i + 8).stream().map(Person::getUserUUID).toList();
+            heat.setCompetitors(competitorsUUIDs);
 
             Map<String, String> results = new HashMap<>();
-            competitorsEmail.forEach(email -> results.put(email, fake.random().nextInt(0, 230).toString()));
+            competitorsUUIDs.forEach(uuid -> results.put(uuid, fake.random().nextInt(0, 230).toString()));
             heat.setResults(results);
 
             heat = heatRepository.save(heat);
