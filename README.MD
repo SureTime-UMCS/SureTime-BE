@@ -54,7 +54,7 @@ Use a [API-DOCS](http://localhost:8080/swagger-ui.html)
     }'
       ```
 6. Authorize swagger endpoints.
-        Login to app use 'http://localhost:8080/api/auth/login', you receive token that you must paste to swagger authorization (green lock) in this format "Bearer <token>.
+        Login to app use 'http://localhost:8080/api/auth/login', you receive token that you must paste to swagger authorization (green lock) in this format "Bearer your_token.
 ### Project requirements for 4
 
 - [x] Wykorzystanie narzędzia Spring Framework (najlepiej z wykorzystaniem SpringBoot) + Maven + git (repozytorium w
